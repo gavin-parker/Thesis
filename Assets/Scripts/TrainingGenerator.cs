@@ -10,15 +10,16 @@ namespace Assets.Scripts
     public class TrainingGenerator : MonoBehaviour
     {
         public Camera RenderCamera;
-
-        private RenderTexture _renderTexture;
-
+        private Texture2D _texture2D;
+        
+        public void Update()
+        {
+            Debug.Log(transform.position);
+        }
+        
         public void Start()
         {
-            _renderTexture = new RenderTexture(RenderCamera.pixelWidth,RenderCamera.pixelHeight,16, RenderTextureFormat.ARGB32);
-            _renderTexture.Create();
-            RenderCamera.targetTexture = _renderTexture;
-            RenderTexture.active = _renderTexture;
+            _texture2D = new Texture2D(RenderCamera.pixelWidth, RenderCamera.pixelHeight, TextureFormat.RGB24, false);
             GenerateBatch(new Vector3(0,0,0), 5);
         }
         /*
@@ -34,34 +35,31 @@ namespace Assets.Scripts
 
         IEnumerator RenderRandomCameraAngles(Vector3 target, int count, String mapId)
         {
-            var tex = new Texture2D(_renderTexture.width, _renderTexture.height, TextureFormat.RGBA32, false);
             Directory.CreateDirectory($"{Application.dataPath}/training/{mapId}/renders");
-            while (!_renderTexture.IsCreated())
-            {
-                yield return new WaitForEndOfFrame();
-            }
             for (var i = 0; i < count; i++)
             {
-                TransformToRandomViewPoint(RenderCamera, target, 2f, 10f);
+                Vector3 relativeCameraPos = TransformToRandomViewPoint(RenderCamera, target, 20f, 60f);
                 yield return new WaitForEndOfFrame();
-                Debug.Log(RenderCamera.transform.position);
-                tex.ReadPixels(new Rect(0,0, _renderTexture.width, _renderTexture.height), 0, 0);
-                tex.Apply();
-                var bytes = tex.EncodeToPNG();
-                Vector3 relativeCameraPos = RenderCamera.transform.position - target;
+                RenderCamera.Render();
+                _texture2D.ReadPixels(new Rect(0,0, _texture2D.width, _texture2D.height), 0, 0);
+                _texture2D.Apply();
+                var bytes = _texture2D.EncodeToPNG();
+                
                 var renderId = $"{relativeCameraPos}";
                 File.WriteAllBytes($"{Application.dataPath}/training/{mapId}/renders/{renderId}.png", bytes);
             }
+            Application.Quit();
         }
         
-
-        void TransformToRandomViewPoint(Camera renderCamera, Vector3 target, float maxDistance, float minDistance)
+        Vector3 TransformToRandomViewPoint(Camera renderCamera, Vector3 target, float maxDistance, float minDistance)
         {
             float dist = Random.Range(minDistance, maxDistance);
             Vector3 position = target + Random.onUnitSphere*dist;
             Debug.Log($"New position is {position}");
             renderCamera.transform.position = position;
-            renderCamera.transform.LookAt(target - renderCamera.transform.position);
+            renderCamera.transform.LookAt(target);
+            Vector3 relativeCameraPos = target - RenderCamera.transform.position;
+            return relativeCameraPos;
         }
         
     }
