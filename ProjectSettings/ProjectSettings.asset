@@ -633,7 +633,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 404bca0b-bf6e-4c45-9442-cfabe46cfc41
   projectName: Environment Map Generator
   organizationId: gavin-parker

@@ -8,7 +8,7 @@ from scipy import ndimage
 
 
 class Dataset:
-    def __init__(self, generate=True):
+    def __init__(self, generate=False):
         if generate:
             self.generate_dataset()
         self.load_cahed_dataset()

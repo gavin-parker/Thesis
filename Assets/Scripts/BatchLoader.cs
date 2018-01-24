@@ -3,48 +3,38 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts
 {
-	public class BatchLoader : MonoBehaviour {
-		// Use this for initialization
-
-		void Start ()
-		{
-			Cubemap testMap = RenderCubemap(new Vector3(0, 0, 0));
-			SaveCubeMap(testMap, "test");
-		}
-
-		void Update () {
-		
-		}
-
+	public class BatchLoader {
 		// Update is called once per frame
-		void SaveCubeMap(Cubemap cubemap, String mapId)
+		public static void SaveCubeMap(Cubemap cubemap, String mapId)
 		{
 			var tex = new Texture2D(cubemap.width, cubemap.height, TextureFormat.RGBA32, false);
-			Directory.CreateDirectory($"{Application.dataPath}/maps/{mapId}");
+			Directory.CreateDirectory($"{Application.dataPath}/training/{mapId}/envmap");
 			foreach(CubemapFace face in Enum.GetValues(typeof(CubemapFace)).Cast<CubemapFace>())
 			{
 				if (face == CubemapFace.Unknown )continue;
-				Debug.Log(face);
 				tex.SetPixels(cubemap.GetPixels(face));
 				var bytes = tex.EncodeToPNG();
-				File.WriteAllBytes($"{Application.dataPath}/maps/{mapId}/{face.ToString()}.png", bytes);
+				File.WriteAllBytes($"{Application.dataPath}/training/{mapId}/envmap/{face.ToString()}.png", bytes);
 			}
 			
 			
 		}
 		
-		Cubemap RenderCubemap(Vector3 point)
+		public static Cubemap RenderCubemap(Vector3 point)
 		{
 			GameObject renderCube = new GameObject("RenderCube");
-			renderCube.AddComponent<Camera>();
+			Camera renderCamera = renderCube.AddComponent<Camera>();
 			renderCube.transform.position = point;
 			renderCube.transform.rotation = Quaternion.identity;
 			Cubemap cubemap = new Cubemap(256, TextureFormat.RGBA32, false);
-			renderCube.GetComponent<Camera>().RenderToCubemap(cubemap);
-			
+			renderCamera.nearClipPlane = 0.001f;
+			renderCamera.farClipPlane = 20000f;
+			renderCamera.RenderToCubemap(cubemap);
+			Object.Destroy(renderCube);
 			return cubemap;
 		}
 	}
