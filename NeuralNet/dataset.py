@@ -1,8 +1,9 @@
 import os
 import numpy as np
 import matplotlib
+
 print os.getenv("DISPLAY")
-#matplotlib.use('GTK')
+matplotlib.use('GTK')
 import matplotlib.pyplot as plt
 from scipy import ndimage
 
@@ -12,11 +13,14 @@ class Dataset:
         if generate:
             self.generate_dataset()
         self.load_cahed_dataset()
+        self.partition()
         return
 
-
     def partition(self, test_fraction=0.1):
-        np.random.rand()
+        indices = np.random.permutation(self.samples.shape[0])
+        test_count = int(test_fraction * self.samples.shape[0])
+        training_idx, test_idx = indices[test_count:], indices[:test_count]
+        print(test_idx)
 
     def load_cahed_dataset(self):
         dataset = np.load("dataset.npz")
@@ -24,6 +28,10 @@ class Dataset:
         self.samples = dataset['samples']
         print(self.envmaps.shape)
         print(self.samples.shape)
+        plt.imshow(self.samples[0])
+        plt.show()
+        plt.imshow(self.envmaps[0])
+        plt.show()
 
     def generate_dataset(self):
         envmaps = []
@@ -38,7 +46,7 @@ class Dataset:
             envmap = envmap_sides.reshape(6 * 256, 256, 4)
             envmaps.append(envmap)
             samples.append(renders)
-            #print("sample: {}, size: {}".format(sample_set,renders.shape))
+            # print("sample: {}, size: {}".format(sample_set,renders.shape))
 
         envmaps = np.array(envmaps)
         samples = np.concatenate(np.array(samples))
