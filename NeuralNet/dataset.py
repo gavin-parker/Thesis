@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib
 
 print os.getenv("DISPLAY")
-matplotlib.use('GTK')
+#matplotlib.use('GTK')
 import matplotlib.pyplot as plt
 from scipy import ndimage
 
@@ -19,8 +19,7 @@ class Dataset:
     def partition(self, test_fraction=0.1):
         indices = np.random.permutation(self.samples.shape[0])
         test_count = int(test_fraction * self.samples.shape[0])
-        training_idx, test_idx = indices[test_count:], indices[:test_count]
-        print(test_idx)
+        self.training_idx, self.test_idx = indices[test_count:], indices[:test_count]
 
     def load_cahed_dataset(self):
         dataset = np.load("dataset.npz")
@@ -28,10 +27,20 @@ class Dataset:
         self.samples = dataset['samples']
         print(self.envmaps.shape)
         print(self.samples.shape)
-        plt.imshow(self.samples[0])
+        #plt.imshow(self.samples[0])
         plt.show()
-        plt.imshow(self.envmaps[0])
+        #plt.imshow(self.envmaps[0])
         plt.show()
+
+    def generate_batches(self, testing=False):
+        if testing:
+            indices = self.test_idx
+        else:
+            indices = self.training_idx
+
+        for i in indices:
+            #return samples and target map - expand dims for multisample batches
+            yield np.expand_dims(self.samples[i],0), np.expand_dims(self.envmaps[i//10], 0)
 
     def generate_dataset(self):
         envmaps = []
@@ -44,7 +53,7 @@ class Dataset:
             renders = np.array([ndimage.imread(render_path + "/{}".format(x)) for x in os.listdir(render_path)])
             # 6 sides of 256x256 rgba envmap -> one wide image for tf
             envmap = envmap_sides.reshape(6 * 256, 256, 4)
-            envmaps.append(envmap)
+            envmaps.append(envmap[:,:,:3])
             samples.append(renders)
             # print("sample: {}, size: {}".format(sample_set,renders.shape))
 
