@@ -33,11 +33,11 @@ class Dataset:
         plt.show()
 
     def generate_batches(self, testing=False):
+        self.partition()
         if testing:
             indices = self.test_idx
         else:
             indices = self.training_idx
-
         for i in indices:
             #return samples and target map - expand dims for multisample batches
             yield np.expand_dims(self.samples[i],0), np.expand_dims(self.envmaps[i//10], 0)

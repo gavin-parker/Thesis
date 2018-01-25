@@ -1,5 +1,6 @@
 import tensorflow as tf
-tf.app.flags.DEFINE_float('learning-rate', 1e-5, 'Number of examples to run. (default: %(default)d)')
+
+tf.app.flags.DEFINE_float('learning-rate', 0.0002, 'Number of examples to run. (default: %(default)d)')
 tf.app.flags.DEFINE_integer('max-epochs', 50, 'Number of epochs to run. (default: %(default)d)')
 
 FLAGS = tf.app.flags.FLAGS
@@ -15,10 +16,10 @@ def conv2d_extraction(x, filters, size, strides=[1, 1]):
                             kernel_size=size)
 
 
-def conv2d_reconstruction(x, strides):
+def conv2d_reconstruction(x, filters, size, strides):
     return tf.layers.conv2d_transpose(inputs=x,
-                                      filters=3,
-                                      kernel_size=[5, 5],
+                                      filters=filters,
+                                      kernel_size=size,
                                       strides=strides,
                                       padding='SAME',
                                       activation=tf.nn.relu)
@@ -30,13 +31,21 @@ def dense(x, units):
                            kernel_initializer=tf.truncated_normal_initializer(mean=0, stddev=0.01),
                            )
 
+def encode_layer(x, count, size, stride):
+    conv = conv2d_extraction(x, count, size, stride)
+    conv_bn = tf.layers.batch_normalization(conv)
+    return tf.nn.relu(conv_bn)
 
+def decode_layer(x, count, size, stride):
+    deconv = conv2d_reconstruction(x, count, size, stride)
+    deconv_bn = tf.layers.batch_normalization(deconv)
+    return tf.nn.relu(deconv_bn)
 
-def pool(x):
+def pool(x, strides=(2, 2)):
     return tf.layers.average_pooling2d(
         inputs=x,
-        pool_size=[3, 3],
-        strides=2,
+        pool_size=[2, 2],
+        strides=strides,
         padding='same')
 
 
@@ -57,40 +66,48 @@ class Generator:
         self.img_out_summary_r = tf.summary.image('generated resized envmaps', self.resized_pred)
         self.img_in_summary = tf.summary.image('trained renders', self.probes)
         self.img_target_summary = tf.summary.image('trained renders', self.envmaps)
-        self.img_summary = tf.summary.merge([self.img_out_summary, self.img_out_summary_r, self.img_in_summary, self.img_target_summary])
+        self.img_summary = tf.summary.merge(
+            [self.img_out_summary, self.img_out_summary_r, self.img_in_summary, self.img_target_summary])
         self.train_writer = tf.summary.FileWriter("train_summaries", self.sess.graph)
         self.saver = tf.train.Saver()
         return
 
     # Convolutional graph definition for render -> envmap
     def generate(self, x_image):
-        conv1 = conv2d_extraction(x_image, 128, [11, 11], [1, 1])
-        #pool1 = pool(conv1)
-        conv2 = conv2d_extraction(conv1, 32, [7, 7], [1, 1])
-        #pool2 = pool(conv2)
-        conv3 = conv2d_extraction(conv2, 16, [3, 3], [1, 1])
-        conv3_bn = tf.layers.batch_normalization(conv3)
+        encode_1 = encode_layer(x_image, 64, (5,5), (2,2) )
+        encode_2 = encode_layer(encode_1, 128, (3,3), (2,2))
+        encode_3 = encode_layer(encode_2, 256, (3,3), (2,2))
+        encode_4 = encode_layer(encode_3, 512, (3,3), (2,2))
+        encode_5 = encode_layer(encode_4, 512, (3,3), (2,2))
+        encode_6 = encode_layer(encode_5, 512, (3,3), (2,2))
+        encode_7 = encode_layer(encode_6, 512, (3,3), (2,2))
+        encode_8 = encode_layer(encode_7, 512, (3,3), (2,2))
 
-        flat = tf.reshape(conv3_bn, [8, 8, -1])
-        fullc1 = dense(flat, 16384)
-        fullc2 = dense(fullc1, 16384)
-        reshaped = tf.reshape(fullc2, [1, 256, 256, 16])
+        decode_1 = decode_layer(encode_8, 512, (3,3), (6,1))
+        decode_2= decode_layer(decode_1, 512, (3,3), (2,2))
+        decode_3= decode_layer(decode_2, 512, (3,3), (2,2))
+        decode_4= decode_layer(decode_3, 512, (3,3), (2,2))
+        decode_5= decode_layer(decode_4, 256, (3,3), (2,2))
+        decode_6= decode_layer(decode_5, 128, (3,3), (2,2))
+        decode_7= decode_layer(decode_6, 64, (3,3), (2,2))
+        decode_8= decode_layer(decode_7, 3, (3,3), (2,2))
 
-        deconv1 = conv2d_reconstruction(reshaped, [1, 1])
-        #deconv2 = conv2d_reconstruction(deconv1, [2, 2])
-        #deconv3 = conv2d_reconstruction(deconv2, [6, 1])
-        return deconv1
+        return decode_8
 
     def train(self, dataset):
         self.train_op = tf.train.GradientDescentOptimizer(FLAGS.learning_rate).minimize(self.loss)
         self.sess.run(tf.global_variables_initializer())
         # generate batches and run graph
         for epoch in range(0, FLAGS.max_epochs):
+            total_err = 0
+            batch_count = 0
             for sample, envmap in dataset.generate_batches(testing=False):
                 _, err, summary = self.sess.run([self.train_op, self.loss, self.img_summary],
                                                 feed_dict={self.envmaps: envmap, self.renders: sample})
-                if epoch % 5 == 0:
-                    self.train_writer.add_summary(summary, epoch)
-                    self.train_writer.flush()
+                total_err += err
+                batch_count += 1
+                self.train_writer.add_summary(summary, epoch)
+                self.train_writer.flush()
+                print(total_err / batch_count)
         self.train_writer.close()
         self.sess.close()
