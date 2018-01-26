@@ -14,6 +14,7 @@ namespace Assets.Scripts
         public Camera RenderCamera;
         public Collider TargetBounds;
         public Collider CameraBounds;
+        public Collider SceneBounds;
         public GameObject Probe;
         private Texture2D _texture2D;
 
@@ -28,7 +29,7 @@ namespace Assets.Scripts
         public void Start()
         {
             String[] args = Environment.GetCommandLineArgs();
-            foreach(String arg in args)
+            foreach (String arg in args)
             {
                 if (arg.Contains("-batch-size="))
                 {
@@ -40,7 +41,7 @@ namespace Assets.Scripts
                     BatchCount = int.Parse(arg.Split('=')[1]);
                 }
             }
-            
+
             _texture2D = new Texture2D(RenderCamera.pixelWidth, RenderCamera.pixelHeight, TextureFormat.RGB24, false);
             StartCoroutine(GenerateBatches());
         }
@@ -53,8 +54,10 @@ namespace Assets.Scripts
             for (int i = 0; i < BatchCount; i++)
             {
                 yield return new WaitUntil(() => _rendering == false);
+                SceneGenerator scene = new SceneGenerator(SceneBounds.bounds, CameraBounds.bounds, 10);
                 GenerateBatch(RandomPointInBounds(TargetBounds.bounds), BatchSize);
             }
+
             Application.Quit();
         }
 
@@ -64,6 +67,9 @@ namespace Assets.Scripts
         private void GenerateBatch(Vector3 targetPoint, int count)
         {
             Probe.transform.position = targetPoint;
+            Probe.GetComponentInChildren<ReflectionProbe>().RenderProbe();
+            CameraBounds.gameObject.transform.position = new Vector3(targetPoint.x,
+                CameraBounds.gameObject.transform.position.y, targetPoint.z);
             var cubemap = BatchLoader.RenderCubemap(targetPoint);
             var mapId = $"{SceneManager.GetActiveScene().name}_{targetPoint}";
             BatchLoader.SaveCubeMap(cubemap, mapId);
@@ -92,18 +98,45 @@ namespace Assets.Scripts
 
         Vector3 TransformToRandomViewPoint(Camera renderCamera, Vector3 target)
         {
-            Vector3 position = target + RandomPointInBounds(CameraBounds.bounds);
+            Vector3 position;
+            while (true)
+            {
+                position = target + RandomPointInBounds(CameraBounds.bounds);
+                if (Vector3.Distance(target, position) > 2f 
+                    && !Physics.Raycast(transform.position, target - position, Vector3.Distance(target, position), ~(1 << 8)))
+                {
+                    break;
+                }
+            }
             renderCamera.transform.position = position;
             renderCamera.transform.LookAt(target);
             Vector3 relativeCameraPos = target - RenderCamera.transform.position;
             return relativeCameraPos;
         }
-        
-        private Vector3 RandomPointInBounds(Bounds bounds)
+
+        public static Vector3 RandomPointInBounds(Bounds bounds)
         {
             return new Vector3(Random.Range(bounds.min.x, bounds.max.x),
                 Random.Range(bounds.min.y, bounds.max.y),
                 Random.Range(bounds.min.z, bounds.max.z));
+        }
+        public static Vector3 RandomPointInBounds(Bounds bounds, Bounds offBounds)
+        {
+            Vector3 point = RandomPointInBounds(bounds);
+            while (offBounds.Contains(point))
+            {
+                point = RandomPointInBounds(bounds);
+            }
+
+            return point;
+        }
+        
+
+        public static Vector3 RandomScale(Vector3 min, Vector3 max)
+        {
+            return new Vector3(Random.Range(min.x, max.x),
+                Random.Range(min.y, max.y),
+                Random.Range(min.z, max.z));
         }
     }
 }
