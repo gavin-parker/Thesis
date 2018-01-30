@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-tf.app.flags.DEFINE_float('learning-rate', 0.0002, 'Number of examples to run. (default: %(default)d)')
+tf.app.flags.DEFINE_float('learning-rate', 1e-7, 'Number of examples to run. (default: %(default)d)')
 tf.app.flags.DEFINE_integer('max-epochs', 200, 'Number of epochs to run. (default: %(default)d)')
 
 FLAGS = tf.app.flags.FLAGS
@@ -52,33 +52,33 @@ def pool(x, strides=(2, 2)):
         padding='same')
 
 
-class Generator:
+class Model:
     def __init__(self):
         tf.reset_default_graph()
         self.sess = tf.Session()
-        envmap_size, input_size = (1536, 256), (1080, 1920)
-        self.envmaps = tf.placeholder(tf.float32, [1, envmap_size[0], envmap_size[1], 3])
-        self.renders = tf.placeholder(tf.float32, [1, input_size[0], input_size[1], 3])
-        self.probes = tf.map_fn(lambda x: tf.image.resize_image_with_crop_or_pad(x, 256, 256), self.renders)
-        # self.envmaps = tf.map_fn(lambda x: tf.image.per_image_standardization(x), self.envmaps)
-        # self.renders = tf.map_fn(lambda x: tf.image.per_image_standardization(x), self.renders)
-        self.pred = self.generate(self.probes)
-        self.resized_pred = tf.image.resize_images(self.pred, [6*32, 32])
-        self.resized_envmaps = tf.image.resize_images(self.envmaps, [6*32, 32])
-
-        self.loss = tf.reduce_mean(tf.square(self.resized_envmaps - self.resized_pred))
+        self.images = tf.placeholder(tf.float32, [1, None, None, 3])
+        self.normals = tf.placeholder(tf.float32, [1, None, None, 3])
+        self.envmaps = tf.placeholder(tf.float32, [1, None, None, 3])
+        self.images = tf.map_fn(lambda x: tf.image.resize_image_with_crop_or_pad(x, 128, 128), self.images)
+        self.normals = tf.map_fn(lambda x: tf.image.resize_image_with_crop_or_pad(x, 128, 128), self.normals)
+        self.envmaps = tf.map_fn(lambda x: tf.image.resize_image_with_crop_or_pad(x, 512, 1024), self.envmaps)
+        self.pred = self.generate(self.images, self.normals)
+        self.pred = tf.map_fn(lambda x: tf.image.resize_image_with_crop_or_pad(x, 512, 1024), self.pred)
+        self.loss = tf.reduce_mean(tf.square(self.envmaps - self.pred))
         self.img_out_summary = tf.summary.image('generated envmaps', self.pred, max_outputs=1)
-        self.img_in_summary = tf.summary.image('trained renders', self.probes, max_outputs=1)
-        self.img_target_summary = tf.summary.image('trained renders', self.resized_envmaps, max_outputs=1)
+        self.img_in_summary = tf.summary.image('trained renders', self.images, max_outputs=1)
+        self.img_target_summary = tf.summary.image('trained renders', self.envmaps, max_outputs=1)
+        self.img_normal_summary = tf.summary.image('normals', self.normals, max_outputs=1)
         self.img_summary = tf.summary.merge(
-            [self.img_out_summary, self.img_in_summary, self.img_target_summary])
+            [self.img_out_summary, self.img_in_summary, self.img_target_summary, self.img_normal_summary])
         self.train_writer = tf.summary.FileWriter("train_summaries", self.sess.graph)
         self.saver = tf.train.Saver()
         return
 
     # Convolutional graph definition for render -> envmap
-    def generate(self, x_image):
-        encode_1 = encode_layer(x_image, 64, (5, 5), (2, 2))
+    def generate(self, x_image, x_normal):
+        x_input = tf.concat([x_image, x_normal], 1)
+        encode_1 = encode_layer(x_input, 64, (5, 5), (2, 2))
         encode_2 = encode_layer(encode_1, 128, (3, 3), (2, 2))
         encode_3 = encode_layer(encode_2, 256, (3, 3), (2, 2))
         encode_4 = encode_layer(encode_3, 512, (3, 3), (2, 2))
@@ -87,15 +87,19 @@ class Generator:
         encode_7 = encode_layer(encode_6, 512, (3, 3), (2, 2))
         encode_8 = encode_layer(encode_7, 512, (3, 3), (2, 2))
 
-        decode_1 = decode_layer(encode_8, 512, (3, 3), (6, 1))
+        decode_1 = decode_layer(encode_8, 512, (3, 3), (1, 2))
         decode_2 = decode_layer(decode_1, 512, (3, 3), (2, 2))
         decode_3 = decode_layer(decode_2, 512, (3, 3), (2, 2))
         decode_4 = decode_layer(decode_3, 512, (3, 3), (2, 2))
-        decode_5 = decode_layer(decode_4, 256, (3, 3), (2, 2))
-        decode_6 = decode_layer(decode_5, 128, (3, 3), (2, 2))
-        decode_7 = decode_layer(decode_6, 3, (3, 3), (1, 1))
+        decode_5 = decode_layer(decode_4, 512, (3, 3), (2, 2))
+        decode_6 = decode_layer(decode_5, 512, (3, 3), (2, 2))
+        decode_7 = decode_layer(decode_6, 512, (3, 3), (2, 2))
+        decode_8 = decode_layer(decode_7, 256, (3, 3), (2, 2))
+        decode_9 = decode_layer(decode_8, 128, (3, 3), (2, 2))
+        decode_10 = decode_layer(decode_9, 128, (3, 3), (2, 2))
+        decode_11 = decode_layer(decode_10, 3, (3, 3), (1, 1))
 
-        return decode_7
+        return decode_11
 
     def train(self, dataset):
         self.train_op = tf.train.GradientDescentOptimizer(FLAGS.learning_rate).minimize(self.loss)
@@ -104,9 +108,9 @@ class Generator:
         for epoch in range(0, FLAGS.max_epochs):
             total_err = 0
             batch_count = 0
-            for sample, envmap in dataset.generate_batches(testing=False):
+            for image, normal, envmap in dataset.generate_batches():
                 _, err, summary = self.sess.run([self.train_op, self.loss, self.img_summary],
-                                                feed_dict={self.envmaps: envmap, self.renders: sample})
+                                                feed_dict={self.envmaps: envmap, self.images: image, self.normals: normal})
                 total_err += err
                 batch_count += 1
                 self.train_writer.add_summary(summary, epoch)
