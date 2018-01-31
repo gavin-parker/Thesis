@@ -5,7 +5,7 @@ from generator import Generator
 from dataset import Dataset
 
 def main():
-    dataset = Dataset(generate=False)
+    dataset = Dataset(generate=True)
     gen = Generator()
     gen.train(dataset)
     return

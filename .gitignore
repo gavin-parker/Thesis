@@ -31,3 +31,23 @@ NeuralNet/\.idea/
 Assets/training/
 Replication/synthetic
 *.zip
+
+NeuralNet/training/mvb_\(-0\.5, -0\.1, 2\.0\)/renders/
+
+NeuralNet/training/mvb_\(-0\.5, -0\.1, 2\.0\)/envmap/
+
+NeuralNet/training/mvb_\(-0\.5, 0\.0, 0\.7\)/envmap/
+
+*.png
+
+Replication/\.idea/
+
+*.pyc
+
+NeuralNet/train_summaries/
+
+Replication/train_summaries/
+
+*.npz
+
+*.pk1
