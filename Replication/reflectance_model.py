@@ -1,5 +1,5 @@
 import tensorflow as tf
-
+from reflectance_dataset import ReflectanceDataset
 tf.app.flags.DEFINE_float('learning-rate', 1e-4, 'Number of examples to run. (default: %(default)d)')
 tf.app.flags.DEFINE_integer('max-epochs', 200, 'Number of epochs to run. (default: %(default)d)')
 
@@ -51,32 +51,46 @@ def pool(x, strides=(2, 2)):
         strides=strides,
         padding='same')
 
+def image_queue(image_reader, file_names):
+    input_queue = tf.train.string_input_producer(file_names)
+    _, input_file = image_reader.read(input_queue)
+    input_image = tf.image.decode_png(input_file)
+    input_image.set_shape((256, 256, 3))
+    return input_image
+
 
 class Model:
-    self.images = tf.placeholder(tf.float32, [None, 256, 256, 3])
-    self.normals = tf.placeholder(tf.float32, [None, 256, 256, 3])
-    self.gts = tf.placeholder(tf.float32, [None, 256, 256, 3])
+    image = tf.placeholder(tf.float32, [ 256, 256, 3])
+    normals = tf.placeholder(tf.float32, [ 256, 256, 3])
+    gts = tf.placeholder(tf.float32, [ 256, 256, 3])
+    train_path = "synthetic/synthetic/train"
+    input_files = tf.train.match_filenames_once("{}/radiance/*.png".format(train_path))
+    normal_files = tf.train.match_filenames_once("{}/normal/*.png".format(train_path))
+    gt_files = tf.train.match_filenames_once("{}/lit/*.png".format(train_path))
 
+    def __init__(self):
+        self.sess = tf.Session()
+        self.image_reader = tf.WholeFileReader()
+        self.input_image = image_queue(self.image_reader, self.input_files)
+        self.normal_image = image_queue(self.image_reader, self.normal_files)
+        self.gt_image = image_queue(self.image_reader, self.gt_files)
 
-    def __init__(self, dataset, sess):
-        self.dataset = dataset
-        tf.reset_default_graph()
-        self.sess = sess
-        self.images = tf.placeholder(tf.float32, [None, 256, 256, 3])
-        self.normals = tf.placeholder(tf.float32, [None, 256, 256, 3])
-        self.gts = tf.placeholder(tf.float32, [None, 256, 256, 3])
+        self.images = tf.to_float(tf.train.shuffle_batch([self.input_image, self.normal_image, self.gt_image],
+                                        batch_size=1,
+                                        num_threads=4,
+                                        capacity=100,
+                                        min_after_dequeue=0))
 
-        self.images, self.normals, self.gts = self.dataset.get_batch([1])
+        tf.Print(self.images, [self.images], "got images")
+        self.pred = self.generate(self.images[0], self.images[1])
+        self.loss = tf.reduce_mean(tf.square(self.images[2] - self.pred))
 
-        self.pred = self.generate(self.images, self.normals)
-        self.loss = tf.reduce_mean(tf.square(self.gts - self.pred))
-
-        self.img_out_summary = tf.summary.image('generated envmaps', self.pred, max_outputs=1)
-        self.img_in_summary = tf.summary.image('trained renders', self.images, max_outputs=1)
-        self.img_target_summary = tf.summary.image('trained renders', self.gts, max_outputs=1)
-        self.img_normal_summary = tf.summary.image('normals', self.normals, max_outputs=1)
+        self.img_out_summary = tf.summary.image('generated reflectance', self.pred, max_outputs=1)
+        self.img_in_summary = tf.summary.image('training input', self.images[0], max_outputs=1)
+        self.img_normal_summary = tf.summary.image('normal input', self.images[1], max_outputs=1)
+        self.img_gt_summary = tf.summary.image('Ground Truth', self.images[2], max_outputs=1)
         self.img_summary = tf.summary.merge(
-            [self.img_out_summary, self.img_in_summary, self.img_target_summary, self.img_normal_summary])
+            [self.img_out_summary, self.img_in_summary,self.img_gt_summary, self.img_normal_summary])
         self.train_writer = tf.summary.FileWriter("train_summaries", self.sess.graph)
         self.saver = tf.train.Saver()
         return
@@ -107,7 +121,12 @@ class Model:
     def train(self):
         self.train_op = tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
         self.sess.run(tf.global_variables_initializer())
+        self.sess.run(tf.local_variables_initializer())
+        tf.train.start_queue_runners(sess=self.sess)
+
         # generate batches and run graph
         for epoch in range(0, FLAGS.max_epochs):
             _, err, summary = self.sess.run([self.train_op, self.loss, self.img_summary])
+            print(err)
         self.train_writer.close()
+        self.sess.close()
