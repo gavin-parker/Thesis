@@ -39,7 +39,7 @@ class Dataset:
         else:
             indices = self.training_idx
         for i in indices:
-            #return samples and target map - expand dims for multisample batches
+            #return samples and target map - expand dims for multisample batch
             yield np.expand_dims(self.samples[i],0), np.expand_dims(self.envmaps[i//10], 0)
 
     def generate_dataset(self):
