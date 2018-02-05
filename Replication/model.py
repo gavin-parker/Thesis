@@ -121,6 +121,7 @@ class Model:
             total_err = 0
             batch_count = 0
             for image, normal, envmap in dataset.generate_batches():
+
                 _, err, summary = self.sess.run([self.train_op, self.loss, self.img_summary],
                                                 feed_dict={self.envmaps: envmap, self.images: image, self.normals: normal})
                 total_err += err
