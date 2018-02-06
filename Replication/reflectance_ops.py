@@ -15,7 +15,7 @@ class Reflectance:
 
         flat_reflmap = tf.gather(color_flat, indices)
 
-        reflmap = tf.reshape(flat_reflmap, [128, 128, 3])
+        reflmap = tf.reshape(flat_reflmap, tf.shape(color_image))
         return reflmap
 
 
