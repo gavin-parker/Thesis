@@ -90,6 +90,13 @@ def get_norm_sphere(single_sphere):
     batch_sphere = tf.reshape(batch_sphere, [FLAGS.batch_size, 256, 256, 3])
     return tf.image.resize_images(batch_sphere, [128, 128])
 
+def unit_norm(image):
+    flat = tf.reshape(image, [-1,3])
+    norm = tf.sqrt(tf.reduce_sum(tf.square(flat), 1, keep_dims=True))
+    norm_flat = flat / norm
+    norm_flat = tf.where(tf.is_nan(norm_flat), tf.zeros_like(norm_flat), norm_flat)
+    return tf.reshape(norm_flat, tf.shape(image))
+
 class Model:
     appearance = tf.placeholder(tf.float32, [FLAGS.batch_size, 128, 128, 3])
     orientation = tf.placeholder(tf.float32, [FLAGS.batch_size, 128, 128, 3])
@@ -116,13 +123,12 @@ class Model:
         iterator = dataset.make_one_shot_iterator()
         (appearance, orientation, gt) = iterator.get_next()
         self.appearance = format_image(appearance, [FLAGS.batch_size, 256, 256, 3], 128)
-        self.orientation = format_image(orientation, [FLAGS.batch_size, 256, 256, 3], 128, mask_alpha=True,
-                                        normalize=True)
-        self.batch_sphere = get_norm_sphere(self.norm_sphere)
+        self.orientation = unit_norm(format_image(orientation, [FLAGS.batch_size, 256, 256, 3], 128, mask_alpha=True))
+        self.batch_sphere = unit_norm(get_norm_sphere(self.norm_sphere))
 
         self.sparse_rm = tf.map_fn(Reflectance.online_reflectance,
                                    (self.appearance, self.orientation, self.batch_sphere), dtype=tf.float32)
-        self.gt = format_image(gt, [FLAGS.batch_size, 256, 256, 3], 32, normalize=True)
+        self.gt = format_image(gt, [FLAGS.batch_size, 256, 256, 3], 32)
 
         self.pred = self.generate(self.sparse_rm)
         self.loss = tf.reduce_mean(tf.square(self.gt - self.pred))
@@ -189,8 +195,7 @@ class Model:
             total_err = 0.0
             summary = {}
             for i in range(0, 10):
-                #test = self.sess.run(self.batch_sphere)
-                #print(test)
+                test_sphere, test_orientation = self.sess.run([self.batch_sphere, self.orientation])
                 _, err, summary = self.sess.run([self.train_op, self.loss, self.img_summary])
                 total_err += err
             self.train_writer.add_summary(summary, epoch)
