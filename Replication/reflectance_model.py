@@ -6,7 +6,8 @@ from preprocessing_ops import Preprocessor
 
 tf.app.flags.DEFINE_float('learning-rate', 1e-4, 'Learning Rate. (default: %(default)d)')
 tf.app.flags.DEFINE_integer('max-epochs', 200, 'Number of epochs to run. (default: %(default)d)')
-tf.app.flags.DEFINE_integer('batch-size', 2, 'Batch Size. (default: %(default)d)')
+tf.app.flags.DEFINE_integer('batch-size', 4, 'Batch Size. (default: %(default)d)')
+tf.app.flags.DEFINE_boolean('debug', False, 'Batch Size. (default: %(default)d)')
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -70,7 +71,7 @@ class Model:
     gt_files = tf.contrib.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(sorted(glob.glob("{}/lit/*.png".format(train_path)))))
     norm_sphere = tf.image.decode_image(tf.read_file("synthetic/normal_sphere.png"), channels=3)
-
+    global_step = tf.Variable(0, trainable=False)
     def __init__(self):
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.per_process_gpu_memory_fraction = 0.8
@@ -143,26 +144,31 @@ class Model:
         self.saver = tf.train.Saver()
 
     def train(self):
-        self.train_op = tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
+        learning_rate = tf.train.exponential_decay(FLAGS.learning_rate, self.global_step,
+                                                   1000, 0.98, staircase=False)
+        self.train_op = tf.train.AdamOptimizer(learning_rate).minimize(self.loss)
 
         self.sess.run(tf.global_variables_initializer())
         self.sess.run(tf.local_variables_initializer())
-        options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
-        self.run_metadata = tf.RunMetadata()
+        options,self.run_metadata = None,None
+        if FLAGS.debug:
+            options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+            self.run_metadata = tf.RunMetadata()
         tf.train.start_queue_runners(sess=self.sess)
         # generate batches and run graph
         for epoch in range(0, FLAGS.max_epochs):
             for i in range(0, 50000/FLAGS.batch_size):
-                self.sess.run([self.train_op], options=options, run_metadata=self.run_metadata)
-                if i % 1 == 0:
+                self.sess.run([self.train_op],feed_dict={self.global_step:i}, options=options, run_metadata=self.run_metadata)
+                if i % 10 == 0:
                     err, summary, loss_summary = self.sess.run(
                         [ self.loss, self.img_summary, self.loss_summary], options=options,
                         run_metadata=self.run_metadata)
-                    self.train_writer.add_summary(summary, epoch)
-                    self.train_writer.add_summary(loss_summary, epoch)
-                    self.train_writer.add_run_metadata(self.run_metadata, "step{}".format(i), global_step=None)
+                    self.train_writer.add_summary(summary, i)
+                    self.train_writer.add_summary(loss_summary, i)
+                    if FLAGS.debug:
+                        self.train_writer.add_run_metadata(self.run_metadata, "step{}".format(i), global_step=None)
                     self.train_writer.flush()
-                    return
+                    print(err)
         print("finished")
         self.train_writer.close()
         self.sess.close()

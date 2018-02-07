@@ -18,25 +18,13 @@ class Reflectance:
         return reflmap
 
 
-# Given a row of pixel intensity product (dot product of RGB), returns those within cos(5)
-def near_mask(dot_row):
-    mask = tf.cast(tf.greater(dot_row, math.cos(0.0872665)), dtype=tf.float16, name="discretize")
-    return mask
-
-
-# Returns the index of the max intensity for a given orientation
-def max_idx(dot_row, flat_intensity):
-    mask = near_mask(dot_row)
-    #mask = tf.stack([mask,mask,mask],axis=-1)
-    reflectance = tf.multiply(mask, flat_intensity, name="mask")
-
-    idx = tf.argmax(reflectance, axis=0, output_type=tf.int64, name="max_reflectance")
-    return idx
-
-
 # Computes 128x128 matrix to represent dot products of pixels
 def unique_2d(flat_input, flat_intensity, sphere):
     diffs = tf.matmul(sphere, flat_input, transpose_b=True, name="normal_product")
-    #diffs = tf.transpose(diffs)
-    indices = tf.map_fn(lambda x: max_idx(x, flat_intensity), diffs, dtype=tf.int64, name="sparse_reflectance")
+    #discretized = tf.cast(tf.greater(diffs, math.cos(0.0872665)), dtype=tf.float16)
+    if tf.__version__ == '1.5.0':
+        reflectance = tf.boolean_mask(flat_intensity, tf.greater(diffs, math.cos(0.0872665)), axis=1)
+    else:
+        reflectance = tf.multiply(tf.cast(tf.greater(diffs, math.cos(0.0872665)), dtype=tf.float16), flat_intensity)
+    indices = tf.argmax(reflectance, axis=1, output_type=tf.int32, name="max_reflectance")
     return indices
