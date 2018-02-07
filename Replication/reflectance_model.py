@@ -2,14 +2,13 @@ import tensorflow as tf
 from reflectance_ops import Reflectance
 import numpy as np
 import glob
-from PIL import Image
-from tensorflow.python.client import timeline
+from preprocessing_ops import Preprocessor
+
 tf.app.flags.DEFINE_float('learning-rate', 1e-4, 'Learning Rate. (default: %(default)d)')
 tf.app.flags.DEFINE_integer('max-epochs', 200, 'Number of epochs to run. (default: %(default)d)')
-tf.app.flags.DEFINE_integer('batch-size', 4, 'Batch Size. (default: %(default)d)')
+tf.app.flags.DEFINE_integer('batch-size', 2, 'Batch Size. (default: %(default)d)')
 
 FLAGS = tf.app.flags.FLAGS
-
 
 def conv2d_extraction(x, filters, size, strides=[1, 1]):
     return tf.layers.conv2d(inputs=x,
@@ -57,45 +56,6 @@ def pool(x, strides=(2, 2)):
         padding='same')
 
 
-def zero_mask(image):
-    flat = tf.reshape(image, [-1,3])
-    totals = tf.reduce_sum(flat, axis=-1)
-    flat_mask = tf.not_equal(totals, 0)
-    mask = tf.stack([flat_mask]*3, axis=-1)
-    mask = tf.to_float(mask)
-    return tf.reshape(mask, tf.shape(image))
-
-def format_image(image, in_shape, out_size, mask_alpha=False, normalize=False):
-    alpha = []
-    if mask_alpha:
-        alpha = tf.clip_by_value(tf.to_float(image[:, :, :, 3]), 0, 1)
-    image = image[:, :, :, :3]
-    image = tf.reshape(image, in_shape)
-    image = tf.image.convert_image_dtype(image, dtype=tf.float32)
-    if normalize:
-        image = tf.map_fn(tf.image.per_image_standardization, image)
-    if mask_alpha:
-        alpha_mask = tf.stack([alpha, alpha, alpha], axis=-1)
-        image = tf.multiply(image, alpha_mask)
-    image = tf.reshape(image, in_shape)
-    image = tf.image.resize_images(image, [out_size, out_size])
-
-    return image
-
-def get_norm_sphere(single_sphere):
-    batch_sphere = tf.stack([single_sphere] * FLAGS.batch_size, axis=0)
-    #mask = zero_mask(batch_sphere)
-    batch_sphere = format_image(batch_sphere, [FLAGS.batch_size, 1024, 1024, 3], 1024)
-    #batch_sphere = tf.multiply(batch_sphere, mask)
-    batch_sphere = tf.reshape(batch_sphere, [FLAGS.batch_size, 1024, 1024, 3])
-    return tf.image.resize_images(batch_sphere, [128, 128])
-
-def unit_norm(image, channels=3):
-    flat = tf.reshape(image, [-1,channels])
-    norm = tf.sqrt(tf.reduce_sum(tf.square(flat), 1, keep_dims=True))
-    norm_flat = flat / norm
-    norm_flat = tf.where(tf.is_nan(norm_flat), tf.zeros_like(norm_flat), norm_flat)
-    return tf.reshape(norm_flat, tf.shape(image))
 
 class Model:
     appearance = tf.placeholder(tf.float32, [FLAGS.batch_size, 128, 128, 3])
@@ -110,31 +70,28 @@ class Model:
     gt_files = tf.contrib.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(sorted(glob.glob("{}/lit/*.png".format(train_path)))))
     norm_sphere = tf.image.decode_image(tf.read_file("synthetic/normal_sphere.png"), channels=3)
+
     def __init__(self):
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.per_process_gpu_memory_fraction = 0.8
         self.sess = tf.Session(config=config)
+        inputs = self.input_files.map(Preprocessor.preprocess_color, num_parallel_calls=4)
+        normals = self.normal_files.map(Preprocessor.preprocess_orientation, num_parallel_calls=4)
+        gts = self.gt_files.map(Preprocessor.preprocess_gt, num_parallel_calls=4)
+        sphere = Preprocessor.get_norm_sphere(self.norm_sphere, FLAGS.batch_size)
+        self.batch_sphere = Preprocessor.unit_norm(sphere[:, :, :, :3], channels=3)
+        dataset = tf.data.Dataset.zip((inputs, normals, gts)).repeat().batch(FLAGS.batch_size).prefetch(buffer_size=4)
+        iterator = dataset.make_one_shot_iterator()
+        (appearance, orientation, gt) = iterator.get_next()
+        normal_sphere_flat = tf.reshape(self.batch_sphere, [FLAGS.batch_size, -1, 3])
+
         with tf.device('/gpu:0'):
-            inputs = self.input_files.map(lambda filename: tf.image.decode_image(tf.read_file(filename), channels=3))
-            normals = self.normal_files.map(lambda filename: tf.image.decode_image(tf.read_file(filename), channels=4))
-            gts = self.gt_files.map(lambda filename: tf.image.decode_image(tf.read_file(filename), channels=3))
-
-            dataset = tf.data.Dataset.zip((inputs, normals, gts)).repeat().batch(FLAGS.batch_size)
-            iterator = dataset.make_one_shot_iterator()
-            (appearance, orientation, gt) = iterator.get_next()
-
-            self.appearance = format_image(appearance, [FLAGS.batch_size, 256, 256, 3], 128)
-            self.orientation = unit_norm(format_image(orientation, [FLAGS.batch_size, 256, 256, 3], 128, mask_alpha=True)[:,:,:,:3], channels=3)
-            sphere = get_norm_sphere(self.norm_sphere)
-            self.batch_sphere = unit_norm(sphere[:,:,:,:3], channels=3)
-
-            self.sparse_rm = tf.map_fn(Reflectance.online_reflectance,
-                                       (self.appearance, self.orientation, self.batch_sphere), dtype=tf.float32)
-            self.gt = format_image(gt, [FLAGS.batch_size, 256, 256, 3], 32)
-
-            self.pred = self.generate(self.sparse_rm)
-            self.loss = tf.sqrt(tf.reduce_sum(tf.square(self.gt - self.pred)))
-        self.summary(appearance, orientation, gt, self.sparse_rm, self.pred, sphere)
+            sparse_rm = tf.map_fn(Reflectance.online_reflectance,
+                                       (appearance, orientation, normal_sphere_flat), dtype=tf.float16, name="reflectance")
+            sparse_rm = tf.cast(tf.reshape(sparse_rm, [FLAGS.batch_size, 128, 128, 3]), dtype=tf.float32, name="recast")
+            pred = self.generate(sparse_rm)
+            self.loss = tf.sqrt(tf.reduce_sum(tf.square(gt - pred)))
+        self.summary(appearance, orientation, gt, sparse_rm, pred, sphere)
 
         return
 
@@ -148,8 +105,7 @@ class Model:
         return full_1, [encode_4, encode_3, encode_2]
 
     def decode(self, full, size, feature_maps):
-        full_2 = tf.contrib.layers.fully_connected(full, size)
-        full_2 = tf.concat([full_2, feature_maps[0]], axis=-1)
+        full_2 = tf.concat([full, feature_maps[0]], axis=-1)
         if feature_maps:
             decode_1 = decode_layer(full_2, 512, (3, 3), (8, 8))  # 2,8,8,512
             fm_1 = tf.reshape(feature_maps[0], [FLAGS.batch_size, 8, 8, -1])
@@ -179,27 +135,34 @@ class Model:
         img_in_summary = tf.summary.image('training input', appearance, max_outputs=1)
         img_normal_summary = tf.summary.image('normal input', orientation, max_outputs=1)
         img_gt_summary = tf.summary.image('Ground Truth', gt, max_outputs=1)
+        self.loss_summary = tf.summary.scalar("Loss", self.loss)
         self.img_summary = tf.summary.merge(
             [img_out_summary, img_in_summary, img_gt_summary, img_normal_summary, sparse_rm_summary,
              norm_sphere_summary])
-        self.train_writer = tf.summary.FileWriter("train_summaries", self.sess.graph)
+        self.train_writer = tf.summary.FileWriter("train_summaries_c", self.sess.graph)
         self.saver = tf.train.Saver()
 
     def train(self):
         self.train_op = tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
+
         self.sess.run(tf.global_variables_initializer())
         self.sess.run(tf.local_variables_initializer())
+        options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+        self.run_metadata = tf.RunMetadata()
         tf.train.start_queue_runners(sess=self.sess)
         # generate batches and run graph
         for epoch in range(0, FLAGS.max_epochs):
-            total_err = 0.0
-            summary = {}
-            for i in range(0, 10):
-                _, err, summary = self.sess.run([self.train_op, self.loss, self.img_summary])
-                total_err += err
-            self.train_writer.add_summary(summary, epoch)
-            self.train_writer.flush()
-            print(total_err / 2.0)
+            for i in range(0, 50000/FLAGS.batch_size):
+                self.sess.run([self.train_op], options=options, run_metadata=self.run_metadata)
+                if i % 1 == 0:
+                    err, summary, loss_summary = self.sess.run(
+                        [ self.loss, self.img_summary, self.loss_summary], options=options,
+                        run_metadata=self.run_metadata)
+                    self.train_writer.add_summary(summary, epoch)
+                    self.train_writer.add_summary(loss_summary, epoch)
+                    self.train_writer.add_run_metadata(self.run_metadata, "step{}".format(i), global_step=None)
+                    self.train_writer.flush()
+                    return
         print("finished")
         self.train_writer.close()
         self.sess.close()
