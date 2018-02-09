@@ -51,3 +51,5 @@ Replication/train_summaries/
 *.npz
 
 *.pk1
+
+\.idea/

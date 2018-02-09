@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+
 def encode(image, out_size):
     encode_1 = encode_layer(image, 3, (11, 11), (2, 2))
     encode_2 = encode_layer(encode_1, 64, (7, 7), (2, 2))
@@ -55,15 +56,18 @@ def dense(x, units):
                            )
 
 
-def encode_layer(x, count, size, stride):
-    conv = conv2d_extraction(x, count, size, [1,1])
-    conv_bn = tf.layers.batch_normalization(conv)
-    conv_pool = pool(conv_bn, stride)
+def encode_layer(x, count, size, stride, convolutions=1):
+    for i in range(0,convolutions):
+        x = conv2d_extraction(x, count, size, [1, 1])
+        x = tf.layers.batch_normalization(x)
+    conv_pool = pool(x, stride)
     return conv_pool
 
 
-def decode_layer(x, count, size, stride):
+def decode_layer(x, count, size, stride, convolutions=0):
     deconv = conv2d_reconstruction(x, count, size, stride)
+    for i in range(0,convolutions):
+        deconv = conv2d_extraction(x, count, size, [1, 1])
     deconv_bn = tf.layers.batch_normalization(deconv)
     return deconv_bn
 

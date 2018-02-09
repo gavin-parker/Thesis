@@ -8,7 +8,6 @@ import tensorflow as tf
 def main():
     refl_model = Model()
     refl_model.train()
-    #a, b, c = refl_data.get_batch(1)
 
 if __name__ == "__main__":
     main()
