@@ -1,6 +1,6 @@
 import tensorflow as tf
 import glob
-
+import imageio
 
 def zero_mask(image):
     flat = tf.reshape(image, [-1, 3])
@@ -43,17 +43,49 @@ def unit_norm(image, channels=3):
     norm_flat = tf.where(tf.is_nan(norm_flat), tf.zeros_like(norm_flat), norm_flat)
     return tf.reshape(norm_flat, tf.shape(image))
 
-def preprocess_color(filename):
+def preprocess_color(filename,input_shape=[256,256,3], double_precision=False):
     image = tf.image.decode_image(tf.read_file(filename), channels=3, name="decode_color")
-    return tf.cast(format_image(image, [256, 256, 3], 128), tf.float16)
+    if not double_precision:
+        return tf.cast(format_image(image, input_shape, 128), tf.float16)
+    return tf.cast(format_image(image, input_shape, 128), tf.float32)
 
-def preprocess_orientation(filename):
+"""
+Tensorflow implementation of http://www.graphics.cornell.edu/%7Ebjw/rgbe/rgbe.c for RGBE to float decoding
+
+rgbe2float(float *red, float *green, float *blue, unsigned char rgbe[4])
+{
+  float f;
+
+  if (rgbe[3]) {   /*nonzero pixel*/
+    f = ldexp(1.0,rgbe[3]-(int)(128+8));
+    *red = rgbe[0] * f;
+    *green = rgbe[1] * f;
+    *blue = rgbe[2] * f;
+  }
+  else
+    *red = *green = *blue = 0.0;
+}
+
+"""
+def preprocess_hdr(filename, size=64, double_precision=False):
+    rgbe_image = tf.py_func(parse_hdr, [filename], tf.float32)
+    if not double_precision:
+        return tf.cast(format_image(rgbe_image, [128, 128, 3], size), tf.float16)
+    return tf.cast(format_image(rgbe_image, [128, 128, 3], size), tf.float32)
+
+def parse_hdr(filename):
+    img = imageio.imread(filename, format='hdr')
+    return img
+
+def preprocess_orientation(filename, double_precision=False):
     image = tf.image.decode_image(tf.read_file(filename), channels=4, name="decode_norm")
     orientation = unit_norm(
         format_image(image, [256, 256, 3], 128, mask_alpha=True)[:, :, :3], channels=3)
-    return tf.cast(orientation, tf.float16)
+    if not double_precision:
+        return tf.cast(orientation, tf.float16)
+    return tf.cast(orientation, tf.float32)
 
-def preprocess_gt(filename):
+def preprocess_gt(filename, double_precision=False):
     image = tf.image.decode_image(tf.read_file(filename), channels=3, name="decode_gt")
     return format_image(image, [256, 256, 3], 32)
 

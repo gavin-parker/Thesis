@@ -67,7 +67,7 @@ def encode_layer(x, count, size, stride, convolutions=1):
 def decode_layer(x, count, size, stride, convolutions=0):
     deconv = conv2d_reconstruction(x, count, size, stride)
     for i in range(0,convolutions):
-        deconv = conv2d_extraction(x, count, size, [1, 1])
+        deconv = conv2d_extraction(deconv, count, size, [1, 1])
     deconv_bn = tf.layers.batch_normalization(deconv)
     return deconv_bn
 
