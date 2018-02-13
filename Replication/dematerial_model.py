@@ -49,7 +49,7 @@ class Model:
 
     def inference(self, input_batch):
         with tf.device('/gpu:0'):
-            return self.encode(input_batch[0])
+            return self.encode(input_batch[0], input_batch[1])
 
     """Calculate the l2 norm loss between the prediction and ground truth"""
 
@@ -69,11 +69,12 @@ class Model:
         encode_5 = encode_decode.encode_layer(encode_4, 512, (3, 3), (2, 2), 3)
         return [encode_1, encode_2, encode_3, encode_4, encode_5]
 
-    def encode(self, reflectance_map):
+    def encode(self, reflectance_map, background):
 
         rm_encodings = self.singlet(reflectance_map)
-
-        decode_1 = encode_decode.decode_layer(rm_encodings[4], 512, (3, 3), (2, 2), 3)
+        bg_encodings = self.singlet(background)
+        fully_encoded = tf.concat([rm_encodings[-1], bg_encodings[-1]], axis=-1)
+        decode_1 = encode_decode.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3)
         decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3)
         decode_3 = encode_decode.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3)
         decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 2)
