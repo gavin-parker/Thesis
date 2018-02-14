@@ -28,13 +28,13 @@ class Model:
         reflectance = self.reflectance_files.map(lambda x: preprocessing.preprocess_color(x, [128, 128, 3], True),
                                                  num_parallel_calls=4)
 
-        dataset = tf.data.Dataset.zip((reflectance, background, envmap)).repeat().batch(FLAGS.batch_size).prefetch(
-            buffer_size=4)
+        dataset = tf.data.Dataset.zip((reflectance, background, envmap)).repeat().batch(FLAGS.batch_size).shuffle(8).prefetch(
+            buffer_size=8)
         iterator = dataset.make_one_shot_iterator()
         input_batch = iterator.get_next()
-        refl = tf.map_fn(tf.image.per_image_standardization, input_batch[0])
-        bg = tf.map_fn(tf.image.per_image_standardization, input_batch[1])
-        gt = tf.map_fn(tf.image.per_image_standardization, input_batch[2])
+        refl = input_batch[0]
+        bg = input_batch[1]
+        gt = input_batch[2]
 
         prediction = self.inference((refl, bg, gt))
         self.loss_calculation(prediction, gt)
@@ -56,7 +56,7 @@ class Model:
     """Use Gradient Descent Optimizer to minimize loss"""
 
     def optimize(self):
-        return tf.train.GradientDescentOptimizer(self.learning_rate).minimize(self.loss)
+        return tf.train.AdamOptimizer(self.learning_rate).minimize(self.loss)
 
     def singlet(self, input):
         encode_1 = encode_decode.encode_layer(input, 64, (3, 3), (2, 2), 2)
@@ -72,22 +72,21 @@ class Model:
         bg_encodings = self.singlet(background)
 
         fully_encoded = tf.concat([rm_encodings[-1], bg_encodings[-1]], axis=-1)
-        # fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
+        fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
         decode_1 = encode_decode.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3)
         decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3)
         decode_3 = encode_decode.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3)
         decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1)
-        self.test = (decode_4)
         return encode_decode.encode_layer(decode_4, 3, (3, 3), (1, 1), 1)
 
     """Create tensorboard summaries of images and loss"""
 
     def summary(self, bg, reflectance, gt, pred):
 
-        # adjusted_gt = tf.map_fn(tf.image.per_image_standardization,gt)
-        # adjusted_pred = tf.map_fn(tf.image.per_image_standardization,pred)
-        img_out_summary = tf.summary.image('Generated Envmap', pred, max_outputs=1)
-        img_in_summary = tf.summary.image('Ground Truth Envmap', gt, max_outputs=1)
+        adjusted_gt = tf.map_fn(tf.image.per_image_standardization,gt)
+        adjusted_pred = tf.map_fn(tf.image.per_image_standardization,pred)
+        img_out_summary = tf.summary.image('Generated Envmap', adjusted_pred, max_outputs=1)
+        img_in_summary = tf.summary.image('Ground Truth Envmap', adjusted_gt, max_outputs=1)
         img_bg_summary = tf.summary.image('Input Background', bg, max_outputs=1)
         img_reflectance_summary = tf.summary.image('Input Reflectance Map', reflectance, max_outputs=1)
         loss_summary = tf.summary.scalar("Loss", self.loss)
@@ -119,7 +118,7 @@ class Model:
         # generate batches and run graph
         for epoch in range(0, FLAGS.max_epochs):
             for i in range(0, epoch_size):
-                sess.run([self.train_op], feed_dict={self.global_step: epoch}, options=options,
+                sess.run([self.loss, self.train_op], feed_dict={self.global_step: epoch}, options=options,
                          run_metadata=run_metadata)
                 if i % 10 == 0:
                     err, (summary, loss_summary) = sess.run(
