@@ -10,6 +10,9 @@ from params import FLAGS
 
 """Defines the graph and provides a template training function"""
 
+regularizer = tf.contrib.layers.l2_regularizer(scale=FLAGS.weight_decay)
+EPS = 1e-7
+
 
 class Model:
     global_step = tf.Variable(0, trainable=False)
@@ -22,24 +25,35 @@ class Model:
 
     def __init__(self):
         background = self.bg_files.map(
-            lambda x: preprocessing.preprocess_color(x, input_shape=[128, 128, 3], double_precision=True),
+            lambda x: preprocessing.preprocess_color(x, input_shape=[128, 128, 3], double_precision=True,
+                                                     use_lab=False),
             num_parallel_calls=4)
-        envmap = self.envmap_files.map(lambda x: preprocessing.preprocess_hdr(x, 64, True), num_parallel_calls=4)
-        reflectance = self.reflectance_files.map(lambda x: preprocessing.preprocess_color(x, [128, 128, 3], True),
-                                                 num_parallel_calls=4)
+        envmap = self.envmap_files.map(lambda x: preprocessing.preprocess_hdr(x, 64, double_precision=True), num_parallel_calls=4)
+        reflectance = self.reflectance_files.map(
+            lambda x: preprocessing.preprocess_color(x, [128, 128, 3], double_precision=True, use_lab=False),
+            num_parallel_calls=4)
 
-        dataset = tf.data.Dataset.zip((reflectance, background, envmap)).repeat().batch(FLAGS.batch_size).shuffle(8).prefetch(
+        dataset = tf.data.Dataset.zip((reflectance, background, envmap)).repeat().batch(FLAGS.batch_size).shuffle(
+            8).prefetch(
             buffer_size=8)
         iterator = dataset.make_one_shot_iterator()
         input_batch = iterator.get_next()
         refl = input_batch[0]
         bg = input_batch[1]
         gt = input_batch[2]
+        refl_log = tf.log(refl+EPS)
+        bg_log = tf.log(bg+EPS)
+        gt_log = tf.log(gt+EPS)
+        #bg_lab = tf.map_fn(preprocessing.rgb_to_lab, bg_log)
+        gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_log)
+        #refl_lab = tf.map_fn(preprocessing.rgb_to_lab, refl_log)
 
-        prediction = self.inference((refl, bg, gt))
-        self.loss_calculation(prediction, gt)
+        prediction = self.inference((refl_log, bg_log, gt_log))
+        #prediction_rgb = preprocessing.lab_to_rgb(prediction)
+        self.test = gt_log
+        self.loss_calculation(prediction, gt_log)
         self.train_op = self.optimize()
-        self.summaries = self.summary(bg, refl, gt, prediction)
+        self.summaries = self.summary(bg, refl, gt, tf.exp(prediction))
         return
 
     """Calculate a prediction RM and intermediary sparse RM"""
@@ -52,18 +66,23 @@ class Model:
 
     def loss_calculation(self, prediction, gt):
         self.loss = tf.sqrt(tf.reduce_sum(tf.square(gt - prediction)), name="l2_norm")
+        # self.loss = tf.reduce_sum(tf.abs(gt - prediction), name="l1_norm") + tf.losses.get_regularization_loss()
+        #self.loss = tf.reduce_sum(tf.abs(gt - prediction),
+        #                          name="l1_norm") + tf.losses.get_regularization_loss()
+        #self.loss = tf.losses.log_loss(gt, prediction) + tf.losses.get_regularization_losses()
 
     """Use Gradient Descent Optimizer to minimize loss"""
 
     def optimize(self):
-        return tf.train.AdamOptimizer(self.learning_rate).minimize(self.loss)
+        return tf.train.MomentumOptimizer(self.learning_rate, 0.95).minimize(self.loss)
 
-    def singlet(self, input):
-        encode_1 = encode_decode.encode_layer(input, 64, (3, 3), (2, 2), 2)
-        encode_2 = encode_decode.encode_layer(encode_1, 128, (3, 3), (2, 2), 2)
-        encode_3 = encode_decode.encode_layer(encode_2, 256, (3, 3), (2, 2), 3)
-        encode_4 = encode_decode.encode_layer(encode_3, 512, (3, 3), (2, 2), 3)
-        encode_5 = encode_decode.encode_layer(encode_4, 512, (3, 3), (2, 2), 3)
+    @staticmethod
+    def singlet(input):
+        encode_1 = encode_decode.encode_layer(input, 64, (3, 3), (2, 2), 2, regularizer=regularizer)
+        encode_2 = encode_decode.encode_layer(encode_1, 128, (3, 3), (2, 2), 2, regularizer=regularizer)
+        encode_3 = encode_decode.encode_layer(encode_2, 256, (3, 3), (2, 2), 3, regularizer=regularizer)
+        encode_4 = encode_decode.encode_layer(encode_3, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
+        encode_5 = encode_decode.encode_layer(encode_4, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
         return [encode_1, encode_2, encode_3, encode_4, encode_5]
 
     def encode(self, reflectance_map, background):
@@ -72,19 +91,22 @@ class Model:
         bg_encodings = self.singlet(background)
 
         fully_encoded = tf.concat([rm_encodings[-1], bg_encodings[-1]], axis=-1)
-        fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
-        decode_1 = encode_decode.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3)
-        decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3)
-        decode_3 = encode_decode.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3)
-        decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1)
-        return encode_decode.encode_layer(decode_4, 3, (3, 3), (1, 1), 1)
+        # fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
+        decode_1 = encode_decode.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
+        decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3,
+                                              regularizer=regularizer)
+        decode_3 = encode_decode.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3,
+                                              regularizer=regularizer)
+        decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1,
+                                              regularizer=regularizer)
+        return encode_decode.encode_layer(decode_4, 3, (3, 3), (1, 1), 1, regularizer=regularizer)
 
     """Create tensorboard summaries of images and loss"""
 
     def summary(self, bg, reflectance, gt, pred):
 
-        adjusted_gt = tf.map_fn(tf.image.per_image_standardization,gt)
-        adjusted_pred = tf.map_fn(tf.image.per_image_standardization,pred)
+        adjusted_gt = tf.map_fn(tf.image.per_image_standardization, gt)
+        adjusted_pred = tf.map_fn(tf.image.per_image_standardization, pred)
         img_out_summary = tf.summary.image('Generated Envmap', adjusted_pred, max_outputs=1)
         img_in_summary = tf.summary.image('Ground Truth Envmap', adjusted_gt, max_outputs=1)
         img_bg_summary = tf.summary.image('Input Background', bg, max_outputs=1)
@@ -110,22 +132,25 @@ class Model:
             options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
             run_metadata = tf.RunMetadata()
         tf.train.start_queue_runners(sess=sess)
-        train_writer = tf.summary.FileWriter("envmap_synthetic_results/{}".format(time.strftime("%H:%M:%S")),
+        train_writer = tf.summary.FileWriter("{}/{}".format(FLAGS.log_dir, time.strftime("%H:%M:%S")),
                                              sess.graph)
 
         saver = tf.train.Saver()
-        epoch_size = 50000 / FLAGS.max_epochs
+        epoch_size = 56238 / FLAGS.batch_size
+        print("beginning training with learning rate: {}".format(FLAGS.learning_rate))
+        print("Epoch size: {}".format(epoch_size))
+        print("Batch size: {}".format(FLAGS.batch_size))
         # generate batches and run graph
         for epoch in range(0, FLAGS.max_epochs):
             for i in range(0, epoch_size):
+                #test = sess.run(self.test)
+                #print(test)
                 sess.run([self.loss, self.train_op], feed_dict={self.global_step: epoch}, options=options,
                          run_metadata=run_metadata)
                 if i % 10 == 0:
                     err, (summary, loss_summary) = sess.run(
                         [self.loss, self.summaries], options=options,
                         run_metadata=run_metadata)
-                    #test = sess.run(self.test)
-                    #print(test)
                     train_writer.add_summary(summary, epoch * epoch_size + i)
                     train_writer.add_summary(loss_summary, epoch * epoch_size + i)
                     saver.save(sess, os.path.join("dematerial_graph", 'model'), global_step=epoch)
