@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 import os
 
-
+"""Sends commands to the render worker processes"""
 class Master:
     worker = None
 
