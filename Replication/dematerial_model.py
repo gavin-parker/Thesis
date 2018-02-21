@@ -6,6 +6,7 @@ import time
 from params import FLAGS
 import render_master
 import cv2
+import numpy as np
 
 """ Convolutional-Deconvolutional model for extracting reflectance maps from input images with normals.
     Extracts sparse reflectance maps, with the CNN performing data interpolation"""
@@ -64,8 +65,6 @@ class Model:
         self.converted_prediction = tf.map_fn(preprocessing.denormalize_hdr, self.converted_prediction)
         self.converted_gt = tf.map_fn(preprocessing.lab_to_rgb, gt_lab)
         self.converted_gt = tf.map_fn(preprocessing.denormalize_hdr, self.converted_gt)
-        self.gt = gt_norm
-        self.test = (gt, self.converted_gt, gt_norm)
         return
 
     """Calculate a prediction RM and intermediary sparse RM"""
@@ -204,19 +203,24 @@ class Model:
         sess.run(tf.local_variables_initializer())
         test_size = 20
         master = render_master.Master('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender')
-        test = sess.run(self.test)
+        mask = np.sum(cv2.imread('mask.png'), axis=2).astype(np.bool)
+
         for i in range(0, test_size):
-            loss, prediction, gt, test_gt = sess.run([self.loss, self.converted_prediction, self.gt, self.converted_gt])
+            loss, prediction, gt = sess.run([self.loss, self.converted_prediction, self.converted_gt])
             print("loss: {}".format(loss))
             if loss < 5:
                 preprocessing.write_hdr('prediction.hdr', prediction[0])
                 preprocessing.write_hdr('gt.hdr', gt[0])
                 master.start_worker('test_elephant.blend', 'gt.hdr', 'gt.png')
                 master.start_worker('test_elephant.blend', 'prediction.hdr', 'pred.png')
-                gt_render = cv2.imread('gt.png')
+                gt_elephant = cv2.imread('gt.png')
+                pred_elephant = cv2.imread('pred.png')
+                background = cv2.imread('bg_gt.png')
+                background[mask] = gt_elephant[mask]
+                cv2.imwrite('gt_render.png', background)
+                background[mask] = pred_elephant[mask]
+                cv2.imwrite('pred_render.png', background)
                 return
-                # gt_render = cv2.imread('gt.png')
-            # prediction_render = cv2.imread('pred.png')
 
         sess.close()
         return

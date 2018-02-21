@@ -11,11 +11,17 @@ class RenderWorker:
 
     def render_image(self, name, envmap):
         print('{}/{}'.format(os.getcwd(),envmap))
+        """Render the elephant with lighting"""
         bpy.data.images.load('{}/{}'.format(os.getcwd(),envmap), check_existing=False)
         bpy.data.scenes['Scene'].world.node_tree.nodes['Environment Texture'].image = bpy.data.images[envmap]
         bpy.data.scenes['Scene'].render.filepath = name
+        bpy.data.scenes['Scene'].world.cycles_visibility.camera = False
         bpy.ops.render.render(write_still=True)
-
+        """Render the Background"""
+        bpy.data.objects['Elephant'].hide_render = True
+        bpy.data.scenes['Scene'].world.cycles_visibility.camera = True
+        bpy.data.scenes['Scene'].render.filepath = "bg_{}".format(name)
+        bpy.ops.render.render(write_still=True)
 
 def main():
     worker = RenderWorker()
