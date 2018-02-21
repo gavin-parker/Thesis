@@ -1,25 +1,26 @@
 import tensorflow as tf
+import numpy as np
 
 
-
-def conv2d_extraction(x, filters, size, strides=[1, 1], regularizer=None):
+def conv2d_extraction(x, filters, size, strides=[1, 1], regularizer=None, activation=tf.nn.relu):
     return tf.layers.conv2d(inputs=x,
                             filters=filters,
                             strides=strides,
-                            kernel_initializer=tf.contrib.layers.xavier_initializer(),
+                            kernel_initializer=tf.contrib.layers.xavier_initializer_conv2d(),
                             padding='SAME',
                             kernel_size=size,
-                            kernel_regularizer=regularizer)
+                            kernel_regularizer=regularizer,
+                            activation=activation)
 
 
-def conv2d_reconstruction(x, filters, size, strides, regularizer=None):
+def conv2d_reconstruction(x, filters, size, strides, regularizer=None, activation=tf.nn.relu):
     return tf.layers.conv2d_transpose(inputs=x,
                                       filters=filters,
                                       kernel_size=size,
                                       strides=strides,
                                       padding='SAME',
-                                      kernel_initializer=tf.contrib.layers.xavier_initializer(),
-                                      kernel_regularizer=regularizer
+                                      kernel_regularizer=regularizer,
+                                      activation=activation
                                         )
 
 
@@ -30,25 +31,24 @@ def dense(x, units):
                            )
 
 
-def encode_layer(x, count, size, stride, convolutions=1, regularizer=None, use_relu=True, norm=True, maxpool=True):
+def encode_layer(x, count, size, stride, convolutions=1, regularizer=None, activation=tf.nn.relu, norm=True, maxpool=True):
     for i in range(0,convolutions):
-        x = conv2d_extraction(x, count, size, [1, 1], regularizer=regularizer)
-        if use_relu:
-            x = tf.nn.relu(x)
+        x = conv2d_extraction(x, count, size, [1, 1], regularizer=regularizer, activation=tf.nn.relu)
         if norm:
-            x = tf.layers.batch_normalization(x)
+            x = tf.layers.batch_normalization(x,
+                            fused=True)
     if maxpool:
         x = pool(x, stride)
     return x
 
 
-def decode_layer(x, count, size, stride, convolutions=0, regularizer=None, norm=True):
-    deconv = conv2d_reconstruction(x, count, size, stride)
+def decode_layer(x, count, size, stride, convolutions=0, regularizer=None, norm=True, activation=tf.nn.relu):
+    deconv = conv2d_reconstruction(x, count, size, stride, activation=activation)
     for i in range(0,convolutions):
         deconv = conv2d_extraction(deconv, count, size, [1, 1], regularizer=regularizer)
-        deconv = tf.nn.relu(deconv)
         if norm:
-            deconv = tf.layers.batch_normalization(deconv)
+            deconv = tf.layers.batch_normalization(deconv,
+                            fused=True)
     return deconv
 
 
