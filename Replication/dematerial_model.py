@@ -4,8 +4,9 @@ import preprocessing_ops as preprocessing
 import encode_decode
 import time
 from params import FLAGS
-import glob
-import random
+import render_master
+import cv2
+
 """ Convolutional-Deconvolutional model for extracting reflectance maps from input images with normals.
     Extracts sparse reflectance maps, with the CNN performing data interpolation"""
 
@@ -13,11 +14,19 @@ import random
 
 regularizer = tf.contrib.layers.l1_regularizer(scale=FLAGS.weight_decay)
 
+
 class Model:
     global_step = tf.Variable(0, trainable=False)
     learning_rate = tf.train.exponential_decay(FLAGS.learning_rate, global_step,
                                                1, 0.95, staircase=False)
-    train_path = "/mnt/black/MultiNatIllum/data/multiple_materials_single_object/singlets/synthetic/train"
+    synth_path = 'synthetic'
+    train_path = 'train'
+    if FLAGS.validate:
+        train_path = 'val'
+    if FLAGS.real:
+        synth_path = 'real'
+    train_path = "/mnt/black/MultiNatIllum/data/multiple_materials_single_object/singlets/{}/{}".format(synth_path,
+                                                                                                        train_path)
     bg_files = preprocessing.image_stream("{}/background/*.png".format(train_path))
     envmap_files = preprocessing.image_stream("{}/envmap_latlong/*.hdr".format(train_path))
     reflectance_files = preprocessing.image_stream("{}/reflectanceMap_latlong/*.png".format(train_path))
@@ -35,24 +44,28 @@ class Model:
                 num_parallel_calls=4)
 
             dataset = tf.data.Dataset.zip((reflectance, background, envmap)).repeat().batch(FLAGS.batch_size).prefetch(
-                buffer_size=2*FLAGS.batch_size)
+                buffer_size=2 * FLAGS.batch_size)
             iterator = dataset.make_one_shot_iterator()
             input_batch = iterator.get_next()
             refl = input_batch[0]
             bg = input_batch[1]
             gt = input_batch[2]
 
-
         gt_norm = preprocessing.normalize_hdr(gt)
         bg_lab = tf.map_fn(preprocessing.rgb_to_lab, bg)
         refl_lab = tf.map_fn(preprocessing.rgb_to_lab, refl)
         gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
 
-        self.test = refl_lab
         prediction = self.inference((refl_lab, bg_lab, gt_lab))
         self.loss_calculation(prediction, gt_lab)
         self.train_op = self.optimize()
         self.summaries = self.summary(bg, refl, gt_lab, prediction, gt, bg_lab, refl_lab)
+        self.converted_prediction = tf.map_fn(preprocessing.lab_to_rgb, prediction)
+        self.converted_prediction = tf.map_fn(preprocessing.denormalize_hdr, self.converted_prediction)
+        self.converted_gt = tf.map_fn(preprocessing.lab_to_rgb, gt_lab)
+        self.converted_gt = tf.map_fn(preprocessing.denormalize_hdr, self.converted_gt)
+        self.gt = gt_norm
+        self.test = (gt, self.converted_gt, gt_norm)
         return
 
     """Calculate a prediction RM and intermediary sparse RM"""
@@ -67,18 +80,17 @@ class Model:
         reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
         reg_constant = 0.01
         self.reg_loss = reg_constant * sum(reg_losses)
-        #self.reg_loss = tf.losses.get_regularization_loss()
-        self.loss = tf.reduce_mean(tf.abs(gt -prediction))
+        # self.reg_loss = tf.losses.get_regularization_loss()
+        self.loss = tf.reduce_mean(tf.abs(gt - prediction))
 
     def gabriel_loss(self, prediction_log, gt_log):
-        n = 1.0 / (3.0*64*64)
-        return n*tf.reduce_sum(tf.square(prediction_log - gt_log))
-
+        n = 1.0 / (3.0 * 64 * 64)
+        return n * tf.reduce_sum(tf.square(prediction_log - gt_log))
 
     """Use Gradient Descent Optimizer to minimize loss"""
 
     def optimize(self):
-        #return tf.train.MomentumOptimizer(self.learning_rate, 0.95).minimize(self.loss)
+        # return tf.train.MomentumOptimizer(self.learning_rate, 0.95).minimize(self.loss)
         return tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
 
     @staticmethod
@@ -96,7 +108,8 @@ class Model:
         bg_encodings = self.singlet(background)
 
         fully_encoded = tf.concat([rm_encodings[-1], bg_encodings[-1]], axis=-1)
-        fully_encoded = encode_decode.encode_layer(fully_encoded, 1024, (3,3), (1,1), 1, maxpool=False)
+        fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
+        fully_encoded = encode_decode.encode_layer(fully_encoded, 1024, (3, 3), (1, 1), 1, maxpool=False)
         decode_1 = encode_decode.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
         decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3,
                                               regularizer=regularizer)
@@ -105,7 +118,7 @@ class Model:
         decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1,
                                               regularizer=regularizer)
         return encode_decode.decode_layer(decode_4, 3, (2, 2), (1, 1), 0,
-                                              regularizer=regularizer, activation=None)
+                                          regularizer=regularizer, activation=None)
 
     """Create tensorboard summaries of images and loss"""
 
@@ -132,6 +145,7 @@ class Model:
 
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.per_process_gpu_memory_fraction = 0.9
+
         if sess is None:
             sess = tf.Session(config=config)
         sess.run(tf.global_variables_initializer())
@@ -146,6 +160,8 @@ class Model:
                                              sess.graph)
 
         saver = tf.train.Saver()
+        if FLAGS.fine_tune:
+            saver.restore(sess, FLAGS.test_model_dir)
         epoch_size = 56238 / FLAGS.batch_size
         print("beginning training with learning rate: {}".format(FLAGS.learning_rate))
         print("Epoch size: {}".format(epoch_size))
@@ -155,7 +171,7 @@ class Model:
             real_max = 0
             for i in range(0, epoch_size):
                 sess.run([self.loss, self.train_op], options=options,
-                                   run_metadata=run_metadata)
+                         run_metadata=run_metadata)
                 if i % 100 == 0:
                     err, (summary, loss_summary, lr_summary), reg_loss = sess.run(
                         [self.loss, self.summaries, self.reg_loss], options=options,
@@ -175,3 +191,32 @@ class Model:
         print("finished")
         train_writer.close()
         sess.close()
+
+    def test_model(self, sess=None):
+        config = tf.ConfigProto(allow_soft_placement=True)
+        config.gpu_options.per_process_gpu_memory_fraction = 0.5
+        if sess is None:
+            sess = tf.Session(config=config)
+
+        saver = tf.train.Saver()
+        saver.restore(sess, FLAGS.test_model_dir)
+        sess.run(tf.global_variables_initializer())
+        sess.run(tf.local_variables_initializer())
+        test_size = 20
+        master = render_master.Master('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender')
+        test = sess.run(self.test)
+        for i in range(0, test_size):
+            loss, prediction, gt, test_gt = sess.run([self.loss, self.converted_prediction, self.gt, self.converted_gt])
+            print("loss: {}".format(loss))
+            if loss < 5:
+                preprocessing.write_hdr('prediction.hdr', prediction[0])
+                preprocessing.write_hdr('gt.hdr', gt[0])
+                master.start_worker('test_elephant.blend', 'gt.hdr', 'gt.png')
+                master.start_worker('test_elephant.blend', 'prediction.hdr', 'pred.png')
+                gt_render = cv2.imread('gt.png')
+                return
+                # gt_render = cv2.imread('gt.png')
+            # prediction_render = cv2.imread('pred.png')
+
+        sess.close()
+        return

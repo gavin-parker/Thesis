@@ -11,7 +11,10 @@ def main():
         refl_model.train()
     if '--dematerial' in sys.argv:
         demat_model = dematerial_model.Model()
-        demat_model.train()
+        if '--test' in sys.argv:
+            demat_model.test_model()
+        else:
+            demat_model.train()
 
 if __name__ == "__main__":
     main()

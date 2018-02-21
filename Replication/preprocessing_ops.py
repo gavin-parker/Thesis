@@ -3,8 +3,8 @@ import glob
 import cv2
 import numpy as np
 
-HDR_MIN = 0
-HDR_MAX = 1
+HDR_MIN = 0.0
+HDR_MAX = 1.0
 EPS = 1e-12
 
 
@@ -67,15 +67,14 @@ def preprocess_color(filename, input_shape=[256, 256, 3], double_precision=False
 
 
 def normalize_hdr(image):
-    image_log = tf.log(image + 1.0 + EPS)
-    image_norm = (image_log - HDR_MIN) / HDR_MAX
-    return image_norm
+    image_log = tf.log(image + 1.0) / 10.0
+    return image_log
 
 
 def denormalize_hdr(image):
-    image = (image * HDR_MAX) + HDR_MIN
-    image = tf.exp(image - 1.0 - EPS)
-    return image
+
+    image_delog = tf.exp(image*10.0) - 1.0
+    return image_delog
 
 
 """
@@ -109,6 +108,9 @@ def parse_hdr(filename):
     img = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
     return img.astype(np.float32)
 
+
+def write_hdr(filename, image):
+    cv2.imwrite(filename, image)
 
 def preprocess_orientation(filename, double_precision=False):
     image = tf.image.decode_image(tf.read_file(filename), channels=4, name="decode_norm")
@@ -157,12 +159,12 @@ def rgb_to_lab(srgb):
             # convert to fx = f(X/Xn), fy = f(Y/Yn), fz = f(Z/Zn)
 
             # normalize for D65 white point
-            xyz_normalized_pixels = tf.multiply(xyz_pixels, [1 / 0.950456, 1.0, 1 / 1.088754])
+            xyz_normalized_pixels = tf.multiply(xyz_pixels, [1 / 0.950456, 1.0, 1.0 / 1.088754])
 
-            epsilon = 6.0 / 29
-            linear_mask = tf.cast(xyz_normalized_pixels <= (epsilon ** 3), dtype=tf.float32)
-            exponential_mask = tf.cast(xyz_normalized_pixels > (epsilon ** 3), dtype=tf.float32)
-            fxfyfz_pixels = (xyz_normalized_pixels / (3.0 * epsilon ** 2) + 4.0 / 29) * linear_mask + (
+            epsilon = 6.0 / 29.0
+            linear_mask = tf.cast(xyz_normalized_pixels <= (epsilon ** 3.0), dtype=tf.float32)
+            exponential_mask = tf.cast(xyz_normalized_pixels > (epsilon ** 3.0), dtype=tf.float32)
+            fxfyfz_pixels = (xyz_normalized_pixels / (3.0 * epsilon ** 2.0) + 4.0 / 29) * linear_mask + (
                         xyz_normalized_pixels ** (1.0 / 3)) * exponential_mask
 
             # convert to lab
@@ -186,18 +188,18 @@ def lab_to_rgb(lab):
             # convert to fxfyfz
             lab_to_fxfyfz = tf.constant([
                 #   fx      fy        fz
-                [1 / 116.0, 1 / 116.0, 1 / 116.0],  # l
-                [1 / 500.0, 0.0, 0.0],  # a
-                [0.0, 0.0, -1 / 200.0],  # b
+                [1.0 / 116.0, 1.0 / 116.0, 1.0 / 116.0],  # l
+                [1.0 / 500.0, 0.0, 0.0],  # a
+                [0.0, 0.0, -1.0 / 200.0],  # b
             ])
             fxfyfz_pixels = tf.matmul(lab_pixels + tf.constant([16.0, 0.0, 0.0]), lab_to_fxfyfz)
 
             # convert to xyz
-            epsilon = 6.0 / 29
+            epsilon = 6.0 / 29.0
             linear_mask = tf.cast(fxfyfz_pixels <= epsilon, dtype=tf.float32)
             exponential_mask = tf.cast(fxfyfz_pixels > epsilon, dtype=tf.float32)
-            xyz_pixels = (3.0 * epsilon ** 2 * (fxfyfz_pixels - 4.0 / 29)) * linear_mask + (
-                        fxfyfz_pixels ** 3) * exponential_mask
+            xyz_pixels = (3.0 * epsilon ** 2.0 * (fxfyfz_pixels - 4.0 / 29.0)) * linear_mask + (
+                        fxfyfz_pixels ** 3.0) * exponential_mask
 
             # denormalize for D65 white point
             xyz_pixels = tf.multiply(xyz_pixels, [0.950456, 1.0, 1.088754])
@@ -215,6 +217,6 @@ def lab_to_rgb(lab):
             linear_mask = tf.cast(rgb_pixels <= 0.0031308, dtype=tf.float32)
             exponential_mask = tf.cast(rgb_pixels > 0.0031308, dtype=tf.float32)
             srgb_pixels = (rgb_pixels * 12.92 * linear_mask) + (
-                        (rgb_pixels ** (1 / 2.4) * 1.055) - 0.055) * exponential_mask
+                        (rgb_pixels ** (1.0 / 2.4) * 1.055) - 0.055) * exponential_mask
 
         return tf.reshape(srgb_pixels, tf.shape(lab))

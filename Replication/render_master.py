@@ -8,7 +8,7 @@ class Master:
     def __init__(self, blender_path):
         self.blender_path = blender_path
 
-    def start_worker(self, scene):
+    def start_worker(self, scene, envmap, name):
         myargs = [
             self.blender_path,
             scene,
@@ -17,21 +17,9 @@ class Master:
             "render_worker.py"
         ]
         self.worker = Popen(myargs, stdin=PIPE)
+        self.start_render(envmap, name)
 
-    def start_render(self, envmap):
-        self.worker.stdin.write("{}\n".format(envmap))
-
-    def stop_worker(self):
-        self.worker.stdin.write('stop\n')
+    def start_render(self, envmap, name):
+        self.worker.communicate("{} {}".format(envmap, name))
 
 
-def test():
-    master = Master('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender')
-    master.start_worker('test_elephant.blend')
-    for filename in os.listdir('envmaps'):
-        print(filename)
-        master.start_render(filename)
-    master.stop_worker()
-
-if __name__ == "__main__":
-    test()

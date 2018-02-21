@@ -2,7 +2,12 @@ import tensorflow as tf
 tf.app.flags.DEFINE_float('learning-rate', 0.001, 'Learning Rate. (default: %(default)d)')
 tf.app.flags.DEFINE_integer('max-epochs', 50, 'Number of epochs to run. (default: %(default)d)')
 tf.app.flags.DEFINE_integer('batch-size', 4, 'BatchSize. (default: %(default)d)')
-tf.app.flags.DEFINE_boolean('debug', False, 'Batch Size. (default: %(default)d)')
+tf.app.flags.DEFINE_boolean('debug', False, 'Enable debug options. (default: %(default)d)')
+tf.app.flags.DEFINE_boolean('validate', False, 'Operate on validation set. (default: %(default)d)')
+tf.app.flags.DEFINE_boolean('test', False, 'Run test renders. (default: %(default)d)')
+tf.app.flags.DEFINE_boolean('real', False, 'Operate on real data set. (default: %(default)d)')
+tf.app.flags.DEFINE_boolean('fine-tune', False, 'Pre-load previous best. (default: %(default)d)')
 tf.app.flags.DEFINE_string('log-dir', 'envmap_synthetic_results', 'Output Log directory')
+tf.app.flags.DEFINE_string('test-model-dir', 'best_dematerial', 'Directory of model for testing')
 tf.app.flags.DEFINE_float('weight-decay', 0.0005, 'Weight decay factor.')
 FLAGS = tf.app.flags.FLAGS
