@@ -13,7 +13,7 @@ import numpy as np
 
 """Defines the graph and provides a template training function"""
 
-regularizer = tf.contrib.layers.l1_regularizer(scale=FLAGS.weight_decay)
+regularizer = None#tf.contrib.layers.l1_regularizer(scale=FLAGS.weight_decay)
 
 
 class Model:
@@ -26,8 +26,7 @@ class Model:
         train_path = 'val'
     if FLAGS.real:
         synth_path = 'real'
-    train_path = "/mnt/black/MultiNatIllum/data/multiple_materials_single_object/singlets/{}/{}".format(synth_path,
-                                                                                                        train_path)
+    train_path = FLAGS.train_dir + "{}/{}".format(synth_path,train_path)
     bg_files = preprocessing.image_stream("{}/background/*.png".format(train_path))
     envmap_files = preprocessing.image_stream("{}/envmap_latlong/*.hdr".format(train_path))
     reflectance_files = preprocessing.image_stream("{}/reflectanceMap_latlong/*.png".format(train_path))
@@ -62,13 +61,13 @@ class Model:
             self.loss_calculation(prediction, gt_lab)
             self.train_op = self.optimize()
             self.summaries = self.summary(bg, refl, gt_lab, prediction, gt, bg_lab, refl_lab)
-            self.converted_prediction = tf.map_fn(preprocessing.lab_to_rgb, prediction)
-            self.converted_prediction = tf.map_fn(preprocessing.denormalize_hdr, self.converted_prediction)
-            self.prediction = prediction
-            self.converted_gt = tf.map_fn(preprocessing.lab_to_rgb, gt_lab)
-            self.converted_gt = tf.map_fn(preprocessing.denormalize_hdr, self.converted_gt)
-            self.gt = gt
-            self.gt_lab = gt_lab
+            #self.converted_prediction = tf.map_fn(preprocessing.lab_to_rgb, prediction)
+            #self.converted_prediction = tf.map_fn(preprocessing.denormalize_hdr, self.converted_prediction)
+            #self.prediction = prediction
+            #self.converted_gt = tf.map_fn(preprocessing.lab_to_rgb, gt_lab)
+            #self.converted_gt = tf.map_fn(preprocessing.denormalize_hdr, self.converted_gt)
+            #self.gt = gt
+            #self.gt_lab = gt_lab
         return
 
     """Calculate a prediction RM and intermediary sparse RM"""
@@ -79,9 +78,9 @@ class Model:
     """Calculate the l2 norm loss between the prediction and ground truth"""
 
     def loss_calculation(self, prediction, gt):
-        reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+        #reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
         reg_constant = 0.01
-        self.reg_loss = reg_constant * sum(reg_losses)
+        #self.reg_loss = reg_constant * sum(reg_losses)
         # self.reg_loss = tf.losses.get_regularization_loss()
         self.loss = tf.reduce_mean(tf.abs(prediction - gt))
 
