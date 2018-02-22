@@ -51,27 +51,30 @@ class Model:
             refl = input_batch[0]
             bg = input_batch[1]
             gt = input_batch[2]
+        with tf.device('/gpu:0'):
+            gt_norm = preprocessing.normalize_hdr(gt)
+            bg_lab = tf.map_fn(preprocessing.rgb_to_lab, bg)
+            refl_lab = tf.map_fn(preprocessing.rgb_to_lab, refl)
+            gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
 
-        gt_norm = preprocessing.normalize_hdr(gt)
-        bg_lab = tf.map_fn(preprocessing.rgb_to_lab, bg)
-        refl_lab = tf.map_fn(preprocessing.rgb_to_lab, refl)
-        gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
-
-        prediction = self.inference((refl_lab, bg_lab, gt_lab))
-        self.loss_calculation(prediction, gt_lab)
-        self.train_op = self.optimize()
-        self.summaries = self.summary(bg, refl, gt_lab, prediction, gt, bg_lab, refl_lab)
-        self.converted_prediction = tf.map_fn(preprocessing.lab_to_rgb, prediction)
-        self.converted_prediction = tf.map_fn(preprocessing.denormalize_hdr, self.converted_prediction)
-        self.converted_gt = tf.map_fn(preprocessing.lab_to_rgb, gt_lab)
-        self.converted_gt = tf.map_fn(preprocessing.denormalize_hdr, self.converted_gt)
+            prediction = self.inference((refl_lab, bg_lab, gt_lab))
+            self.diff = tf.reduce_max(gt_lab) - tf.reduce_max(prediction)
+            self.loss_calculation(prediction, gt_lab)
+            self.train_op = self.optimize()
+            self.summaries = self.summary(bg, refl, gt_lab, prediction, gt, bg_lab, refl_lab)
+            self.converted_prediction = tf.map_fn(preprocessing.lab_to_rgb, prediction)
+            self.converted_prediction = tf.map_fn(preprocessing.denormalize_hdr, self.converted_prediction)
+            self.prediction = prediction
+            self.converted_gt = tf.map_fn(preprocessing.lab_to_rgb, gt_lab)
+            self.converted_gt = tf.map_fn(preprocessing.denormalize_hdr, self.converted_gt)
+            self.gt = gt
+            self.gt_lab = gt_lab
         return
 
     """Calculate a prediction RM and intermediary sparse RM"""
 
     def inference(self, input_batch):
-        with tf.device('/gpu:0'):
-            return self.encode(input_batch[0], input_batch[1])
+        return self.encode(input_batch[0], input_batch[1])
 
     """Calculate the l2 norm loss between the prediction and ground truth"""
 
@@ -80,7 +83,7 @@ class Model:
         reg_constant = 0.01
         self.reg_loss = reg_constant * sum(reg_losses)
         # self.reg_loss = tf.losses.get_regularization_loss()
-        self.loss = tf.reduce_mean(tf.abs(gt - prediction))
+        self.loss = tf.reduce_mean(tf.abs(prediction - gt))
 
     def gabriel_loss(self, prediction_log, gt_log):
         n = 1.0 / (3.0 * 64 * 64)
@@ -134,7 +137,7 @@ class Model:
                      tf.summary.image('CIELAB Reflectance Map', refl_lab, max_outputs=1)]
 
         loss_summary = tf.summary.scalar("Loss", self.loss)
-        lr_summary = tf.summary.scalar("Learning Rate", self.learning_rate)
+        lr_summary = tf.summary.scalar("Max difference", self.diff)
         img_summary = tf.summary.merge(summaries)
         return loss_summary, img_summary, lr_summary
 
@@ -168,22 +171,25 @@ class Model:
         # generate batches and run graph
         for epoch in range(0, FLAGS.max_epochs):
             real_max = 0
+            t0 = time.time()
             for i in range(0, epoch_size):
                 sess.run([self.loss, self.train_op], options=options,
                          run_metadata=run_metadata)
                 if i % 100 == 0:
-                    err, (summary, loss_summary, lr_summary), reg_loss = sess.run(
-                        [self.loss, self.summaries, self.reg_loss], options=options,
+                    err, (summary, loss_summary, diff_summary) = sess.run(
+                        [self.loss, self.summaries], options=options,
                         run_metadata=run_metadata)
+                    t1 = time.time()
                     train_writer.add_summary(summary, epoch * epoch_size + i)
                     train_writer.add_summary(loss_summary, epoch * epoch_size + i)
-                    train_writer.add_summary(lr_summary, epoch * epoch_size + i)
-                    saver.save(sess, os.path.join("dematerial_graph", 'model'), global_step=epoch)
+                    train_writer.add_summary(diff_summary, epoch * epoch_size + i)
+                    saver.save(sess, os.path.join("dematerial_graph", 'model'))
                     if FLAGS.debug:
                         train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
                                                       global_step=None)
                     train_writer.flush()
-                    print("Loss:{}, Reg Loss: {}".format(err, reg_loss))
+                    print("Loss:{}".format(err))
+                    print("{} sec per sample".format((t1-t0)/(100*FLAGS.batch_size)))
                     if FLAGS.debug:
                         return
             print(real_max)
@@ -206,7 +212,7 @@ class Model:
         mask = np.sum(cv2.imread('mask.png'), axis=2).astype(np.bool)
 
         for i in range(0, test_size):
-            loss, prediction, gt = sess.run([self.loss, self.converted_prediction, self.converted_gt])
+            loss, prediction, pred_lab, gt_lab, gt = sess.run([self.loss, self.converted_prediction, self.prediction, self.gt_lab, self.gt])
             print("loss: {}".format(loss))
             if loss < 5:
                 preprocessing.write_hdr('prediction.hdr', prediction[0])
