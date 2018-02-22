@@ -78,10 +78,6 @@ class Model:
     """Calculate the l2 norm loss between the prediction and ground truth"""
 
     def loss_calculation(self, prediction, gt):
-        #reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
-        reg_constant = 0.01
-        #self.reg_loss = reg_constant * sum(reg_losses)
-        # self.reg_loss = tf.losses.get_regularization_loss()
         self.loss = tf.reduce_mean(tf.abs(prediction - gt))
 
     def gabriel_loss(self, prediction_log, gt_log):
@@ -111,15 +107,11 @@ class Model:
         fully_encoded = tf.concat([rm_encodings[-1], bg_encodings[-1]], axis=-1)
         fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
         fully_encoded = encode_decode.encode_layer(fully_encoded, 1024, (3, 3), (1, 1), 1, maxpool=False)
-        decode_1 = encode_decode.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
-        decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3,
-                                              regularizer=regularizer)
-        decode_3 = encode_decode.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3,
-                                              regularizer=regularizer)
-        decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1,
-                                              regularizer=regularizer)
-        return encode_decode.decode_layer(decode_4, 3, (2, 2), (1, 1), 0,
-                                          regularizer=regularizer, activation=None)
+        decode_1 = encode_decode.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3)
+        decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3)
+        decode_3 = encode_decode.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3)
+        decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1)
+        return encode_decode.decode_layer(decode_4, 3, (2, 2), (1, 1), 0, activation=None)
 
     """Create tensorboard summaries of images and loss"""
 
@@ -169,7 +161,6 @@ class Model:
         print("Batch size: {}".format(FLAGS.batch_size))
         # generate batches and run graph
         for epoch in range(0, FLAGS.max_epochs):
-            real_max = 0
             t0 = time.time()
             for i in range(0, epoch_size):
                 sess.run([self.loss, self.train_op], options=options,

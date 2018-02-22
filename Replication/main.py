@@ -1,9 +1,6 @@
 import reflectance_model
 import dematerial_model
-import tensorflow as tf
 import sys
-
-
 
 def main():
     if '--reflectance' in sys.argv:
