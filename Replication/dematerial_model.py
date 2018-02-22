@@ -43,7 +43,7 @@ class Model:
                 lambda x: preprocessing.preprocess_color(x, [128, 128, 3], double_precision=True),
                 num_parallel_calls=4)
 
-            dataset = tf.data.Dataset.zip((reflectance, background, envmap)).repeat().batch(FLAGS.batch_size).prefetch(
+            dataset = tf.contrib.data.Dataset.zip((reflectance, background, envmap)).repeat().batch(FLAGS.batch_size).prefetch(
                 buffer_size=2 * FLAGS.batch_size)
             iterator = dataset.make_one_shot_iterator()
             input_batch = iterator.get_next()
@@ -61,12 +61,12 @@ class Model:
             self.loss_calculation(prediction, gt_lab)
             self.train_op = self.optimize()
             self.summaries = self.summary(bg, refl, gt_lab, prediction, gt, bg_lab, refl_lab)
+            self.gt = gt
             #self.converted_prediction = tf.map_fn(preprocessing.lab_to_rgb, prediction)
             #self.converted_prediction = tf.map_fn(preprocessing.denormalize_hdr, self.converted_prediction)
             #self.prediction = prediction
             #self.converted_gt = tf.map_fn(preprocessing.lab_to_rgb, gt_lab)
             #self.converted_gt = tf.map_fn(preprocessing.denormalize_hdr, self.converted_gt)
-            #self.gt = gt
             #self.gt_lab = gt_lab
         return
 
@@ -117,11 +117,11 @@ class Model:
 
     def summary(self, bg, reflectance, gt_lab, pred, gt, bg_lab, refl_lab):
         pred_pretty = tf.map_fn(preprocessing.lab_to_rgb, pred)
-        pred_pretty = preprocessing.denormalize_hdr(pred_pretty)
+        self.converted_prediction = preprocessing.denormalize_hdr(pred_pretty)
         summaries = [tf.summary.image('Generated Envmap', pred, max_outputs=1),
                      tf.summary.image('Ground Truth Envmap', gt_lab, max_outputs=1),
                      tf.summary.image('Original GT Envmap', gt, max_outputs=1),
-                     tf.summary.image('Converted generated Envmap', pred_pretty, max_outputs=1),
+                     tf.summary.image('Converted generated Envmap', self.converted_prediction, max_outputs=1),
                      tf.summary.image('Input Background', bg, max_outputs=1),
                      tf.summary.image('CIELAB Background', bg_lab, max_outputs=1),
                      tf.summary.image('Input Reflectance Map', reflectance, max_outputs=1),
@@ -182,7 +182,6 @@ class Model:
                     print("{} sec per sample".format((t1-t0)/(100*FLAGS.batch_size)))
                     if FLAGS.debug:
                         return
-            print(real_max)
         print("finished")
         train_writer.close()
         sess.close()
@@ -202,7 +201,7 @@ class Model:
         mask = np.sum(cv2.imread('mask.png'), axis=2).astype(np.bool)
 
         for i in range(0, test_size):
-            loss, prediction, pred_lab, gt_lab, gt = sess.run([self.loss, self.converted_prediction, self.prediction, self.gt_lab, self.gt])
+            loss, prediction, gt = sess.run([self.loss, self.converted_prediction, self.gt])
             print("loss: {}".format(loss))
             if loss < 5:
                 preprocessing.write_hdr('prediction.hdr', prediction[0])
