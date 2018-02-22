@@ -1,5 +1,4 @@
 import tensorflow as tf
-import numpy as np
 
 
 def conv2d_extraction(x, filters, size, strides=[1, 1], regularizer=None, activation=tf.nn.relu):
