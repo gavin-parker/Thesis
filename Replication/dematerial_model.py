@@ -13,7 +13,7 @@ import numpy as np
 
 """Defines the graph and provides a template training function"""
 
-regularizer = None#tf.contrib.layers.l1_regularizer(scale=FLAGS.weight_decay)
+regularizer = tf.contrib.layers.l1_regularizer(scale=FLAGS.weight_decay)
 
 
 class Model:
@@ -26,7 +26,7 @@ class Model:
         train_path = 'val'
     if FLAGS.real:
         synth_path = 'real'
-    train_path = FLAGS.train_dir + "{}/{}".format(synth_path,train_path)
+    train_path = FLAGS.train_dir + "{}/{}".format(synth_path, train_path)
     bg_files = preprocessing.image_stream("{}/background/*.png".format(train_path))
     envmap_files = preprocessing.image_stream("{}/envmap_latlong/*.hdr".format(train_path))
     reflectance_files = preprocessing.image_stream("{}/reflectanceMap_latlong/*.png".format(train_path))
@@ -43,7 +43,7 @@ class Model:
                 lambda x: preprocessing.preprocess_color(x, [128, 128, 3], double_precision=True),
                 num_parallel_calls=4)
 
-            dataset = tf.contrib.data.Dataset.zip((reflectance, background, envmap)).repeat().batch(FLAGS.batch_size).prefetch(
+            dataset = tf.data.Dataset.zip((reflectance, background, envmap)).repeat().batch(FLAGS.batch_size).prefetch(
                 buffer_size=2 * FLAGS.batch_size)
             iterator = dataset.make_one_shot_iterator()
             input_batch = iterator.get_next()
@@ -52,22 +52,25 @@ class Model:
             gt = input_batch[2]
         with tf.device('/gpu:0'):
             gt_norm = preprocessing.normalize_hdr(gt)
-            bg_lab = tf.map_fn(preprocessing.rgb_to_lab, bg)
-            refl_lab = tf.map_fn(preprocessing.rgb_to_lab, refl)
-            gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
-
-            prediction = self.inference((refl_lab, bg_lab, gt_lab))
-            self.diff = tf.reduce_max(gt_lab) - tf.reduce_max(prediction)
-            self.loss_calculation(prediction, gt_lab)
+            bg_lab, refl_lab, gt_lab = bg, refl, gt
+            if FLAGS.use_lab:
+                bg_lab = tf.map_fn(preprocessing.rgb_to_lab, bg)
+                refl_lab = tf.map_fn(preprocessing.rgb_to_lab, refl)
+                gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
+                prediction = self.inference((refl_lab, bg_lab, gt_lab))
+                self.diff = tf.abs(tf.reduce_max(gt_lab) - tf.reduce_max(prediction))
+                self.loss_calculation(prediction, gt_lab)
+            else:
+                prediction = self.inference((refl, bg, gt_norm))
+                self.diff = tf.abs(tf.reduce_max(gt_norm) - tf.reduce_max(prediction))
+                self.loss_calculation(prediction, gt_norm)
             self.train_op = self.optimize()
             self.summaries = self.summary(bg, refl, gt_lab, prediction, gt, bg_lab, refl_lab)
             self.gt = gt
-            #self.converted_prediction = tf.map_fn(preprocessing.lab_to_rgb, prediction)
-            #self.converted_prediction = tf.map_fn(preprocessing.denormalize_hdr, self.converted_prediction)
-            #self.prediction = prediction
-            #self.converted_gt = tf.map_fn(preprocessing.lab_to_rgb, gt_lab)
-            #self.converted_gt = tf.map_fn(preprocessing.denormalize_hdr, self.converted_gt)
-            #self.gt_lab = gt_lab
+            self.gt_lab = gt_lab
+            self.converted_gt = tf.map_fn(preprocessing.lab_to_rgb, gt_lab)
+            self.converted_gt = tf.map_fn(preprocessing.denormalize_hdr, self.converted_gt)
+            # self.gt_lab = gt_lab
         return
 
     """Calculate a prediction RM and intermediary sparse RM"""
@@ -77,8 +80,8 @@ class Model:
 
     """Calculate the l2 norm loss between the prediction and ground truth"""
 
-    def loss_calculation(self, prediction, gt):
-        self.loss = tf.reduce_mean(tf.abs(prediction - gt))
+    def loss_calculation(self, prediction, gt_lab):
+        self.loss = tf.reduce_sum(tf.abs(prediction - gt_lab)) + tf.losses.get_regularization_losses()
 
     def gabriel_loss(self, prediction_log, gt_log):
         n = 1.0 / (3.0 * 64 * 64)
@@ -87,8 +90,8 @@ class Model:
     """Use Gradient Descent Optimizer to minimize loss"""
 
     def optimize(self):
-        # return tf.train.MomentumOptimizer(self.learning_rate, 0.95).minimize(self.loss)
-        return tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
+        return tf.train.MomentumOptimizer(self.learning_rate, 0.95).minimize(self.loss)
+        #return tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
 
     @staticmethod
     def singlet(input):
@@ -116,6 +119,7 @@ class Model:
     """Create tensorboard summaries of images and loss"""
 
     def summary(self, bg, reflectance, gt_lab, pred, gt, bg_lab, refl_lab):
+        self.pred_lab = pred
         pred_pretty = tf.map_fn(preprocessing.lab_to_rgb, pred)
         self.converted_prediction = preprocessing.denormalize_hdr(pred_pretty)
         summaries = [tf.summary.image('Generated Envmap', pred, max_outputs=1),
@@ -179,7 +183,7 @@ class Model:
                                                       global_step=None)
                     train_writer.flush()
                     print("Loss:{}".format(err))
-                    print("{} sec per sample".format((t1-t0)/(100*FLAGS.batch_size)))
+                    print("{} sec per sample".format((t1 - t0) / (100 * FLAGS.batch_size)))
                     if FLAGS.debug:
                         return
         print("finished")
@@ -201,9 +205,10 @@ class Model:
         mask = np.sum(cv2.imread('mask.png'), axis=2).astype(np.bool)
 
         for i in range(0, test_size):
-            loss, prediction, gt = sess.run([self.loss, self.converted_prediction, self.gt])
+            loss, prediction, gt, pred_lab, gt_lab = sess.run(
+                [self.loss, self.converted_prediction, self.converted_gt, self.pred_lab, self.gt_lab])
             print("loss: {}".format(loss))
-            if loss < 5:
+            if loss < 1:
                 preprocessing.write_hdr('prediction.hdr', prediction[0])
                 preprocessing.write_hdr('gt.hdr', gt[0])
                 master.start_worker('test_elephant.blend', 'gt.hdr', 'gt.png')
@@ -215,6 +220,7 @@ class Model:
                 cv2.imwrite('gt_render.png', background)
                 background[mask] = pred_elephant[mask]
                 cv2.imwrite('pred_render.png', background)
+                print("rendered new elephant")
                 return
 
         sess.close()
