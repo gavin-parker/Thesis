@@ -12,6 +12,6 @@ module load Python/2.7.11-foss-2016a
 module load libs/cudnn/8.0-cuda-8.0
 source ~/Thesis/tensorflow/bin/activate
 
-python main.py --dematerial --log-dir='/mnt/storage/scratch/gp14958/dm_logs' --$
+python main.py --dematerial --log-dir='/mnt/storage/scratch/gp14958/dm_logs' --batch-size=4 learning-rate=3.2e-9
 
 

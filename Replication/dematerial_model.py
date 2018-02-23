@@ -3,6 +3,8 @@ import os
 import preprocessing_ops as preprocessing
 import encode_decode
 import time
+
+import renderer
 from params import FLAGS
 import render_master
 import cv2
@@ -53,7 +55,7 @@ class Model:
         with tf.device('/gpu:0'):
             gt_norm = preprocessing.normalize_hdr(gt)
             bg_lab, refl_lab, gt_lab = bg, refl, gt
-            if FLAGS.use_lab:
+            if FLAGS.lab_space:
                 bg_lab = tf.map_fn(preprocessing.rgb_to_lab, bg)
                 refl_lab = tf.map_fn(preprocessing.rgb_to_lab, refl)
                 gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
@@ -67,10 +69,6 @@ class Model:
             self.train_op = self.optimize()
             self.summaries = self.summary(bg, refl, gt_lab, prediction, gt, bg_lab, refl_lab)
             self.gt = gt
-            self.gt_lab = gt_lab
-            self.converted_gt = tf.map_fn(preprocessing.lab_to_rgb, gt_lab)
-            self.converted_gt = tf.map_fn(preprocessing.denormalize_hdr, self.converted_gt)
-            # self.gt_lab = gt_lab
         return
 
     """Calculate a prediction RM and intermediary sparse RM"""
@@ -81,7 +79,7 @@ class Model:
     """Calculate the l2 norm loss between the prediction and ground truth"""
 
     def loss_calculation(self, prediction, gt_lab):
-        self.loss = tf.reduce_sum(tf.abs(prediction - gt_lab)) + tf.losses.get_regularization_losses()
+        self.loss = tf.reduce_sum(tf.abs(prediction - gt_lab)) + tf.reduce_sum(tf.losses.get_regularization_losses())
 
     def gabriel_loss(self, prediction_log, gt_log):
         n = 1.0 / (3.0 * 64 * 64)
@@ -114,7 +112,7 @@ class Model:
         decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3)
         decode_3 = encode_decode.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3)
         decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1)
-        return encode_decode.decode_layer(decode_4, 3, (2, 2), (1, 1), 0, activation=None)
+        return encode_decode.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None)
 
     """Create tensorboard summaries of images and loss"""
 
@@ -167,6 +165,7 @@ class Model:
         for epoch in range(0, FLAGS.max_epochs):
             t0 = time.time()
             for i in range(0, epoch_size):
+                #test = sess.run(self.test)
                 sess.run([self.loss, self.train_op], options=options,
                          run_metadata=run_metadata)
                 if i % 100 == 0:
@@ -201,25 +200,13 @@ class Model:
         sess.run(tf.global_variables_initializer())
         sess.run(tf.local_variables_initializer())
         test_size = 20
-        master = render_master.Master('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender')
-        mask = np.sum(cv2.imread('mask.png'), axis=2).astype(np.bool)
 
         for i in range(0, test_size):
-            loss, prediction, gt, pred_lab, gt_lab = sess.run(
-                [self.loss, self.converted_prediction, self.converted_gt, self.pred_lab, self.gt_lab])
+            loss, prediction, gt = sess.run(
+                [self.loss, self.converted_prediction, self.gt])
             print("loss: {}".format(loss))
             if loss < 1:
-                preprocessing.write_hdr('prediction.hdr', prediction[0])
-                preprocessing.write_hdr('gt.hdr', gt[0])
-                master.start_worker('test_elephant.blend', 'gt.hdr', 'gt.png')
-                master.start_worker('test_elephant.blend', 'prediction.hdr', 'pred.png')
-                gt_elephant = cv2.imread('gt.png')
-                pred_elephant = cv2.imread('pred.png')
-                background = cv2.imread('bg_gt.png')
-                background[mask] = gt_elephant[mask]
-                cv2.imwrite('gt_render.png', background)
-                background[mask] = pred_elephant[mask]
-                cv2.imwrite('pred_render.png', background)
+                renderer.render_test(prediction, gt)
                 print("rendered new elephant")
                 return
 

@@ -72,7 +72,6 @@ def normalize_hdr(image):
 
 
 def denormalize_hdr(image):
-
     image_delog = tf.exp(image*10.0) - 1.0
     return image_delog
 
