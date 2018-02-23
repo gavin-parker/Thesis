@@ -8,6 +8,10 @@
 #SBATCH -e hostname_%j.err # File to which STDERR will be written
 #SBATCH --mail-type=ALL # Type of email notification- BEGIN,END,FAIL,ALL
 #SBATCH --mail-user=gp14958@my.bristol.ac.uk # Email to which notifications will be sent
-languages/anaconda2/5.0.1.tensorflow-1.4
+module load Python/2.7.11-foss-2016a
+module load libs/cudnn/8.0-cuda-8.0
+source ~/Thesis/tensorflow/bin/activate
 
-python main.py --dematerial --log-dir='/mnt/storage/scratch/gp14958/dm_logs' --batch-size=16 --test-model-dir='best_dematerial/model-1' --learning-rate=50e-6 --train-dir='/mnt/storage/scratch/gp14958/MultiNatIllum/data/multiple_materials_single_object/singlets/' --max-epochs=1
+python main.py --dematerial --log-dir='/mnt/storage/scratch/gp14958/dm_logs' --$
+
+
