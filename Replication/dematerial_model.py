@@ -79,7 +79,7 @@ class Model:
     """Calculate the l2 norm loss between the prediction and ground truth"""
 
     def loss_calculation(self, prediction, gt_lab):
-        self.loss = tf.reduce_sum(tf.abs(prediction - gt_lab)) + tf.reduce_sum(tf.losses.get_regularization_losses())
+        self.loss = tf.reduce_sum(tf.abs(prediction - gt_lab)) + tf.reduce_sum(tf.losses.get_regularization_losses())*0.001
 
     def gabriel_loss(self, prediction_log, gt_log):
         n = 1.0 / (3.0 * 64 * 64)
