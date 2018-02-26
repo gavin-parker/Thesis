@@ -20,8 +20,8 @@ regularizer = tf.contrib.layers.l1_regularizer(scale=FLAGS.weight_decay)
 
 class Model:
     global_step = tf.Variable(0, trainable=False)
-    learning_rate = tf.train.exponential_decay(FLAGS.learning_rate, global_step,
-                                               1, 0.95, staircase=False)
+    learning_rate = FLAGS.learning_rate#tf.train.exponential_decay(FLAGS.learning_rate, global_step,
+                                       #        1, 0.95, staircase=False)
     synth_path = 'synthetic'
     train_path = 'train'
     if FLAGS.validate:
@@ -45,7 +45,7 @@ class Model:
                 lambda x: preprocessing.preprocess_color(x, [128, 128, 3], double_precision=True),
                 num_parallel_calls=4)
 
-            dataset = tf.data.Dataset.zip((reflectance, background, envmap)).repeat().batch(FLAGS.batch_size).prefetch(
+            dataset = tf.data.Dataset.zip((reflectance, background, envmap)).shuffle(128).repeat().batch(FLAGS.batch_size).prefetch(
                 buffer_size=2 * FLAGS.batch_size)
             iterator = dataset.make_one_shot_iterator()
             input_batch = iterator.get_next()
@@ -79,7 +79,7 @@ class Model:
     """Calculate the l2 norm loss between the prediction and ground truth"""
 
     def loss_calculation(self, prediction, gt_lab):
-        self.loss = tf.reduce_sum(tf.abs(prediction - gt_lab)) + tf.reduce_sum(tf.losses.get_regularization_losses())*0.001
+        self.loss = tf.reduce_sum(tf.abs(prediction - gt_lab))
 
     def gabriel_loss(self, prediction_log, gt_log):
         n = 1.0 / (3.0 * 64 * 64)
@@ -164,17 +164,14 @@ class Model:
         for epoch in range(0, FLAGS.max_epochs):
             t0 = time.time()
             for i in range(0, epoch_size):
-                #test = sess.run(self.test)
                 sess.run([self.loss, self.train_op], options=options,
                          run_metadata=run_metadata)
                 if i % 100 == 0:
-                    err, (summary, loss_summary, diff_summary) = sess.run(
+                    err, summaries = sess.run(
                         [self.loss, self.summaries], options=options,
                         run_metadata=run_metadata)
                     t1 = time.time()
-                    train_writer.add_summary(summary, epoch * epoch_size + i)
-                    train_writer.add_summary(loss_summary, epoch * epoch_size + i)
-                    train_writer.add_summary(diff_summary, epoch * epoch_size + i)
+                    [train_writer.add_summary(s,  epoch * epoch_size + i) for s in summaries]
                     saver.save(sess, os.path.join("dematerial_graph", 'model'))
                     if FLAGS.debug:
                         train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
