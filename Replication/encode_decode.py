@@ -32,7 +32,7 @@ def dense(x, units):
 
 def encode_layer(x, count, size, stride, convolutions=1, regularizer=None, activation=tf.nn.relu, norm=True, maxpool=True):
     for i in range(0,convolutions):
-        x = conv2d_extraction(x, count, size, [1, 1], regularizer=regularizer, activation=tf.nn.relu)
+        x = conv2d_extraction(x, count, size, [1, 1], regularizer=regularizer, activation=activation)
         if norm:
             x = tf.layers.batch_normalization(x,
                             fused=True)

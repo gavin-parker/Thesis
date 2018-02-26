@@ -88,8 +88,7 @@ class Model:
     """Use Gradient Descent Optimizer to minimize loss"""
 
     def optimize(self):
-        return tf.train.MomentumOptimizer(self.learning_rate, 0.95).minimize(self.loss)
-        #return tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
+        return tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
 
     @staticmethod
     def singlet(input):
@@ -106,13 +105,13 @@ class Model:
         bg_encodings = self.singlet(background)
 
         fully_encoded = tf.concat([rm_encodings[-1], bg_encodings[-1]], axis=-1)
-        fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
+        #fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
         fully_encoded = encode_decode.encode_layer(fully_encoded, 1024, (3, 3), (1, 1), 1, maxpool=False)
         decode_1 = encode_decode.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3)
         decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3)
         decode_3 = encode_decode.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3)
         decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1)
-        return encode_decode.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None)
+        return encode_decode.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None, norm=False)
 
     """Create tensorboard summaries of images and loss"""
 
