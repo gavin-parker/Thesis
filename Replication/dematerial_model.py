@@ -4,11 +4,8 @@ import preprocessing_ops as preprocessing
 import encode_decode
 import time
 
-import renderer
+#import renderer
 from params import FLAGS
-import render_master
-import cv2
-import numpy as np
 
 """ Convolutional-Deconvolutional model for extracting reflectance maps from input images with normals.
     Extracts sparse reflectance maps, with the CNN performing data interpolation"""
@@ -29,6 +26,7 @@ class Model:
     if FLAGS.real:
         synth_path = 'real'
     train_path = FLAGS.train_dir + "{}/{}".format(synth_path, train_path)
+    print(train_path)
     bg_files = preprocessing.image_stream("{}/background/*.png".format(train_path))
     envmap_files = preprocessing.image_stream("{}/envmap_latlong/*.hdr".format(train_path))
     reflectance_files = preprocessing.image_stream("{}/reflectanceMap_latlong/*.png".format(train_path))
@@ -111,7 +109,7 @@ class Model:
         decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3)
         decode_3 = encode_decode.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3)
         decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1)
-        return encode_decode.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None, norm=False)
+        return encode_decode.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
 
     """Create tensorboard summaries of images and loss"""
 
@@ -150,7 +148,7 @@ class Model:
             options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
             run_metadata = tf.RunMetadata()
         tf.train.start_queue_runners(sess=sess)
-        train_writer = tf.summary.FileWriter("{}/{}".format(FLAGS.log_dir, time.strftime("%H:%M:%S")),
+        train_writer = tf.summary.FileWriter("{}/{}_{}".format(FLAGS.log_dir, time.strftime("%H:%M:%S"), FLAGS.learning_rate),
                                              sess.graph)
 
         saver = tf.train.Saver()
@@ -202,7 +200,7 @@ class Model:
                 [self.loss, self.converted_prediction, self.gt])
             print("loss: {}".format(loss))
             if loss < 1:
-                renderer.render_test(prediction, gt)
+                #renderer.render_test(prediction, gt)
                 print("rendered new elephant")
                 return
 

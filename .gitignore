@@ -53,3 +53,11 @@ Replication/train_summaries/
 *.pk1
 
 \.idea/
+
+Replication/dematerial_graph/
+
+Replication/envmap_synthetic_results/15:21:04_1e-07/
+
+Replication/envmap_synthetic_results/14:56:49_1e-07/
+
+Replication/envmap_synthetic_results/15:23:48_1e-07/

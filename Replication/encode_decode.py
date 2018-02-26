@@ -8,8 +8,7 @@ def conv2d_extraction(x, filters, size, strides=[1, 1], regularizer=None, activa
                             kernel_initializer=tf.contrib.layers.xavier_initializer_conv2d(),
                             padding='SAME',
                             kernel_size=size,
-                            kernel_regularizer=regularizer,
-                            activation=activation)
+                            kernel_regularizer=regularizer)
 
 
 def conv2d_reconstruction(x, filters, size, strides, regularizer=None, activation=tf.nn.relu):
@@ -18,8 +17,7 @@ def conv2d_reconstruction(x, filters, size, strides, regularizer=None, activatio
                                       kernel_size=size,
                                       strides=strides,
                                       padding='SAME',
-                                      kernel_regularizer=regularizer,
-                                      activation=activation
+                                      kernel_regularizer=regularizer
                                         )
 
 
@@ -36,6 +34,8 @@ def encode_layer(x, count, size, stride, convolutions=1, regularizer=None, activ
         if norm:
             x = tf.layers.batch_normalization(x,
                             fused=True)
+        if activation:
+            x = tf.nn.relu(x)
     if maxpool:
         x = pool(x, stride)
     return x
@@ -48,6 +48,8 @@ def decode_layer(x, count, size, stride, convolutions=0, regularizer=None, norm=
         if norm:
             deconv = tf.layers.batch_normalization(deconv,
                             fused=True)
+        if activation:
+            deconv = tf.nn.relu(deconv)
     return deconv
 
 
