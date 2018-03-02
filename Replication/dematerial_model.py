@@ -4,7 +4,7 @@ import preprocessing_ops as preprocessing
 import encode_decode
 import time
 
-#import renderer
+import renderer as rend
 from params import FLAGS
 
 """ Convolutional-Deconvolutional model for extracting reflectance maps from input images with normals.
@@ -17,8 +17,7 @@ regularizer = tf.contrib.layers.l1_regularizer(scale=FLAGS.weight_decay)
 
 class Model:
     global_step = tf.Variable(0, trainable=False)
-    learning_rate = FLAGS.learning_rate#tf.train.exponential_decay(FLAGS.learning_rate, global_step,
-                                       #        1, 0.95, staircase=False)
+    learning_rate = tf.train.exponential_decay(FLAGS.learning_rate, global_step,1, 0.95, staircase=False)
     synth_path = 'synthetic'
     train_path = 'train'
     if FLAGS.validate:
@@ -86,7 +85,8 @@ class Model:
     """Use Gradient Descent Optimizer to minimize loss"""
 
     def optimize(self):
-        return tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
+        #return tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
+        return tf.train.MomentumOptimizer(self.learning_rate, 0.95).minimize(self.loss)
 
     @staticmethod
     def singlet(input):
@@ -126,22 +126,23 @@ class Model:
                      tf.summary.image('Input Reflectance Map', reflectance, max_outputs=1),
                      tf.summary.image('CIELAB Reflectance Map', refl_lab, max_outputs=1)]
 
-        loss_summary = tf.summary.scalar("Loss", self.loss)
-        lr_summary = tf.summary.scalar("Max difference", self.diff)
+        scalar_summary = tf.summary.merge([tf.summary.scalar("Loss", self.loss),
+                                          tf.summary.scalar("Max difference", self.diff),
+                                          tf.summary.scalar("Learning Rate", self.diff)])
         img_summary = tf.summary.merge(summaries)
-        return loss_summary, img_summary, lr_summary
+        return img_summary, scalar_summary
 
     """Train the model with the settings provided in FLAGS"""
 
     def train(self, sess=None):
 
         config = tf.ConfigProto(allow_soft_placement=True)
-        config.gpu_options.per_process_gpu_memory_fraction = 0.9
+        config.gpu_options.per_process_gpu_memory_fraction = 0.95
 
         if sess is None:
             sess = tf.Session(config=config)
-        sess.run(tf.global_variables_initializer())
         sess.run(tf.local_variables_initializer())
+        sess.run(tf.global_variables_initializer())
 
         options, run_metadata = None, None
         if FLAGS.debug:
@@ -170,7 +171,7 @@ class Model:
                         run_metadata=run_metadata)
                     t1 = time.time()
                     [train_writer.add_summary(s,  epoch * epoch_size + i) for s in summaries]
-                    saver.save(sess, os.path.join("dematerial_graph", 'model'))
+                    saver.save(sess, os.path.join("dematerial_graph_momentum", 'model'))
                     if FLAGS.debug:
                         train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
                                                       global_step=None)
@@ -190,17 +191,16 @@ class Model:
             sess = tf.Session(config=config)
 
         saver = tf.train.Saver()
-        saver.restore(sess, FLAGS.test_model_dir)
-        sess.run(tf.global_variables_initializer())
         sess.run(tf.local_variables_initializer())
+        print("restoring {}".format(FLAGS.test_model_dir))
+        saver.restore(sess, FLAGS.test_model_dir)
         test_size = 20
-
+        renderer = rend.Renderer()
         for i in range(0, test_size):
-            loss, prediction, gt = sess.run(
+                loss, prediction, gt = sess.run(
                 [self.loss, self.converted_prediction, self.gt])
-            print("loss: {}".format(loss))
-            if loss < 1:
-                #renderer.render_test(prediction, gt)
+                print("loss: {}".format(loss))
+                renderer.render_test(prediction[0], gt[0])
                 print("rendered new elephant")
                 return
 

@@ -10,17 +10,17 @@ class Renderer:
     master = render_master.Master('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender')
 
     def render_test(self, pred_envmap, gt_envmap):
-        pre.write_hdr('prediction.hdr', pred_envmap)
-        pre.write_hdr('gt.hdr', gt_envmap)
+        pre.write_hdr('envmaps/prediction.hdr', pred_envmap)
+        pre.write_hdr('envmaps/gt.hdr', gt_envmap)
         self.master.start_worker('test_elephant.blend', 'gt.hdr', 'gt.png')
         self.master.start_worker('test_elephant.blend', 'prediction.hdr', 'pred.png')
-        gt_elephant = cv2.imread('gt.png')
-        pred_elephant = cv2.imread('pred.png')
-        background = cv2.imread('bg_gt.png')
+        gt_elephant = cv2.imread('renders/gt.png')
+        pred_elephant = cv2.imread('renders/pred.png')
+        background = cv2.imread('renders/bg_gt.png')
         background[self.test_mask] = gt_elephant[self.test_mask]
-        cv2.imwrite('gt_render.png', background)
+        cv2.imwrite('renders/gt_render.png', background)
         background[self.test_mask] = pred_elephant[self.test_mask]
-        cv2.imwrite('pred_render.png', background)
+        cv2.imwrite('renders/pred_render.png', background)
 
 
     """Writes a batch of prediction and ground truth envmaps, returns the rendered images"""
