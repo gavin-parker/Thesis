@@ -6,21 +6,21 @@ import thread
 
 
 class Renderer:
-    test_mask = np.sum(cv2.imread('mask.png'), axis=2).astype(np.bool)
+    test_mask = np.sum(cv2.imread('mask_sphere.png'), axis=2).astype(np.bool)
     master = render_master.Master('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender')
 
-    def render_test(self, pred_envmap, gt_envmap):
-        pre.write_hdr('envmaps/prediction.hdr', pred_envmap)
-        pre.write_hdr('envmaps/gt.hdr', gt_envmap)
-        self.master.start_worker('test_elephant.blend', 'gt.hdr', 'gt.png')
-        self.master.start_worker('test_elephant.blend', 'prediction.hdr', 'pred.png')
-        gt_elephant = cv2.imread('renders/gt.png')
-        pred_elephant = cv2.imread('renders/pred.png')
-        background = cv2.imread('renders/bg_gt.png')
+    def render_test(self, pred_envmap, gt_envmap, index):
+        pre.write_hdr('envmaps/prediction_{}.hdr'.format(index), pred_envmap)
+        pre.write_hdr('envmaps/gt_{}.hdr'.format(index), gt_envmap)
+        self.master.start_worker('test_sphere.blend', 'gt_{}.hdr'.format(index), 'gt_{}.png'.format(index), render_background=True)
+        self.master.start_worker('test_sphere.blend', 'prediction_{}.hdr'.format(index), 'pred_{}.png'.format(index))
+        gt_elephant = cv2.imread('renders/gt_{}.png'.format(index))
+        pred_elephant = cv2.imread('renders/pred_{}.png'.format(index))
+        background = cv2.imread('renders/bg_gt_{}.png'.format(index))
         background[self.test_mask] = gt_elephant[self.test_mask]
-        cv2.imwrite('renders/gt_render.png', background)
+        cv2.imwrite('renders/gt_render_{}.png'.format(index), background)
         background[self.test_mask] = pred_elephant[self.test_mask]
-        cv2.imwrite('renders/pred_render.png', background)
+        cv2.imwrite('renders/pred_render_{}.png'.format(index), background)
 
 
     """Writes a batch of prediction and ground truth envmaps, returns the rendered images"""

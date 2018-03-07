@@ -1,25 +1,30 @@
-from subprocess import Popen, PIPE
+import subprocess32
 import os
 
 """Sends commands to the render worker processes"""
 class Master:
     worker = None
-
-    def __init__(self, blender_path):
+    pipe = open(os.devnull, 'w')
+    def __init__(self, blender_path, silent=True):
         self.blender_path = blender_path
+        if not silent:
+            self.pipe = None
 
-    def start_worker(self, scene, envmap, name):
+    def start_worker(self, scene, envmap, name, render_background=False):
         myargs = [
             self.blender_path,
             scene,
             "--background",
             "--python",
-            "render_worker.py"
+            "render_worker.py",
+            envmap,
+            name
         ]
-        self.worker = Popen(myargs, stdin=PIPE)
-        self.start_render(envmap, name)
-
-    def start_render(self, envmap, name):
-        self.worker.communicate("{} {}".format(envmap, name))
-
-
+        if render_background:
+            myargs.append("render_background")
+        else:
+            myargs.append("")
+        try:
+            subprocess32.call(myargs, shell=False, timeout=30, stdout=self.pipe)
+        except subprocess32.TimeoutExpired:
+            pass

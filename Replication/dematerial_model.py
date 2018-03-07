@@ -194,15 +194,18 @@ class Model:
         sess.run(tf.local_variables_initializer())
         print("restoring {}".format(FLAGS.test_model_dir))
         saver.restore(sess, FLAGS.test_model_dir)
-        test_size = 20
+        test_size = 1
         renderer = rend.Renderer()
         for i in range(0, test_size):
                 loss, prediction, gt = sess.run(
                 [self.loss, self.converted_prediction, self.gt])
+                t0 = time.time()
                 print("loss: {}".format(loss))
-                renderer.render_test(prediction[0], gt[0])
-                print("rendered new elephant")
-                return
-
+                for j, p in enumerate(prediction):
+                    renderer.render_test(prediction[j], gt[j], j)
+                t1 = time.time()
+                batch_time = (t1 - t0)
+                print("Seconds to render batch: {}".format(batch_time))
+                print("Seconds to render sample: {}".format(batch_time / FLAGS.batch_size))
         sess.close()
         return
