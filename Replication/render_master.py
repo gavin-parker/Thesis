@@ -11,6 +11,10 @@ class Master:
             self.pipe = None
 
     def start_worker(self, scene, envmap, name, render_background=False):
+        r_b = "none"
+        if render_background:
+            r_b = "render_background"
+
         myargs = [
             self.blender_path,
             scene,
@@ -18,12 +22,9 @@ class Master:
             "--python",
             "render_worker.py",
             envmap,
-            name
+            name,
+            r_b
         ]
-        if render_background:
-            myargs.append("render_background")
-        else:
-            myargs.append("")
         try:
             subprocess32.call(myargs, shell=False, timeout=30, stdout=self.pipe)
         except subprocess32.TimeoutExpired:

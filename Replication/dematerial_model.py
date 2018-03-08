@@ -64,7 +64,16 @@ class Model:
                 self.diff = tf.abs(tf.reduce_max(gt_norm) - tf.reduce_max(prediction))
                 self.loss_calculation(prediction, gt_norm)
             self.train_op = self.optimize()
+            pred_pretty = tf.map_fn(preprocessing.lab_to_rgb, prediction)
+            self.converted_prediction = preprocessing.denormalize_hdr(pred_pretty)
             self.summaries = self.summary(bg, refl, gt_lab, prediction, gt, bg_lab, refl_lab)
+            render_sim, envmap_sim, pred_render, gt_render = tf.py_func(rend.render_summary, [self.converted_prediction[0], gt[0]], [tf.float32, tf.float32, tf.uint8, tf.uint8])
+            render_image_summaries = tf.summary.merge([tf.summary.image('Ground Truth Render', tf.expand_dims(gt_render,0), max_outputs=1),
+                                        tf.summary.image('Predicted Render', tf.expand_dims(pred_render,0), max_outputs=1)])
+            render_similarities = tf.summary.merge([tf.summary.scalar('Render Similarity', render_sim),
+                                        tf.summary.scalar('Envmap Similarity', envmap_sim)])
+            self.render_summary = [render_similarities, render_image_summaries]
+
             self.gt = gt
         return
 
@@ -115,8 +124,6 @@ class Model:
 
     def summary(self, bg, reflectance, gt_lab, pred, gt, bg_lab, refl_lab):
         self.pred_lab = pred
-        pred_pretty = tf.map_fn(preprocessing.lab_to_rgb, pred)
-        self.converted_prediction = preprocessing.denormalize_hdr(pred_pretty)
         summaries = [tf.summary.image('Generated Envmap', pred, max_outputs=1),
                      tf.summary.image('Ground Truth Envmap', gt_lab, max_outputs=1),
                      tf.summary.image('Original GT Envmap', gt, max_outputs=1),
@@ -191,21 +198,19 @@ class Model:
             sess = tf.Session(config=config)
 
         saver = tf.train.Saver()
+        test_writer = tf.summary.FileWriter(
+            "{}/{}_{}".format(FLAGS.log_dir, "Validation: " + time.strftime("%H:%M:%S"), FLAGS.learning_rate),
+            sess.graph)
         sess.run(tf.local_variables_initializer())
         print("restoring {}".format(FLAGS.test_model_dir))
         saver.restore(sess, FLAGS.test_model_dir)
-        test_size = 1
-        renderer = rend.Renderer()
-        for i in range(0, test_size):
-                loss, prediction, gt = sess.run(
-                [self.loss, self.converted_prediction, self.gt])
-                t0 = time.time()
-                print("loss: {}".format(loss))
-                for j, p in enumerate(prediction):
-                    renderer.render_test(prediction[j], gt[j], j)
-                t1 = time.time()
-                batch_time = (t1 - t0)
-                print("Seconds to render batch: {}".format(batch_time))
-                print("Seconds to render sample: {}".format(batch_time / FLAGS.batch_size))
+        for i in range(0, 1000):
+                loss, summaries, render_summary = sess.run(
+                [self.loss, self.summaries, self.render_summary])
+                [test_writer.add_summary(s, i) for s in summaries]
+                [test_writer.add_summary(s, i) for s in render_summary]
+                test_writer.flush()
+
+        test_writer.close()
         sess.close()
         return
