@@ -22,8 +22,6 @@ def render_summary(pred_envmap, gt_envmap):
     p.map(parallel_render, [('test_sphere.blend', 'gt.hdr', 'gt.png', True),
                             ('test_sphere.blend', 'prediction.hdr', 'pred.png', False)])
     p.close()
-    # master.start_worker('test_sphere.blend', 'gt.hdr', 'gt.png', render_background=True)
-    # master.start_worker('test_sphere.blend', 'prediction.hdr', 'pred.png')
     gt_render = cv2.imread('renders/gt.png')
     pred_render = cv2.imread('renders/pred.png')
     background = cv2.imread('renders/bg_gt.png')
