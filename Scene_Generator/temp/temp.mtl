@@ -1,0 +1,541 @@
+# Blender MTL File: 'dummy.blend'
+# Material Count: 49
+
+newmtl blinds.100
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/cloth/3a11885abf91075597221dbbda704e0e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl carpet
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/carpet/c9b2bd8d38501629eb176305995c4ffc.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/ceiling/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling.001
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/ceiling/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling.002
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/ceiling/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling.003
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/ceiling/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling.004
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/ceiling/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling.005
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/ceiling/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling.006
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/ceiling/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling.007
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/ceiling/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling.008
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/ceiling/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl ceiling.009
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/ceiling/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl curtains
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/curtain/7f85b2706e7c841e7b731ea3406ea847.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl decoration.1001
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/decoration/97de8a4d00fd34c0ca54fd938c08096d.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl decoration.111
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/decoration/97de8a4d00fd34c0ca54fd938c08096d.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl door
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/door/767c3b906a7018128d38d40a5e9a6c69.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl door.002
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/door/767c3b906a7018128d38d40a5e9a6c69.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl door.003
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/door/767c3b906a7018128d38d40a5e9a6c69.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl door.004
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/door/767c3b906a7018128d38d40a5e9a6c69.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl door.005
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/door/767c3b906a7018128d38d40a5e9a6c69.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl door.006
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/door/767c3b906a7018128d38d40a5e9a6c69.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl drawer
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/table/1ce207f0d8de16f363ad3d150fbddcd1.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl drawer.001
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/table/1ce207f0d8de16f363ad3d150fbddcd1.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl faucet.001
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/metal_plastic/a8ded350b50a82eed7a82b740b9e390a.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl floor
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/floor/4fcbb81cc60236dc5eb0475b0cf48756.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl floor.003
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/floor/557491c489317c2a5bb5604fc368d33e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl furniture
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/table/1ce207f0d8de16f363ad3d150fbddcd1.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl glasses
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/glass/3372d19433a4fa810208ba649ede62ce.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl lamp.001
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/lamp/e58c136d8c4a4a49598a7de9196288be.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl light.119
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/metal_plastic/a8ded350b50a82eed7a82b740b9e390a.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl lightbulb.100
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/glass/3372d19433a4fa810208ba649ede62ce.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl painting
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/painting/DT1567.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl painting.100
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/painting/DP140858.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl shelf
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/shelf/6be7c2092424b9be8de8ceed0bc13cf4.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl speakers
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/plastic/a8ded350b50a82eed7a82b740b9e390a.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl television
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/plastic/a8ded350b50a82eed7a82b740b9e390a.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.000
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/394e18a972b3716e735efb5c5977c8bc.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.001
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/bcfc7b6694542e0da1a6562ee676301e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.002
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/bcfc7b6694542e0da1a6562ee676301e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.003
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/8a322ba6a214c014a1b6b3a8ca2cf371.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.004
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/394e18a972b3716e735efb5c5977c8bc.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.005
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/8a322ba6a214c014a1b6b3a8ca2cf371.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.006
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/bcfc7b6694542e0da1a6562ee676301e.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.007
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/8a322ba6a214c014a1b6b3a8ca2cf371.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.008
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/394e18a972b3716e735efb5c5977c8bc.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.009
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/8a322ba6a214c014a1b6b3a8ca2cf371.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wall.010
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/wall/394e18a972b3716e735efb5c5977c8bc.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl windows
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/window/3372d19433a4fa810208ba649ede62ce.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl windows.001
+map_Kd /home/gavin/SceneNetRGBD_Layouts/texture_library/window/b98411ba3749db8a9478907c46f06e5c.jpg
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
