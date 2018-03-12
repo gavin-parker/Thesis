@@ -4,86 +4,142 @@ import glob
 from os.path import isdir, join
 import sys
 import random
-
+import mathutils
+from fuzzywuzzy import fuzz, process
+from contextlib import contextmanager
+import addon_utils
+import materials_cycles_converter
 
 class SceneGenerator:
-    temp_obj_file = '{}/temp/temp.obj'.format(os.getcwd())
-    temp_mtl_file = '{}/temp/temp.mtl'.format(os.getcwd())
     scene = bpy.context.scene
+    envmap_camera = bpy.data.objects["Envmap_Camera"]
+    render_camera = bpy.data.objects["Camera"]
+    camera_limits = [(0.8, 1.1), (-0.1, 0.1), (-3.14, 3.14)]
+    envmaps = glob.glob('/home/gavin/hdris/*.hdr')
+    tables = [obj.name for obj in scene.objects if "Table" in obj.name]
+    imported_objects = []
+    table = {}
+    output_path = '/mnt/black/scene_data/'
     def __init__(self):
-        self.scenes, self.textures = find_scene_data()
+        self.materials, self.models = find_scene_data()
+        print(self.tables)
 
+    def randomize_table(self):
+        for table in self.tables:
+            bpy.data.objects[table].hide_render = True
+            bpy.data.objects[table].select = False
+        table = random.choice(self.tables)
+        bpy.data.objects[table].hide_render = False
+        bpy.data.objects[table].select = True
+        mat = random.choice(self.materials['table'])
+        self.scene.objects[table].active_material = mat
+        self.table = bpy.data.objects[table]
+        bpy.ops.view3d.camera_to_view_selected()
+        return
 
-    def random_render(self):
-        scene_type = random.choice(list(self.scenes.values()))
-        scene = random.choice(scene_type)
-        self.load_scene(scene)
+    def place_random_object(self, bounds):
+        bpy.ops.import_scene.obj(filepath=random.choice(self.models))
+        objects = bpy.context.selected_objects[:]
+        lowest_pt = 100
+        position_x = random.uniform(bounds[0][0], bounds[0][1])
+        position_y = random.uniform(bounds[1][0], bounds[1][1])
+        for object in objects:
+            lowest_pt = min(lowest_pt, (min([(object.matrix_world * v.co).z for v in object.data.vertices])))
+        for object in objects:
+            object.location.z = object.location.z - lowest_pt + 0.1
+            object.location.x = object.location.x + position_x
+            object.location.y = object.location.y + position_y
+            object.rotation_euler.z = random.uniform(-3.14,3.14)
+            #mat = random.choice(self.materials['metal'])
+            #object.active_material = mat
+            object.select = False
+        return objects
+
+    def place_random_objects(self):
+        count = random.randint(1,4)
+        bounds = [(-1.5,1.5), (-1.5,1.5)]
+        self.imported_objects = []
+        for i in range(count):
+            objects = self.place_random_object(bounds)
+            self.imported_objects.extend(objects)
+        materials_cycles_converter.mlrefresh(bpy.context)
+
+    def clear_objects(self):
+        bpy.ops.object.select_all(action='DESELECT')
+        for obj in self.imported_objects:
+            obj.select = True
+        bpy.ops.object.delete()
+
+    def random_render(self, name='test'):
+        self.scene.camera = self.render_camera
+        random_rotation(self.scene.camera, self.camera_limits)
+        self.randomize_table()
+        self.place_random_objects()
         self.light_scene()
-        bpy.data.scenes['Scene'].render.filepath = "renders/{}".format('test.png')
-        #bpy.ops.render.render(write_still=True)
+        self.scene.view_settings.view_transform = 'Default'
+        self.scene.render.image_settings.file_format = 'PNG'
+        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(self.output_path,'{}.png'.format(name))
+        bpy.ops.render.render(write_still=True)
+        move_object_right(self.scene.camera)
+        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(self.output_path,'{}_b.png'.format(name) )
+        bpy.ops.render.render(write_still=True)
+        self.clear_objects()
 
     def light_scene(self):
-        bpy.data.images.load('{}/envmaps/{}'.format(os.getcwd(), 'gt.hdr'), check_existing=False)
+        envmap = random.choice(self.envmaps)
+        bpy.data.images.load(envmap, check_existing=False)
         self.scene.world.use_nodes = True
-        self.scene.world.node_tree.nodes['Environment Texture'].image = bpy.data.images['gt.hdr']
-        for obj in self.scene.objects:
-            if 'light' in obj.name:
-                new_light = bpy.context.scene.objects['Lamp'].copy()
-                new_light.location = obj.location
-                new_light.location.z = 2.5
-                self.scene.objects.link(new_light)
+        self.scene.world.node_tree.nodes['Environment Texture'].image = bpy.data.images[os.path.basename(envmap)]
 
-    def apply_random_textures(self, mtl):
-        new_lines = []
-        with open(mtl) as original:
-            lines = original.readlines()
-            new_lines = lines
-            for i, line in enumerate(lines):
-                if 'map_Kd' in line:
-                    item = line.strip().split('/')[-1]
-                    try:
-                        texture = random.choice(self.textures[item])
-                    except IndexError:
-                        print("item {} has no texture!".format(item), file=sys.stderr)
-                    new_lines[i] = 'map_Kd {}\n'.format(texture)
-        assert len(new_lines) > 0
-        return new_lines
+    def render_envmap(self, name='test'):
+        self.envmap_camera.rotation_euler = self.render_camera.rotation_euler
+        self.scene.camera = self.envmap_camera
+        self.scene.view_settings.view_transform = 'Raw'
+        self.scene.render.image_settings.file_format = 'HDR'
+        bpy.data.scenes['Scene'].render.filepath = "{}/envmaps/{}".format(self.output_path,'{}.hdr'.format(name))
+        bpy.ops.render.render(write_still=True)
 
-    def load_scene(self, scene):
-        print("loading {}".format(scene))
-        with open(scene[0]) as original:
-            lines = original.readlines()
-            lines[2] = 'mtllib temp.mtl\n'
-        with open(self.temp_obj_file, 'w') as temp_file:
-            temp_file.writelines(lines)
-        with open(self.temp_mtl_file, 'w') as temp_file:
-            temp_file.writelines(self.apply_random_textures(scene[1]))
-        bpy.ops.import_scene.obj(filepath=self.temp_obj_file)
 
-def find_scene_data(scene_dir='/home/gavin/SceneNetRGBD_Layouts'):
-    scene_types = [f for f in os.listdir(scene_dir) if isdir(join(scene_dir, f)) and 'texture_library' not in f]
-    scenes = dict()
-    for scene in scene_types:
-        objects = sorted(glob.glob("{}/*.obj".format(join(scene_dir, scene))))
-        mats = sorted(glob.glob("{}/*.mtl".format(join(scene_dir, scene))))
-        scenes[scene] = list(zip(objects, mats))
-    object_types = [f for f in os.listdir(join(scene_dir, 'texture_library'))]
-    items = dict()
-    for item in object_types:
-        textures = sorted(glob.glob("{}/*.jpg".format(join(scene_dir, 'texture_library', item))))
-        items[item] = textures
-    return scenes, items
+def move_object_right(object):
+    rightvec = mathutils.Vector((0.1, 0.0, 0.0))
+    inv = object.matrix_world.copy()
+    inv.invert()
+    vec_rot = rightvec * inv
+    object.location = object.location + vec_rot
+
+
+def random_rotation(object, limits):
+    object.rotation_euler.x = random.uniform(limits[0][0], limits[0][1])
+    object.rotation_euler.y = random.uniform(limits[1][0], limits[1][1])
+    object.rotation_euler.z = random.uniform(limits[2][0], limits[2][1])
+
+
+def find_scene_data(scene_dir='/mnt/black/scene_data'):
+    material_file = '{}/materials.blend'.format(scene_dir)
+    with bpy.data.libraries.load(material_file, link=False) as (data_from, data_to):
+        data_to.materials = [name for name in data_from.materials]
+
+    models = glob.glob('{}/models/*/*/*.obj'.format(scene_dir))
+    categories = dict()
+    categories['wood'] = extract_material('wood', data_to.materials)
+    categories['metal'] = extract_material('metal', data_to.materials)
+    categories['plastic'] = extract_material('plastic', data_to.materials)
+    categories['table'] = categories['wood'] + categories['plastic']
+    return categories, models
+
+
+def extract_material(category, materials):
+    return [i[0] for i in process.extract(category, materials, limit=5)]
 
 
 def main():
     bpy.context.scene.render.engine = 'CYCLES'
 
-    bpy.context.scene.camera.location.z = 1.8
-    bpy.context.scene.camera.location.x = 0
-    bpy.context.scene.camera.location.y = 0
-
     generator = SceneGenerator()
-    generator.random_render()
+    for i in range(10):
+        generator.random_render(str(i))
+        generator.render_envmap(str(i))
+
 
 if __name__ == "__main__":
     main()
