@@ -8,7 +8,7 @@ import mathutils
 from fuzzywuzzy import fuzz, process
 from contextlib import contextmanager
 import addon_utils
-import materials_cycles_converter
+
 
 class SceneGenerator:
     scene = bpy.context.scene
@@ -20,6 +20,7 @@ class SceneGenerator:
     imported_objects = []
     table = {}
     output_path = '/mnt/black/scene_data/'
+
     def __init__(self):
         self.materials, self.models = find_scene_data()
         print(self.tables)
@@ -35,7 +36,7 @@ class SceneGenerator:
         self.scene.objects[table].active_material = mat
         self.table = bpy.data.objects[table]
         bpy.ops.view3d.camera_to_view_selected()
-        return
+        return table
 
     def place_random_object(self, bounds):
         bpy.ops.import_scene.obj(filepath=random.choice(self.models))
@@ -49,20 +50,17 @@ class SceneGenerator:
             object.location.z = object.location.z - lowest_pt + 0.1
             object.location.x = object.location.x + position_x
             object.location.y = object.location.y + position_y
-            object.rotation_euler.z = random.uniform(-3.14,3.14)
-            #mat = random.choice(self.materials['metal'])
-            #object.active_material = mat
+            object.rotation_euler.z = random.uniform(-3.14, 3.14)
             object.select = False
         return objects
 
     def place_random_objects(self):
-        count = random.randint(1,4)
-        bounds = [(-1.5,1.5), (-1.5,1.5)]
+        count = random.randint(1, 4)
+        bounds = [(-1.5, 1.5), (-1.5, 1.5)]
         self.imported_objects = []
         for i in range(count):
             objects = self.place_random_object(bounds)
             self.imported_objects.extend(objects)
-        materials_cycles_converter.mlrefresh(bpy.context)
 
     def clear_objects(self):
         bpy.ops.object.select_all(action='DESELECT')
@@ -78,10 +76,12 @@ class SceneGenerator:
         self.light_scene()
         self.scene.view_settings.view_transform = 'Default'
         self.scene.render.image_settings.file_format = 'PNG'
-        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(self.output_path,'{}.png'.format(name))
+        self.scene.render.resolution_x = 1280
+        self.scene.render.resolution_y = 720
+        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(self.output_path, '{}.png'.format(name))
         bpy.ops.render.render(write_still=True)
         move_object_right(self.scene.camera)
-        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(self.output_path,'{}_b.png'.format(name) )
+        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(self.output_path, '{}_b.png'.format(name))
         bpy.ops.render.render(write_still=True)
         self.clear_objects()
 
@@ -92,11 +92,13 @@ class SceneGenerator:
         self.scene.world.node_tree.nodes['Environment Texture'].image = bpy.data.images[os.path.basename(envmap)]
 
     def render_envmap(self, name='test'):
+        self.scene.render.resolution_x = 512
+        self.scene.render.resolution_y = 512
         self.envmap_camera.rotation_euler = self.render_camera.rotation_euler
         self.scene.camera = self.envmap_camera
         self.scene.view_settings.view_transform = 'Raw'
         self.scene.render.image_settings.file_format = 'HDR'
-        bpy.data.scenes['Scene'].render.filepath = "{}/envmaps/{}".format(self.output_path,'{}.hdr'.format(name))
+        bpy.data.scenes['Scene'].render.filepath = "{}/envmaps/{}".format(self.output_path, '{}.hdr'.format(name))
         bpy.ops.render.render(write_still=True)
 
 
@@ -124,19 +126,21 @@ def find_scene_data(scene_dir='/mnt/black/scene_data'):
     categories['wood'] = extract_material('wood', data_to.materials)
     categories['metal'] = extract_material('metal', data_to.materials)
     categories['plastic'] = extract_material('plastic', data_to.materials)
-    categories['table'] = categories['wood'] + categories['plastic']
+    categories['stone'] = extract_material('stone', data_to.materials)
+    categories['table'] = categories['wood'] + categories['plastic'] + categories['stone']
     return categories, models
 
 
 def extract_material(category, materials):
-    return [i[0] for i in process.extract(category, materials, limit=5)]
+    return [i[0] for i in process.extract(category, materials, limit=6)]
 
 
 def main():
     bpy.context.scene.render.engine = 'CYCLES'
-
+    addon_utils.enable('materials_cycles_converter')
+    print(addon_utils.paths())
     generator = SceneGenerator()
-    for i in range(10):
+    for i in range(1000):
         generator.random_render(str(i))
         generator.render_envmap(str(i))
 
