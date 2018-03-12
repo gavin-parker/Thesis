@@ -9,17 +9,18 @@ from fuzzywuzzy import fuzz, process
 from contextlib import contextmanager
 import addon_utils
 
+scene_dir = os.environ['SCENE_DIR']
+
 
 class SceneGenerator:
     scene = bpy.context.scene
     envmap_camera = bpy.data.objects["Envmap_Camera"]
     render_camera = bpy.data.objects["Camera"]
-    camera_limits = [(0.8, 1.1), (-0.1, 0.1), (-3.14, 3.14)]
-    envmaps = glob.glob('/home/gavin/hdris/*.hdr')
+    camera_limits = [(0.8, 1.3), (-0.1, 0.1), (-3.14, 3.14)]
+    envmaps = glob.glob('{}/hdris/*.hdr'.format(scene_dir))
     tables = [obj.name for obj in scene.objects if "Table" in obj.name]
     imported_objects = []
     table = {}
-    output_path = '/mnt/black/scene_data/'
 
     def __init__(self):
         self.materials, self.models = find_scene_data()
@@ -31,10 +32,11 @@ class SceneGenerator:
             bpy.data.objects[table].select = False
         table = random.choice(self.tables)
         bpy.data.objects[table].hide_render = False
-        bpy.data.objects[table].select = True
+        #bpy.data.objects[table].select = True
         mat = random.choice(self.materials['table'])
         self.scene.objects[table].active_material = mat
         self.table = bpy.data.objects[table]
+        self.scene.objects['Anchor'].select = True
         bpy.ops.view3d.camera_to_view_selected()
         return table
 
@@ -61,6 +63,7 @@ class SceneGenerator:
         for i in range(count):
             objects = self.place_random_object(bounds)
             self.imported_objects.extend(objects)
+        bpy.ops.ml.refresh()
 
     def clear_objects(self):
         bpy.ops.object.select_all(action='DESELECT')
@@ -78,10 +81,10 @@ class SceneGenerator:
         self.scene.render.image_settings.file_format = 'PNG'
         self.scene.render.resolution_x = 1280
         self.scene.render.resolution_y = 720
-        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(self.output_path, '{}.png'.format(name))
+        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(scene_dir, '{}.png'.format(name))
         bpy.ops.render.render(write_still=True)
-        move_object_right(self.scene.camera)
-        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(self.output_path, '{}_b.png'.format(name))
+        move_object(self.scene.camera, (0.1, 0.0, 0.0))
+        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(scene_dir, '{}_b.png'.format(name))
         bpy.ops.render.render(write_still=True)
         self.clear_objects()
 
@@ -98,12 +101,12 @@ class SceneGenerator:
         self.scene.camera = self.envmap_camera
         self.scene.view_settings.view_transform = 'Raw'
         self.scene.render.image_settings.file_format = 'HDR'
-        bpy.data.scenes['Scene'].render.filepath = "{}/envmaps/{}".format(self.output_path, '{}.hdr'.format(name))
+        bpy.data.scenes['Scene'].render.filepath = "{}/envmaps/{}".format(scene_dir, '{}.hdr'.format(name))
         bpy.ops.render.render(write_still=True)
 
 
-def move_object_right(object):
-    rightvec = mathutils.Vector((0.1, 0.0, 0.0))
+def move_object(object, vector):
+    rightvec = mathutils.Vector(vector)
     inv = object.matrix_world.copy()
     inv.invert()
     vec_rot = rightvec * inv
@@ -116,7 +119,7 @@ def random_rotation(object, limits):
     object.rotation_euler.z = random.uniform(limits[2][0], limits[2][1])
 
 
-def find_scene_data(scene_dir='/mnt/black/scene_data'):
+def find_scene_data():
     material_file = '{}/materials.blend'.format(scene_dir)
     with bpy.data.libraries.load(material_file, link=False) as (data_from, data_to):
         data_to.materials = [name for name in data_from.materials]
@@ -138,6 +141,9 @@ def extract_material(category, materials):
 def main():
     bpy.context.scene.render.engine = 'CYCLES'
     addon_utils.enable('materials_cycles_converter')
+    for arg in sys.argv:
+        if "scene-dir" in arg:
+            scene_dir = arg.split("=")[1]
     print(addon_utils.paths())
     generator = SceneGenerator()
     for i in range(1000):
