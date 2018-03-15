@@ -11,6 +11,8 @@ import addon_utils
 
 scene_dir = os.environ['SCENE_DIR']
 
+table_objects = ["bowl", "bottle", "can", "computer keyboard", "keypad", "display", "phone", "jar", "knife", "lamp", "laptop", "microphone"
+                 "mug", "remote", "wine bottle"]
 
 class SceneGenerator:
     scene = bpy.context.scene
