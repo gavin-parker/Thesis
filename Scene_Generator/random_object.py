@@ -27,14 +27,13 @@ class SceneGenerator:
         print(self.tables)
 
     def random_material(self, objects):
-        for img in bpy.data.images:
-            bpy.data.images.remove(img)
         mat_prop(self.material, 'Base Color', random_colour())
         mat_prop(self.material, 'Subsurface', random.uniform(0, 0.2))
         mat_prop(self.material, 'Subsurface Color', random_colour())
         mat_prop(self.material, 'Metallic', random.uniform(0, 1))
         mat_prop(self.material, 'Specular', random.uniform(0, 1))
         mat_prop(self.material, 'Roughness', random.uniform(0, 1))
+
         for obj in bpy.data.objects:
             if obj.type == 'Mesh':
                 obj.active_material = self.material
@@ -42,13 +41,18 @@ class SceneGenerator:
 
     def place_random_object(self):
         bpy.ops.import_scene.obj(filepath=random.choice(self.models))
+        for material in bpy.data.materials:
+            if material != self.material:
+                bpy.data.materials.remove(material)
         objects = bpy.context.selected_objects[:]
+        #bpy.ops.mesh.uv_texture_remove()
         return objects
 
     def clear_objects(self, objects):
         bpy.ops.object.select_all(action='DESELECT')
-        for obj in objects:
-            obj.select = True
+        for obj in bpy.data.objects:
+            if obj.type == 'MESH':
+                obj.select = True
         bpy.ops.object.delete()
 
     def random_render(self, name='test'):
@@ -70,7 +74,6 @@ class SceneGenerator:
                                                                           '{}_{}_b.png'.format(envmap_id, name))
         bpy.ops.render.render(write_still=True)
         self.clear_objects(obj)
-        return
 
     def light_scene(self):
         envmap = random.choice(self.envmaps)
@@ -128,7 +131,7 @@ def main():
     #bpy.ops.wm.addon_enable(module='materials_utils')
     print(prefs.compute_device_type)
     generator = SceneGenerator()
-    for i in range(10):
+    for i in range(1000):
         generator.random_render(str(i))
 
 

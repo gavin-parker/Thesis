@@ -15,5 +15,6 @@ export PATH=$PATH:/mnt/storage/scratch/gp14958/blender-2.79-linux-glibc219-x86_6
 export SCENE_DIR=/mnt/storage/scratch/gp14958/scene_data
 #source ~/Thesis/tensorflow/bin/activate
 
-export PREFIX=c
+export PREFIX=b
 python runner.py
+
