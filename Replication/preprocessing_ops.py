@@ -2,6 +2,7 @@ import tensorflow as tf
 import glob
 import cv2
 import numpy as np
+import os
 
 HDR_MIN = 0.0
 HDR_MAX = 1.0
@@ -57,9 +58,9 @@ def unit_norm(image, channels=3):
 def preprocess_color(filename, input_shape=[256, 256, 3], double_precision=False):
     image = tf.image.decode_image(tf.read_file(filename), channels=3, name="decode_color")
     if not double_precision:
-        image = tf.cast(format_image(image, input_shape, 128), tf.float16)
+        image = tf.cast(format_image(image, input_shape, 256), tf.float16)
     else:
-        image = tf.cast(format_image(image, input_shape, 128), tf.float32)
+        image = tf.cast(format_image(image, input_shape, 256), tf.float32)
     # if use_lab:
     #    new_image = tf.py_func(rgb_to_lab, [image], tf.float32)
     #    image = tf.reshape(new_image, tf.shape(image))
@@ -72,7 +73,7 @@ def normalize_hdr(image):
 
 
 def denormalize_hdr(image):
-    image_delog = tf.exp(image*10.0) - 1.0
+    image_delog = tf.exp(image * 10.0) - 1.0
     return image_delog
 
 
@@ -98,7 +99,7 @@ rgbe2float(float *red, float *green, float *blue, unsigned char rgbe[4])
 
 def preprocess_hdr(filename, size=64, double_precision=True, use_lab=False):
     rgbe_image = tf.py_func(parse_hdr, [filename], tf.float32)
-    image = tf.reshape(rgbe_image, [128, 128, 3])
+    image = tf.reshape(rgbe_image, [64, 64, 3])
     image = tf.image.resize_images(image, [64, 64])
     return image
 
@@ -110,6 +111,7 @@ def parse_hdr(filename):
 
 def write_hdr(filename, image):
     cv2.imwrite(filename, image)
+
 
 def preprocess_orientation(filename, double_precision=False):
     image = tf.image.decode_image(tf.read_file(filename), channels=4, name="decode_norm")
@@ -134,6 +136,18 @@ def image_stream(path, order=None):
             tf.convert_to_tensor(sorted(glob.glob(path)), dtype=tf.string))
 
 
+def stereo_stream(dir):
+    left = tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(sorted(glob.glob("{}/renders/*_[0-9].png".format(dir))), dtype=tf.string))
+    right = tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(sorted(glob.glob("{}/renders/*_b.png".format(dir))), dtype=tf.string))
+    image_paths = sorted(glob.glob("{}/renders/*_[0-9].png".format(dir)))
+    envmap_paths = [dir + "/hdris/" + os.path.basename(i).split('_')[0] + ".hdr" for i in image_paths]
+    envmaps = tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(envmap_paths, dtype=tf.string))
+    return left, right, envmaps
+
+
 # based on https://github.com/torch/image/blob/9f65c30167b2048ecbe8b7befdc6b2d6d12baee9/generic/image.c
 # Shamelessly ripped from pix2pix https://github.com/affinelayer/pix2pix-tensorflow/blob/master/pix2pix.py
 def rgb_to_lab(srgb):
@@ -144,7 +158,7 @@ def rgb_to_lab(srgb):
             linear_mask = tf.cast(srgb_pixels <= 0.04045, dtype=tf.float32)
             exponential_mask = tf.cast(srgb_pixels > 0.04045, dtype=tf.float32)
             rgb_pixels = (srgb_pixels / 12.92 * linear_mask) + (
-                        ((srgb_pixels + 0.055) / 1.055) ** 2.4) * exponential_mask
+                    ((srgb_pixels + 0.055) / 1.055) ** 2.4) * exponential_mask
             rgb_to_xyz = tf.constant([
                 #    X        Y          Z
                 [0.412453, 0.212671, 0.019334],  # R
@@ -164,7 +178,7 @@ def rgb_to_lab(srgb):
             linear_mask = tf.cast(xyz_normalized_pixels <= (epsilon ** 3.0), dtype=tf.float32)
             exponential_mask = tf.cast(xyz_normalized_pixels > (epsilon ** 3.0), dtype=tf.float32)
             fxfyfz_pixels = (xyz_normalized_pixels / (3.0 * epsilon ** 2.0) + 4.0 / 29) * linear_mask + (
-                        xyz_normalized_pixels ** (1.0 / 3)) * exponential_mask
+                    xyz_normalized_pixels ** (1.0 / 3)) * exponential_mask
 
             # convert to lab
             fxfyfz_to_lab = tf.constant([
@@ -198,7 +212,7 @@ def lab_to_rgb(lab):
             linear_mask = tf.cast(fxfyfz_pixels <= epsilon, dtype=tf.float32)
             exponential_mask = tf.cast(fxfyfz_pixels > epsilon, dtype=tf.float32)
             xyz_pixels = (3.0 * epsilon ** 2.0 * (fxfyfz_pixels - 4.0 / 29.0)) * linear_mask + (
-                        fxfyfz_pixels ** 3.0) * exponential_mask
+                    fxfyfz_pixels ** 3.0) * exponential_mask
 
             # denormalize for D65 white point
             xyz_pixels = tf.multiply(xyz_pixels, [0.950456, 1.0, 1.088754])
@@ -216,6 +230,6 @@ def lab_to_rgb(lab):
             linear_mask = tf.cast(rgb_pixels <= 0.0031308, dtype=tf.float32)
             exponential_mask = tf.cast(rgb_pixels > 0.0031308, dtype=tf.float32)
             srgb_pixels = (rgb_pixels * 12.92 * linear_mask) + (
-                        (rgb_pixels ** (1.0 / 2.4) * 1.055) - 0.055) * exponential_mask
+                    (rgb_pixels ** (1.0 / 2.4) * 1.055) - 0.055) * exponential_mask
 
         return tf.reshape(srgb_pixels, tf.shape(lab))

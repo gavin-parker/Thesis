@@ -2,7 +2,7 @@ import tensorflow as tf
 from reflectance_ops import Reflectance
 import os
 import preprocessing_ops as preprocessing
-import encode_decode as ed
+import layers as ed
 import time
 from params import FLAGS
 

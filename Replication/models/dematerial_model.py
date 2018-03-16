@@ -1,10 +1,10 @@
 import tensorflow as tf
 import os
 import preprocessing_ops as preprocessing
-import encode_decode
+import layers
 import time
 
-import renderer as rend
+from rendering import renderer as rend
 from params import FLAGS
 
 """ Convolutional-Deconvolutional model for extracting reflectance maps from input images with normals.
@@ -99,11 +99,11 @@ class Model:
 
     @staticmethod
     def singlet(input):
-        encode_1 = encode_decode.encode_layer(input, 64, (3, 3), (2, 2), 2, regularizer=regularizer)
-        encode_2 = encode_decode.encode_layer(encode_1, 128, (3, 3), (2, 2), 2, regularizer=regularizer)
-        encode_3 = encode_decode.encode_layer(encode_2, 256, (3, 3), (2, 2), 3, regularizer=regularizer)
-        encode_4 = encode_decode.encode_layer(encode_3, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
-        encode_5 = encode_decode.encode_layer(encode_4, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
+        encode_1 = layers.encode_layer(input, 64, (3, 3), (2, 2), 2, regularizer=regularizer)
+        encode_2 = layers.encode_layer(encode_1, 128, (3, 3), (2, 2), 2, regularizer=regularizer)
+        encode_3 = layers.encode_layer(encode_2, 256, (3, 3), (2, 2), 3, regularizer=regularizer)
+        encode_4 = layers.encode_layer(encode_3, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
+        encode_5 = layers.encode_layer(encode_4, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
         return [encode_1, encode_2, encode_3, encode_4, encode_5]
 
     def encode(self, reflectance_map, background):
@@ -113,12 +113,12 @@ class Model:
 
         fully_encoded = tf.concat([rm_encodings[-1], bg_encodings[-1]], axis=-1)
         #fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
-        fully_encoded = encode_decode.encode_layer(fully_encoded, 1024, (3, 3), (1, 1), 1, maxpool=False)
-        decode_1 = encode_decode.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3)
-        decode_2 = encode_decode.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3)
-        decode_3 = encode_decode.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3)
-        decode_4 = encode_decode.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1)
-        return encode_decode.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
+        fully_encoded = layers.encode_layer(fully_encoded, 1024, (3, 3), (1, 1), 1, maxpool=False)
+        decode_1 = layers.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3)
+        decode_2 = layers.decode_layer(tf.concat([decode_1, rm_encodings[3]], axis=-1), 512, (3, 3), (2, 2), 3)
+        decode_3 = layers.decode_layer(tf.concat([decode_2, rm_encodings[2]], axis=-1), 256, (3, 3), (2, 2), 3)
+        decode_4 = layers.decode_layer(tf.concat([decode_3, rm_encodings[1]], axis=-1), 128, (3, 3), (2, 2), 1)
+        return layers.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
 
     """Create tensorboard summaries of images and loss"""
 
