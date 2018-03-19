@@ -6,6 +6,7 @@ import time
 from stereo_model import *
 from rendering import renderer as rend
 from params import FLAGS
+import glob
 
 """ Convolutional-Deconvolutional model for extracting reflectance maps from input images with normals.
     Extracts sparse reflectance maps, with the CNN performing data interpolation"""
@@ -33,7 +34,7 @@ class Model:
                 lambda x: preprocessing.preprocess_color(x, [256, 256, 3], double_precision=True),
                 num_parallel_calls=4)
 
-            dataset = tf.data.Dataset.zip((left, right, envmap)).shuffle(128).repeat().batch(FLAGS.batch_size).prefetch(
+            dataset = tf.data.Dataset.zip((left, right, envmap)).repeat().batch(FLAGS.batch_size).prefetch(
                 buffer_size=2 * FLAGS.batch_size)
             iterator = dataset.make_one_shot_iterator()
             input_batch = iterator.get_next()
@@ -85,27 +86,18 @@ class Model:
         # return tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
         return tf.train.MomentumOptimizer(self.learning_rate, 0.95).minimize(self.loss)
 
-    @staticmethod
-    def singlet(input):
-        encode_1 = layers.encode_layer(input, 64, (3, 3), (2, 2), 2, regularizer=regularizer)
-        encode_2 = layers.encode_layer(encode_1, 128, (3, 3), (2, 2), 2, regularizer=regularizer)
-        encode_3 = layers.encode_layer(encode_2, 256, (3, 3), (2, 2), 3, regularizer=regularizer)
-        encode_4 = layers.encode_layer(encode_3, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
-        encode_5 = layers.encode_layer(encode_4, 512, (3, 3), (2, 2), 3, regularizer=regularizer)
-        return [encode_1, encode_2, encode_3, encode_4, encode_5]
-
     def encode(self, left, right):
 
         l_encodings = siamese_encode(left, reuse=False)
         r_encodings = siamese_encode(right, reuse=True)
 
-        fully_encoded = tf.concat([l_encodings, r_encodings], axis=-1)
+        fully_encoded = tf.concat([l_encodings[-1], r_encodings[-1]], axis=-1)
         # fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
         fully_encoded = layers.encode_layer(fully_encoded, 1024, (3, 3), (1, 1), 1, maxpool=False)
         decode_1 = layers.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3)
-        decode_2 = layers.decode_layer(decode_1, 512, (3, 3), (2, 2), 3)
-        decode_3 = layers.decode_layer(decode_2, 256, (3, 3), (2, 2), 3)
-        decode_4 = layers.decode_layer(decode_3, 128, (3, 3), (2, 2), 1)
+        decode_2 = layers.decode_layer(tf.concat([decode_1, r_encodings[-2]], axis=-1), 512, (3, 3), (2, 2), 3)
+        decode_3 = layers.decode_layer(tf.concat([decode_2, r_encodings[-3]], axis=-1), 256, (3, 3), (2, 2), 3)
+        decode_4 = layers.decode_layer(tf.concat([decode_3, r_encodings[-4]], axis=-1), 128, (3, 3), (2, 2), 1)
 
         return layers.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
 
@@ -124,7 +116,7 @@ class Model:
 
         scalar_summary = tf.summary.merge([tf.summary.scalar("Loss", self.loss),
                                            tf.summary.scalar("Max difference", self.diff),
-                                           tf.summary.scalar("Learning Rate", self.diff)])
+                                           tf.summary.scalar("Learning Rate", self.learning_rate)])
         img_summary = tf.summary.merge(summaries)
         return img_summary, scalar_summary
 
@@ -152,7 +144,8 @@ class Model:
         saver = tf.train.Saver()
         if FLAGS.fine_tune:
             saver.restore(sess, FLAGS.test_model_dir)
-        epoch_size = 56238 / FLAGS.batch_size
+        epoch_size = len(glob.glob("{}/renders/left/*.png".format(dir)))
+        epoch_size /= FLAGS.batch_size
         print("beginning training with learning rate: {}".format(FLAGS.learning_rate))
         print("Epoch size: {}".format(epoch_size))
         print("Batch size: {}".format(FLAGS.batch_size))

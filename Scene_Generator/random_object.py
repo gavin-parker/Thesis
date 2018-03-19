@@ -33,10 +33,17 @@ class SceneGenerator:
         mat_prop(self.material, 'Metallic', random.uniform(0, 1))
         mat_prop(self.material, 'Specular', random.uniform(0, 1))
         mat_prop(self.material, 'Roughness', random.uniform(0, 1))
-
-        for obj in bpy.data.objects:
-            if obj.type == 'Mesh':
+        for obj in self.scene.objects:
+            if obj.type != 'CAMERA' and obj.type != 'LAMP':
+                if obj.data.materials:
+                    obj.data.materials[0] = self.material
+                else:
+                    obj.data.materials.append(self.material)
                 obj.active_material = self.material
+                bpy.context.scene.objects.active = obj
+                bpy.ops.object.mode_set(mode='EDIT')
+                bpy.ops.object.material_slot_assign()
+                bpy.ops.object.mode_set(mode='OBJECT')
 
 
     def place_random_object(self):
@@ -45,6 +52,7 @@ class SceneGenerator:
             if material != self.material:
                 bpy.data.materials.remove(material)
         objects = bpy.context.selected_objects[:]
+
         #bpy.ops.mesh.uv_texture_remove()
         return objects
 
@@ -66,12 +74,12 @@ class SceneGenerator:
         self.scene.render.image_settings.file_format = 'PNG'
         self.scene.render.resolution_x = 512
         self.scene.render.resolution_y = 512
-        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(scene_dir,
+        bpy.data.scenes['Scene'].render.filepath = "{}/renders/left/{}".format(scene_dir,
                                                                           '{}_{}.png'.format(envmap_id, name))
         bpy.ops.render.render(write_still=True)
         move_object(self.scene.camera, (0.1, 0.0, 0.0))
-        bpy.data.scenes['Scene'].render.filepath = "{}/renders/{}".format(scene_dir,
-                                                                          '{}_{}_b.png'.format(envmap_id, name))
+        bpy.data.scenes['Scene'].render.filepath = "{}/renders/right/{}".format(scene_dir,
+                                                                          '{}_{}.png'.format(envmap_id, name))
         bpy.ops.render.render(write_still=True)
         self.clear_objects(obj)
 
@@ -131,7 +139,7 @@ def main():
     #bpy.ops.wm.addon_enable(module='materials_utils')
     print(prefs.compute_device_type)
     generator = SceneGenerator()
-    for i in range(1000):
+    for i in range(10000):
         generator.random_render(str(i))
 
 

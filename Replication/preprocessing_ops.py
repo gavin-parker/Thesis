@@ -138,10 +138,10 @@ def image_stream(path, order=None):
 
 def stereo_stream(dir):
     left = tf.data.Dataset.from_tensor_slices(
-        tf.convert_to_tensor(sorted(glob.glob("{}/renders/*_[0-9].png".format(dir))), dtype=tf.string))
+        tf.convert_to_tensor(sorted(glob.glob("{}/renders/left/*.png".format(dir))), dtype=tf.string))
     right = tf.data.Dataset.from_tensor_slices(
-        tf.convert_to_tensor(sorted(glob.glob("{}/renders/*_b.png".format(dir))), dtype=tf.string))
-    image_paths = sorted(glob.glob("{}/renders/*_[0-9].png".format(dir)))
+        tf.convert_to_tensor(sorted(glob.glob("{}/renders/right/*.png".format(dir))), dtype=tf.string))
+    image_paths = sorted(glob.glob("{}/renders/right/*.png".format(dir)))
     envmap_paths = [dir + "/hdris/" + os.path.basename(i).split('_')[0] + ".hdr" for i in image_paths]
     envmaps = tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(envmap_paths, dtype=tf.string))

@@ -11,4 +11,4 @@ def resize_img_dir(dir):
 
 if __name__ == "__main__":
     print("resizing...")
-    resize_img_dir('/home/gavin/scene_data/hdris')
+    resize_img_dir('/home/gavin/Downloads/hdris')
