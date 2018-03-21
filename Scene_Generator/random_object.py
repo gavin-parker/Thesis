@@ -11,7 +11,6 @@ import addon_utils
 
 scene_dir = os.environ['SCENE_DIR']
 
-
 class SceneGenerator:
     scene = bpy.context.scene
     envmap_camera = bpy.data.objects["Envmap_Camera"]
@@ -21,7 +20,7 @@ class SceneGenerator:
     tables = [obj.name for obj in scene.objects if "Table" in obj.name]
     imported_objects = []
     table = {}
-
+    car = None
     def __init__(self):
         self.material, self.models = find_scene_data()
         print(self.tables)
@@ -44,17 +43,23 @@ class SceneGenerator:
                 bpy.ops.object.mode_set(mode='EDIT')
                 bpy.ops.object.material_slot_assign()
                 bpy.ops.object.mode_set(mode='OBJECT')
+                obj.select = True
+
 
 
     def place_random_object(self):
-        bpy.ops.import_scene.obj(filepath=random.choice(self.models))
+        path = random.choice(self.models)
+        bpy.ops.import_scene.obj(filepath=path)
         for material in bpy.data.materials:
             if material != self.material:
                 bpy.data.materials.remove(material)
         objects = bpy.context.selected_objects[:]
-
+        bpy.ops.transform.resize(value=(0.1, 0.1, 0.1), constraint_axis=(False, False, False),
+                                 constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED',
+                                 proportional_edit_falloff='SMOOTH', proportional_size=1)
         #bpy.ops.mesh.uv_texture_remove()
-        return objects
+        self.car =  objects
+        return path
 
     def clear_objects(self, objects):
         bpy.ops.object.select_all(action='DESELECT')
@@ -65,9 +70,10 @@ class SceneGenerator:
 
     def random_render(self, name='test'):
         self.scene.camera = self.render_camera
+        bpy.data.cameras[self.scene.camera.name].clip_start = 0.0001
+        bpy.data.cameras[self.scene.camera.name].clip_end = 1000
         random_rotation(self.scene.camera, self.camera_limits)
-        obj = self.place_random_object()
-        self.random_material(obj)
+        self.random_material(self.car)
         bpy.ops.view3d.camera_to_view_selected()
         envmap_id = self.light_scene()
         self.scene.view_settings.view_transform = 'Default'
@@ -81,7 +87,6 @@ class SceneGenerator:
         bpy.data.scenes['Scene'].render.filepath = "{}/renders/right/{}".format(scene_dir,
                                                                           '{}_{}.png'.format(envmap_id, name))
         bpy.ops.render.render(write_still=True)
-        self.clear_objects(obj)
 
     def light_scene(self):
         envmap = random.choice(self.envmaps)
@@ -108,8 +113,8 @@ def move_object(object, vector):
 
 
 def random_rotation(object, limits):
-    object.rotation_euler.x = random.uniform(limits[0][0], limits[0][1])
-    object.rotation_euler.y = random.uniform(limits[1][0], limits[1][1])
+    #object.rotation_euler.x = random.uniform(limits[0][0], limits[0][1])
+    #object.rotation_euler.y = random.uniform(limits[1][0], limits[1][1])
     object.rotation_euler.z = random.uniform(limits[2][0], limits[2][1])
 
 
@@ -128,20 +133,30 @@ def extract_material(category, materials, limit=4):
 
 
 def main():
+    prefix = 0
+    for arg in sys.argv:
+        if 'prefix' in arg:
+            prefix = int(arg.split('=')[1])
     bpy.context.scene.render.engine = 'CYCLES'
     try:
         bpy.context.scene.cycles.device = 'GPU'
         bpy.context.user_preferences.addons['cycles'].preferences.compute_device_type = 'CUDA'
+        bpy.context.scene.render.tile_x = 512
+        bpy.context.scene.render.tile_y = 512
     except TypeError:
+        bpy.context.scene.render.tile_x = 32
+        bpy.context.scene.render.tile_y = 32
         pass
     # bpy.context.user_preferences.addons['cycles'].preferences.devices[1].use = True
     prefs = bpy.context.user_preferences.addons['cycles'].preferences
     #bpy.ops.wm.addon_enable(module='materials_utils')
     print(prefs.compute_device_type)
     generator = SceneGenerator()
-    for i in range(10000):
+    filename = generator.place_random_object()
+    filename = os.path.dirname(filename).split('/')[-1]
+    for i in range(prefix, prefix+10):
         generator.random_render(str(i))
-
+    generator.clear_objects(generator.car)
 
 if __name__ == "__main__":
     main()

@@ -1,11 +1,10 @@
 #!/bin/bash
 #SBATCH -t 1-00:00 # Runtime in D-HH:MM
-#SBATCH -p gpu # Partition to submit to
 #SBATCH --ntasks-per-node=1
-#SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=28
 #SBATCH --mem=15000
-#SBATCH -J lighting_thesis    # name
+#SBATCH --array=0-50
+#SBATCH -J render_data    # name
 #SBATCH -o hostname_%j.out # File to which STDOUT will be written
 #SBATCH -e hostname_%j.err # File to which STDERR will be written
 #SBATCH --mail-type=ALL # Type of email notification- BEGIN,END,FAIL,ALL
@@ -17,5 +16,5 @@ export SCENE_DIR=/mnt/storage/scratch/gp14958/scene_data
 #source ~/Thesis/tensorflow/bin/activate
 
 export PREFIX=10000
-python runner.py
+srun python runner.py --arr=$SLURM_ARRAY_TASK_ID
 

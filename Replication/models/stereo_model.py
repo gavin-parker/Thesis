@@ -34,4 +34,9 @@ def siamese_encode(input, reuse=False):
                                    kernel_initializer=tf.contrib.layers.xavier_initializer_conv2d(),
                                    reuse=reuse)
             filters_f = tf.layers.max_pooling2d(filters_f, pool_size=[2, 2], strides=[2, 2], padding='SAME')
-    return [filters_a, filters_b, filters_c, filters_d, filters_e, filters_f]
+        with tf.variable_scope("siamese_6") as scope:
+            filters_g = tf.layers.conv2d(filters_e, 512, [3, 3], activation=tf.nn.relu, padding='SAME',
+                                   kernel_initializer=tf.contrib.layers.xavier_initializer_conv2d(),
+                                   reuse=reuse)
+            filters_g = tf.layers.max_pooling2d(filters_f, pool_size=[2, 2], strides=[2, 2], padding='SAME')
+    return [filters_a, filters_b, filters_c, filters_d, filters_e, filters_f, filters_g]

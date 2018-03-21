@@ -144,7 +144,7 @@ class Model:
         saver = tf.train.Saver()
         if FLAGS.fine_tune:
             saver.restore(sess, FLAGS.test_model_dir)
-        epoch_size = len(glob.glob("{}/renders/left/*.png".format(dir)))
+        epoch_size = len(glob.glob("{}/renders/left/*.png".format(FLAGS.train_dir)))
         epoch_size /= FLAGS.batch_size
         print("beginning training with learning rate: {}".format(FLAGS.learning_rate))
         print("Epoch size: {}".format(epoch_size))
