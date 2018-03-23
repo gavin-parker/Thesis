@@ -1,0 +1,474 @@
+% The document class supplies options to control rendering of some standard
+% features in the result.  The goal is for uniform style, so some attention 
+% to detail is *vital* with all fields.  Each field (i.e., text inside the
+% curly braces below, so the MEng text inside {MEng} for instance) should 
+% take into account the following:
+%
+% - author name       should be formatted as "FirstName LastName"
+%   (not "Initial LastName" for example),
+% - supervisor name   should be formatted as "Title FirstName LastName"
+%   (where Title is "Dr." or "Prof." for example),
+% - degree programme  should be "BSc", "MEng", "MSci", "MSc" or "PhD",
+% - dissertation title should be correctly capitalised (plus you can have
+%   an optional sub-title if appropriate, or leave this field blank),
+% - dissertation type should be formatted as one of the following:
+%   * for the MEng degree programme either "enterprise" or "research" to
+%     reflect the stream,
+%   * for the MSc  degree programme "$X/Y/Z$" for a project deemed to be
+%     X%, Y% and Z% of type I, II and III.
+% - year              should be formatted as a 4-digit year of submission
+%   (so 2014 rather than the accademic year, say 2013/14 say).
+
+\documentclass[ % the name of the author
+                    author={Gavin Parker},
+                % the name of the supervisor
+                supervisor={Dr. Neill Campbell},
+                % the degree programme
+                    degree={MEng},
+                % the dissertation    title (which cannot be blank)
+                     title={Deep Siamese Networks for Illumination Estimation from Stereo Images},
+                % the dissertation subtitle (which can    be blank)
+                  subtitle={},
+                % the dissertation     type
+                      type={research},
+                % the year of submission
+                      year={2018} ]{dissertation}
+
+\begin{document}
+
+% =============================================================================
+
+% This section simply introduces the structural guidelines.  It can clearly
+% be deleted (or commented out) if you use the file as a template for your
+% own dissertation: everything following it is in the correct order to use 
+% as is.
+
+\section*{Prelude}
+\thispagestyle{empty}
+
+A typical dissertation will be structured according to (somewhat) standard 
+sections, described in what follows.  However, it is hard and perhaps even 
+counter-productive to generalise: the goal is {\em not} to be prescriptive, 
+but simply to act as a guideline.  In particular, each page count given is
+important but {\em not} absolute: their aim is simply to highlight that a 
+clear, concise description is better than a rambling alternative that makes
+it hard to separate important content and facts from trivia.
+
+You can use this document as a \LaTeX-based~\cite{latexbook1,latexbook2} 
+template for your own dissertation by simply deleting extraneous sections
+and content; keep in mind that the associated {\tt Makefile} could be of
+use, in particular because it automatically executes %\mbox{\BibTeX} to 
+deal with the associated bibliography.  
+
+You can, on the other hand, opt {\em not} to use this template; this is a 
+perfectly acceptable approach.  Note that a standard cover and declaration 
+of authorship may still be produced online via
+\[
+\mbox{\url{http://www.cs.bris.ac.uk/Teaching/Resources/cover.html}}
+\]
+
+% =============================================================================
+
+% This macro creates the standard UoB title page by using information drawn
+% from the document class (meaning it is vital you select the correct degree 
+% title and so on).
+
+\maketitle
+
+% After the title page (which is a special case in that it is not numbered)
+% comes the front matter or preliminaries; this macro signals the start of
+% such content, meaning the pages are numbered with Roman numerals.
+
+\frontmatter
+
+% This macro creates the standard UoB declaration; on the printed hard-copy,
+% this must be physically signed by the author in the space indicated.
+
+\makedecl
+
+% LaTeX automatically generates a table of contents, plus associated lists 
+% of figures, tables and algorithms.  The former is a compulsory part of the
+% dissertation, but if you do not require the latter they can be suppressed
+% by simply commenting out the associated macro.
+
+\tableofcontents
+\listoffigures
+\listoftables
+\listofalgorithms
+\lstlistoflistings
+
+% The following sections are part of the front matter, but are not generated
+% automatically by LaTeX; the use of \chapter* means they are not numbered.
+
+% -----------------------------------------------------------------------------
+
+\chapter*{Executive Summary}
+
+\noindent
+In this paper we present a system for estimating the lighting in photographs and video streams of real scenes,  to be used for the realistic rendering of virtual objects and characters. Augmented Reality is a growing topic in computer graphics and vision, that involves superimposing synthetic information and images on real scenes, often with the aim of giving the illusion that the object is part of the real world. Current AR solutions use geometry estimation to correctly place and scale the virtual objects to fit into the real scene, but do very little to render those objects with other scene intrinsics. Our system uses a Siamese Convolutional Neural Network to extract the lighting intensities and directions from objects within a scene, such that virtual objects can be re-rendered with realistic parameters on-the-fly.
+
+The appearance of an object is made up of its material properties, its geometry and the lighting conditions, making estimation of any one of these factors from a single image a difficult task. Previous work has tackled lighting estimation by treating geometry estimation as a separate task, making use of depth cameras or known geometry. I have produced a CNN that relies on the relative invariance of these 3 unknowns with respect to time, by attempting to predict illumination from a series of views of an object.
+
+\begin{quote}
+My research hypothesis is that a siamese CNN provided with RGB stereo images, or a recurrent network provided with a video stream, will achieve similar results to Stamatios Georgoulis et al. while eliminating the need for explicit geometry estimation or the use of a depth camera.
+\end{quote}
+
+To test my hypothesis I performed research and implementation as follows:
+
+\noindent
+\begin{itemize}
+\item Researched existing algorithms and neural network architectures for lighting and geometry estimation.
+\item Replicated the work of Stamatios Georgoulis et al. by building CNNs that can interpolate sparse reflectance maps and predict environment map lighting from single objects with provided geometry.
+\item Implemented a dataset generator that could produce realistic lighting parameters and images for training networks.
+\item Created a new siamese architecture to encode geometry from stereo images and estimate lighting conditions
+\end{itemize}
+
+% -----------------------------------------------------------------------------
+
+\chapter*{Supporting Technologies}
+
+{\bf A compulsory section, of at most $1$ page}
+\vspace{1cm} 
+
+\noindent
+This section should present a detailed summary, in bullet point form, 
+of any third-party resources (e.g., hardware and software components) 
+used during the project.  Use of such resources is always perfectly 
+acceptable: the goal of this section is simply to be clear about how
+and where they are used, so that a clear assessment of your work can
+result.  The content can focus on the project topic itself (rather,
+for example, than including ``I used \mbox{\LaTeX} to prepare my 
+dissertation''); an example is as follows:
+
+\begin{quote}
+\noindent
+\begin{itemize}
+\item Tensorflow
+\item OpenCV libraries
+\item Blender
+\item HDRIHaven
+\item Shapenet
+\end{itemize}
+\end{quote}
+
+% -----------------------------------------------------------------------------
+
+\chapter*{Notation and Acronyms}
+
+{\bf An optional section, of roughly $1$ or $2$ pages}
+\vspace{1cm} 
+
+
+\begin{quote}
+\noindent
+\begin{tabular}{lcl}
+AR                 &:     & Augmented Reality                                         \\
+CNN                 &:     & Convolutional Neural Network                             \\
+HDR					&:		& High Dynamic Range
+\end{tabular}
+\end{quote}
+
+% -----------------------------------------------------------------------------
+
+\chapter*{Acknowledgements}
+
+{\bf An optional section, of at most $1$ page}
+\vspace{1cm} 
+
+\noindent
+It is common practice (although totally optional) to acknowledge any
+third-party advice, contribution or influence you have found useful
+during your work.  Examples include support from friends or family, 
+the input of your Supervisor and/or Advisor, external organisations 
+or persons who  have supplied resources of some kind (e.g., funding, 
+advice or time), and so on.
+
+% =============================================================================
+
+% After the front matter comes a number of chapters; under each chapter,
+% sections, subsections and even subsubsections are permissible.  The
+% pages in this part are numbered with Arabic numerals.  Note that:
+%
+% - A reference point can be marked using \label{XXX}, and then later
+%   referred to via \ref{XXX}; for example Chapter\ref{chap:context}.
+% - The chapters are presented here in one file; this can become hard
+%   to manage.  An alternative is to save the content in seprate files
+%   the use \input{XXX} to import it, which acts like the #include
+%   directive in C.
+
+\mainmatter
+
+% -----------------------------------------------------------------------------
+
+\chapter{Contextual Background}
+\label{chap:context}
+
+{\bf A compulsory chapter,     of roughly $5$ pages}
+\vspace{1cm} 
+
+\noindent
+Traditional computer graphics involves creating virtual scenes, with geometry represented as a series of surfaces in 3D space. Each surface is given properties such as texture and material, and virtual lights are placed in the scene with given intensities and colors. Given the position and size of a virtual camera images can be produced by calculating the resultant color at every point on a the screen, produced by a combination of the lighting and surface properties. This can be achieved through either Raytracing which involves simulating the paths of all light rays that meet the camera within the scene. While physically accurate this is a slow process that is impractical for real-time rendering. In real-time rendering tasks a process called Rasterisation is used, where the geometry is culled so that only surfaces in view of the camera need to be considered. This, in combination with lighting and material approximations, makes it possible for convincing characters and objects to be rendered at 60 frames per second.
+\newline
+Augmented Reality is an extension of computer graphics, where virtual objects are rendered on a real video stream to appear as if they are part of the original scene. This creates additional challenges as many of the parameters that are used in computer graphics are not available. While the material and geometry of the added objects is known, the geometry and lighting of the real scene must be estimated.
+\newline
+Geometry estimation is performed using a process known as Salient Localization and Matching, which can be used to track the movement of a camera through a 3d environment. SLAM relies on finding similar points from multiple camera views, with the assumption that these points share the same position in 3D space. Given known camera parameters such as focal length, and the relative position of the cameras between the views, it is then possible to triangulate these salient points to find their location. SLAM is used extensively in the field of robotics, often using stereo cameras such that scene points can be calculated at every frame of an incoming video stream. By tracking the movement of 3D points in a video, it is not only possible to track the cameras movements, but to also build a 3D mapping of the scene geometry. In the context of AR it is essential to track the cameras position as it corresponds to the users position within the Mixed Reality environment. Furthermore by building a 3d map of the environment it is possible to find appropriate surafces on which to place virtual objects, or even apply shadows.
+\newline
+Another scene parameter that must be estimated is the lighting
+\newline
+The aim of this project is to build a system that is capable of estimating the lighting parameters in real scenes, such that virtual objects and characters can be superimposed and rendered realistically. There has been a growing desire for realistic Augmented Reality applications, that are able to make it appear as if virtual characters are part of, or even interacting with the real world. To achieve this realistically there are significant barriers to overcome, as the parameters of the scene must be estimated from the video feed of the camera. These parameters consist of geometry, lighting and materials. Current AR implementations are able to estimate geometry to a basic level, by finding large flat planes and tracking the camera using SLAM. Estimating lighting has also proven difficult, with previous solutions taking rudimentary metrics light the brightness of the image. We take a deep learning approach, investigating previous work in using Convolutional Neural Networks for estimation, and proposing a more practical network.
+
+Superimposing virtual rendered geometry on real scenes has previously been a task reserved for the film industry, where the realism of virtual additions is essential, and resources to spend on estimating lighting are plentiful. The most common solution is to take composite high-quality photographs of a reflective sphere, before inverting the images into an HDR 'Environment Map'. This Environment Map represents the color and intensity of all incoming light at a point. Provided the object we wish to render is small, this map can be used for near-perfect lighting. More recently there has been the wish to perform realtime superimposition for Augmented Reality applications. AR requires real-time rendering and is commonly used on smartphones, making the traditional solution impractical. Current AR solutions either ignore lighting estimation due to its difficulty or use a rudimentary metric, such as the average intensity across the frame, which result in poor quality lighting that lacks realism. 
+
+There has been some work in lighting estimation using CNNs, either to estimate the primary light direction or more recently to produce an entire environment map. 'What is around the camera' by Stamatios Georgoulis et al. tackles the problem of learning 3 unknowns by providing the network with pre-calculated surface normals representing the geometry. However these normals have to either be estimated using expensive techniques like RANSAC, SLAM or another CNN if we do not have access to a depth camera.
+
+My proposed solution would eliminate the need for known surface normals or depth, and would instead rely on multiple views of the same geometry, given the reasonable assumption that the materials and lighting conditions remain the same. The benefit of this would be its applicability to realtime AR, where the available sources of information are an incoming video stream and the intertia sensors of the camera. This is a challenging problem as the network must be able to identify similar features in each given frame, and track their disparity in order to understand the geometry of the scene. Furthermore it must be able to separate the diffuse color of objects from the incoming light color to produce a realistic environment map.
+ 
+
+\begin{enumerate}
+\item Research existing non-AI techniques for lighting estimation.
+\item Reproduce existing CNN based solutions in Tensorflow with GPU acceleration.
+\item Create a system to generate synthetic scenes with realistic lighting for future experiments.
+\item Experiment with different architectures to exploit multi-shot inputs.
+\end{enumerate}
+
+% -----------------------------------------------------------------------------
+
+\chapter{Technical Background}
+\label{chap:technical}
+
+\vspace{1cm} 
+
+\noindent
+This chapter is intended to describe the technical basis on which execution
+of the project depends.  The goal is to provide a detailed explanation of
+the specific problem at hand, and existing work that is relevant (e.g., an
+existing algorithm that you use, alternative solutions proposed, supporting
+technologies).  
+
+Per the same advice in the handbook, note there is a subtly difference from
+this and a full-blown literature review (or survey).  The latter might try
+to capture and organise (e.g., categorise somehow) {\em all} related work,
+potentially offering meta-analysis, whereas here the goal is simple to
+ensure the dissertation is self-contained.  Put another way, after reading 
+this chapter a non-expert reader should have obtained enough background to 
+understand what {\em you} have done (by reading subsequent sections), then 
+accurately assess your work.  You might view an additional goal as giving 
+the reader confidence that you are able to absorb, understand and clearly 
+communicate highly technical material.
+
+% -----------------------------------------------------------------------------
+
+\chapter{Project Execution}
+\label{chap:execution}
+
+{\bf A topic-specific chapter, of roughly $15$ pages} 
+\vspace{1cm} 
+
+\noindent
+This chapter is intended to describe what you did: the goal is to explain
+the main activity or activities, of any type, which constituted your work 
+during the project.  The content is highly topic-specific, but for many 
+projects it will make sense to split the chapter into two sections: one 
+will discuss the design of something (e.g., some hardware or software, or 
+an algorithm, or experiment), including any rationale or decisions made, 
+and the other will discuss how this design was realised via some form of 
+implementation.  
+
+This is, of course, far from ideal for {\em many} project topics.  Some
+situations which clearly require a different approach include:
+
+\begin{itemize}
+\item In a project where asymptotic analysis of some algorithm is the goal,
+      there is no real ``design and implementation'' in a traditional sense
+      even though the activity of analysis is clearly within the remit of
+      this chapter.
+\item In a project where analysis of some results is as major, or a more
+      major goal than the implementation that produced them, it might be
+      sensible to merge this chapter with the next one: the main activity 
+      is such that discussion of the results cannot be viewed separately.
+\end{itemize}
+
+\noindent
+Note that it is common to include evidence of ``best practice'' project 
+management (e.g., use of version control, choice of programming language 
+and so on).  Rather than simply a rote list, make sure any such content 
+is useful and/or informative in some way: for example, if there was a 
+decision to be made then explain the trade-offs and implications 
+involved.
+
+\section{Example Section}
+
+This is an example section; 
+the following content is auto-generated dummy text.
+\lipsum
+
+\subsection{Example Sub-section}
+
+\begin{figure}[t]
+\centering
+foo
+\caption{This is an example figure.}
+\label{fig}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\begin{tabular}{|cc|c|}
+\hline
+foo      & bar      & baz      \\
+\hline
+$0     $ & $0     $ & $0     $ \\
+$1     $ & $1     $ & $1     $ \\
+$\vdots$ & $\vdots$ & $\vdots$ \\
+$9     $ & $9     $ & $9     $ \\
+\hline
+\end{tabular}
+\caption{This is an example table.}
+\label{tab}
+\end{table}
+
+\begin{algorithm}[t]
+\For{$i=0$ {\bf upto} $n$}{
+  $t_i \leftarrow 0$\;
+}
+\caption{This is an example algorithm.}
+\label{alg}
+\end{algorithm}
+
+\begin{lstlisting}[float={t},caption={This is an example listing.},label={lst},language=C]
+for( i = 0; i < n; i++ ) {
+  t[ i ] = 0;
+}
+\end{lstlisting}
+
+This is an example sub-section;
+the following content is auto-generated dummy text.
+Notice the examples in Figure~\ref{fig}, Table~\ref{tab}, Algorithm~\ref{alg}
+and Listing~\ref{lst}.
+\lipsum
+
+\subsubsection{Example Sub-sub-section}
+
+This is an example sub-sub-section;
+the following content is auto-generated dummy text.
+\lipsum
+
+\paragraph{Example paragraph.}
+
+This is an example paragraph; note the trailing full-stop in the title,
+which is intended to ensure it does not run into the text.
+
+% -----------------------------------------------------------------------------
+
+\chapter{Critical Evaluation}
+\label{chap:evaluation}
+
+{\bf A topic-specific chapter, of roughly $15$ pages} 
+\vspace{1cm} 
+
+\noindent
+This chapter is intended to evaluate what you did.  The content is highly 
+topic-specific, but for many projects will have flavours of the following:
+
+\begin{enumerate}
+\item functional  testing, including analysis and explanation of failure 
+      cases,
+\item behavioural testing, often including analysis of any results that 
+      draw some form of conclusion wrt. the aims and objectives,
+      and
+\item evaluation of options and decisions within the project, and/or a
+      comparison with alternatives.
+\end{enumerate}
+
+\noindent
+This chapter often acts to differentiate project quality: even if the work
+completed is of a high technical quality, critical yet objective evaluation 
+and comparison of the outcomes is crucial.  In essence, the reader wants to
+learn something, so the worst examples amount to simple statements of fact 
+(e.g., ``graph X shows the result is Y''); the best examples are analytical 
+and exploratory (e.g., ``graph X shows the result is Y, which means Z; this 
+contradicts [1], which may be because I use a different assumption'').  As 
+such, both positive {\em and} negative outcomes are valid {\em if} presented 
+in a suitable manner.
+
+% -----------------------------------------------------------------------------
+
+\chapter{Conclusion}
+\label{chap:conclusion}
+
+{\bf A compulsory chapter,     of roughly $5$ pages} 
+\vspace{1cm} 
+
+\noindent
+The concluding chapter of a dissertation is often underutilised because it 
+is too often left too close to the deadline: it is important to allocation
+enough attention.  Ideally, the chapter will consist of three parts:
+
+\begin{enumerate}
+\item (Re)summarise the main contributions and achievements, in essence
+      summing up the content.
+\item Clearly state the current project status (e.g., ``X is working, Y 
+      is not'') and evaluate what has been achieved with respect to the 
+      initial aims and objectives (e.g., ``I completed aim X outlined 
+      previously, the evidence for this is within Chapter Y'').  There 
+      is no problem including aims which were not completed, but it is 
+      important to evaluate and/or justify why this is the case.
+\item Outline any open problems or future plans.  Rather than treat this
+      only as an exercise in what you {\em could} have done given more 
+      time, try to focus on any unexplored options or interesting outcomes
+      (e.g., ``my experiment for X gave counter-intuitive results, this 
+      could be because Y and would form an interesting area for further 
+      study'' or ``users found feature Z of my software difficult to use,
+      which is obvious in hindsight but not during at design stage; to 
+      resolve this, I could clearly apply the technique of Smith [7]'').
+\end{enumerate}
+
+% =============================================================================
+
+% Finally, after the main matter, the back matter is specified.  This is
+% typically populated with just the bibliography.  LaTeX deals with these
+% in one of two ways, namely
+%
+% - inline, which roughly means the author specifies entries using the 
+%   \bibitem macro and typesets them manually, or
+% - using BiBTeX, which means entries are contained in a separate file
+%   (which is essentially a databased) then inported; this is the 
+%   approach used below, with the databased being dissertation.bib.
+%
+% Either way, the each entry has a key (or identifier) which can be used
+% in the main matter to cite it, e.g., \cite{X}, \cite[Chapter 2}{Y}.
+
+\backmatter
+
+\bibliography{dissertation}
+
+% -----------------------------------------------------------------------------
+
+% The dissertation concludes with a set of (optional) appendicies; these are 
+% the same as chapters in a sense, but once signaled as being appendicies via
+% the associated macro, LaTeX manages them appropriatly.
+
+\appendix
+
+\chapter{An Example Appendix}
+\label{appx:example}
+
+Content which is not central to, but may enhance the dissertation can be 
+included in one or more appendices; examples include, but are not limited
+to
+
+\begin{itemize}
+\item lengthy mathematical proofs, numerical or graphical results which 
+      are summarised in the main body,
+\item sample or example calculations, 
+      and
+\item results of user studies or questionnaires.
+\end{itemize}
+
+\noindent
+Note that in line with most research conferences, the marking panel is not
+obliged to read such appendices.
+
+% =============================================================================
+
+\end{document}
