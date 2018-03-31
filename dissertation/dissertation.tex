@@ -250,6 +250,12 @@ The difficulty in the application of CNNs often lies in the 'training' stage; wh
 
 \chapter{Technical Background}
 \label{chap:technical}
+\section{Commercial Lighting Solutions}
+Lighting solutions in the film\&TV industry tend to involve precalculating or precapturing the lighting in a scene before adding virtual characters. In the film 'I,Robot', Digital Domain created a semi-automated system for capturing HDR environment maps using a rotating fisheye-lens camera. Once placed, the camera was able to take shots at multiple angles and at a range of exposures, before compositing the shots together to produce a usable HDR lighting map. Often these HDR maps are not used in isolation, but along with footage of a proxy for the virtual addition, so the filmmakers can qualitatively measure how the materials react with the set lighting. These techniques allow filmmakers to capture an approximation of lighting with limited camera equipment and makes it easier to create complex panning and dolly shots of scenes with real and virtual elements, which would otherwise require a green-screen. Over time, camera equipment has become more advanced and it is faster to take high quality shots at multiple exposures. As a result, later films such as 'The Curious Case of Benjamin Button' are able to utilise multiple lighting probes to illuminate characters. By taking lighting samples across the scene, virtual characters can then be lit partly according to their position in the world by blending environment maps together. This creates a more convincing final render as the approximate indirect lighting from nearby objects becomes more apparent. The downside of these hollywood techniques is that the lighting data must be captured beforehand for every environment used. This is a long, laborious and expensive process as the cameras required to take accurate shots at different exposures need to be extremely accurate to produce correct composites. It is also important to note that compositing images is difficult and also requires human input to match black levels, tones and camera properties that are hard to automate.
+\newline
+Recent commercial AR platforms do contain some level of lighting estimation from input video data. Apple's ARKit is able to estimate the colour and intensity of the ambient lighting in some scenes \footcite{https://developer.apple.com/documentation/arkit/arlightestimate}, by analyzing the pixels of the incoming video frame. This technique adds some realism to AR applications, as objects can be dimmed or brightened with the scene, so as not to stand out. However this is a very rough estimate of lighting, and contains no directional information or approximation of indirect illumination  Google's ARCore has similar functionality, taking an average of the luminance values across the video to estimate the intensity \footcite{https://developers.google.com/ar/reference/unity/prefab/Environmental_Light}. It is possible to estimate the light direction from a face tracking scene however, by using the tracked face as a light probe \footcite{https://developer.apple.com/documentation/arkit/ardirectionallightestimate}. By using a face, the application is able to restrict the possible lighting scenearios to a range of likely geometries and materials that make up human faces. The platform is able to produce not only the primary light direction and intensity, but also an approximation of the environment lighting as spherical harmonics. While incredibly useful for some application such as the retouching of portrail photographs, the technique is not robust to different scenes as it relies on the approximation of some known geometry.
+\newline
+Upcoming AR applications are experimenting with new methods of integrating the scene lighting with virtual augmentations.
 \begin{enumerate}
 \item Commercial lighting modelling
 \item Previous stochastic lighting estimation.
@@ -441,8 +447,6 @@ enough attention.  Ideally, the chapter will consist of three parts:
 % in the main matter to cite it, e.g., \cite{X}, \cite[Chapter 2}{Y}.
 
 \backmatter
-
-\bibliography{dissertation}
 
 % -----------------------------------------------------------------------------
 

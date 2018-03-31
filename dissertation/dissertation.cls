@@ -67,8 +67,12 @@
 \RequirePackage{lipsum}
 % http://www.ctan.org/tex-archive/usergrps/dante/dtk
 %\RequirePackage{dtk-logos}
+\RequirePackage{biblatex}
+\usepackage{todonotes}
+\usepackage{biblatex}
 
 % =============================================================================
+\bibliography{dissertation}
 
 \makeatletter
 
@@ -95,7 +99,7 @@
 
 % configure style of bibliography
 
-\bibliographystyle{plain}
+%\bibliographystyle{}
 
 % configure style of pages
 
