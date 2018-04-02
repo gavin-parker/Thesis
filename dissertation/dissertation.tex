@@ -255,7 +255,18 @@ Lighting solutions in the film\&TV industry tend to involve precalculating or pr
 \newline
 Recent commercial AR platforms do contain some level of lighting estimation from input video data. Apple's ARKit is able to estimate the colour and intensity of the ambient lighting in some scenes \footcite{https://developer.apple.com/documentation/arkit/arlightestimate}, by analyzing the pixels of the incoming video frame. This technique adds some realism to AR applications, as objects can be dimmed or brightened with the scene, so as not to stand out. However this is a very rough estimate of lighting, and contains no directional information or approximation of indirect illumination  Google's ARCore has similar functionality, taking an average of the luminance values across the video to estimate the intensity \footcite{https://developers.google.com/ar/reference/unity/prefab/Environmental_Light}. It is possible to estimate the light direction from a face tracking scene however, by using the tracked face as a light probe \footcite{https://developer.apple.com/documentation/arkit/ardirectionallightestimate}. By using a face, the application is able to restrict the possible lighting scenearios to a range of likely geometries and materials that make up human faces. The platform is able to produce not only the primary light direction and intensity, but also an approximation of the environment lighting as spherical harmonics. While incredibly useful for some application such as the retouching of portrail photographs, the technique is not robust to different scenes as it relies on the approximation of some known geometry.
 \newline
-Upcoming AR applications are experimenting with new methods of integrating the scene lighting with virtual augmentations.
+Upcoming AR applications are experimenting with new methods of integrating the scene lighting with virtual augmentations. Magic Leap is making use of tailored hardware called a 'Light Field' camera, which involves the use of an array of microlenses to capture additional information from the scene. Each microlens is able to capture information from multiple camera points, so that extra depth and lighting information can be extracted from the frame. This is a significant improvement on IR depth cameras such as the Microsoft Kinect, which can't be used outside. By extracting depth, and therefore surface geometry information, it is far easier to reason about the reflectance of objects within the scene and estimate the lighting. However, light-field cameras are extremely expensive and inpractical for mobile AR. Most mobile devices contain normal high quality cameras as well as accurate intertia sensors, which can be used in combination with stereo matching for a similar depth estimation model.
+\section{Lighting Estimation Research}
+Early techniques for lighting estimation were able to find the direction of a single primary light source, under significant constraints. In \footcite{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=990650}, Peter Nillius and Jan-Olof Eklundh were able to estimate a single light direction, provided the input image contained an appropriate lambertian surface. By making use of an 'occluding contour' it is possible to infer some detail of the geometry, as the surface of the visible edge of a contour that occludes itself will always be perpendicular to the view direction of the observer. Using the lambertian lighting model, along with the edge intensity it is possible to make a prediction using a bayesian network for the incoming light direction. This is a simple method that exploits inherent properties of real geometry, but has too many prerequisites to be practical. While it captures direction, it also ignores colour, intensity and any indirect lighting. 
+\todo{More basic stuff here}
+In \cite{Lalonde-2009-10350}, Lalonde et al. are able to estimate a more complete set of parameters for environmental lighting from single outdoor photographs. By segmenting the image into sky, ground and vertical surfaces, and extracting features like shadows, the authors are able to reliable predict the sun's position. While very robust for outdoor applications, this approach does not consider light intensity or colour. Furthermore, the reliance on outdoor scenes restricts its usage in AR.
+Scott Wehrwein et al. demonstrate a technique for sun direction and shadow detection from multiple input images \cite{http://www.cs.cornell.edu/projects/shadows/files/wehrwein_3dv15_shadows.pdf}. They use illunination rations to extract shadows, after constructing a sparse 3D representation of the scene from stereo matching of multiple images. By exploiting shadow boundaries on the derived surface normals, it is then possible to determine the light direction. This work shows how multiple views can be used to infer knowledge of the geometry of the scene, to make the problem of lighting estimation more constrained. However, like previous work it assumes a perfectly lambertian surface and clear outside conditions, restricting the possible lighting conditions significantly.
+
+\footcite{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=790313}
+\todo{Talk about CNNs for estimating geometry/material}
+\section{Machine Learning for Illumination Estimation}
+Most of the previous work has had to rely on significant assumptions for the scene to constrain the lighting to fit known phenomena, that can be exploited to estimate the illumination. It is clear that due to the unconstrained nature of the problem, that some assumptions about geometry, material and lighting must be made. Rather than making the required assumptions to fit a model, another approach is building a model to find and exploit assumptions from real data using machine learning. Given enough scene features and data it is possible to learn approximations and assumptions to produce a more robust model. In \footcite{https://arxiv.org/pdf/1611.06403.pdf}, Yannick Hold-Geoffroy et al. use a CNN-based technique to estimate sky parameters from outdoor photographs to a high enough degree of accuracy that virtual objects can be re-rendered. In this work, the output illumination model is constrained to the Hosek-Wilkie model with parameters representing the sun position, ground albedo and light wavelength. A dataset is then constructed by selecting small LDR sections of real HDR scene panoramas, resulting in a large number of sample photographs, and HDR lighting ground-truths. This work demonstrates extraordinary performance, but is limited in output format by the lighting model which is constrained to outdoor images with clear skies. This ignores the indirect lighting from scene objects and indoor scenes, but demonstrates how CNNs with the right data can be used to exploit more subtle image features to predict lighting.
+\todo{talk about this awesome microsoft thingy for recurrency etc. http://www.cs.wm.edu/~ppeers/showPublication.php?id=Xia:2016:RSS}
 \begin{enumerate}
 \item Commercial lighting modelling
 \item Previous stochastic lighting estimation.
@@ -306,54 +317,8 @@ involved.
 
 \section{Example Section}
 
-This is an example section; 
-the following content is auto-generated dummy text.
-\lipsum
-
 \subsection{Example Sub-section}
 
-\begin{figure}[t]
-\centering
-foo
-\caption{This is an example figure.}
-\label{fig}
-\end{figure}
-
-\begin{table}[t]
-\centering
-\begin{tabular}{|cc|c|}
-\hline
-foo      & bar      & baz      \\
-\hline
-$0     $ & $0     $ & $0     $ \\
-$1     $ & $1     $ & $1     $ \\
-$\vdots$ & $\vdots$ & $\vdots$ \\
-$9     $ & $9     $ & $9     $ \\
-\hline
-\end{tabular}
-\caption{This is an example table.}
-\label{tab}
-\end{table}
-
-\begin{algorithm}[t]
-\For{$i=0$ {\bf upto} $n$}{
-  $t_i \leftarrow 0$\;
-}
-\caption{This is an example algorithm.}
-\label{alg}
-\end{algorithm}
-
-\begin{lstlisting}[float={t},caption={This is an example listing.},label={lst},language=C]
-for( i = 0; i < n; i++ ) {
-  t[ i ] = 0;
-}
-\end{lstlisting}
-
-This is an example sub-section;
-the following content is auto-generated dummy text.
-Notice the examples in Figure~\ref{fig}, Table~\ref{tab}, Algorithm~\ref{alg}
-and Listing~\ref{lst}.
-\lipsum
 
 \subsubsection{Example Sub-sub-section}
 
