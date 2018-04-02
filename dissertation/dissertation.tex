@@ -264,16 +264,13 @@ Scott Wehrwein et al. demonstrate a technique for sun direction and shadow detec
 
 \footcite{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=790313}
 \todo{Talk about CNNs for estimating geometry/material}
+\section{Machine Learning for scene understanding}
+To calculate the lighting of a scene, some assumptions or approximations must be made about the material or geometry to constrain the problem. It is therefore important to consider previous techniques to extract these features from images, especially geometry estimation which has significant applications in the field of robotics. In 2015, David Eigen et al. demonstrated a CNN approach to estimate depth, surface normals and semantic labels from single input images \footcite{https://arxiv.org/pdf/1411.4734.pdf}. Here they use a 'multi-scale' architecture, where outputs from early features passed as input to later deconvolutional layers, as well as subsequent convolutional layers. Multi-scale features can often lead to faster inference as important features are 'short-circuited' closer to the output, reducing the need for large deep layers at inference time \todo{Citation needed ;) }. The results of this work are extremely promising, and suggest that a single RGB image may be enough to infer a complex understanding of the scene. If it is possible to understand variations in the illumination and material in a scene to find geometry then it follows that it is possible to understand geometry and material to find illumination.  However the network shown is very deep and trained primarily on indoor scenes. Its use in the field of AR is limited, as the hardware is much more limited in terms of GPU resources.
 \section{Machine Learning for Illumination Estimation}
 Most of the previous work has had to rely on significant assumptions for the scene to constrain the lighting to fit known phenomena, that can be exploited to estimate the illumination. It is clear that due to the unconstrained nature of the problem, that some assumptions about geometry, material and lighting must be made. Rather than making the required assumptions to fit a model, another approach is building a model to find and exploit assumptions from real data using machine learning. Given enough scene features and data it is possible to learn approximations and assumptions to produce a more robust model. In \footcite{https://arxiv.org/pdf/1611.06403.pdf}, Yannick Hold-Geoffroy et al. use a CNN-based technique to estimate sky parameters from outdoor photographs to a high enough degree of accuracy that virtual objects can be re-rendered. In this work, the output illumination model is constrained to the Hosek-Wilkie model with parameters representing the sun position, ground albedo and light wavelength. A dataset is then constructed by selecting small LDR sections of real HDR scene panoramas, resulting in a large number of sample photographs, and HDR lighting ground-truths. This work demonstrates extraordinary performance, but is limited in output format by the lighting model which is constrained to outdoor images with clear skies. This ignores the indirect lighting from scene objects and indoor scenes, but demonstrates how CNNs with the right data can be used to exploit more subtle image features to predict lighting.
+\newline
+CNNs can exploit different features in a scene to determine lighting such as shadows or object reflectance. One example that uses the latter is 'Deep Reflectance Maps' \footcite{https://arxiv.org/pdf/1511.04384.pdf} by Konstantinos Rematas et al. In this work it is demonstrated that better accuracy can be achieved by constraining the CNN input to a specific feature, in this case a sparse reflectance map. By taking the brightest pixel for every surface normal on an object, a sparse representation of it's reflectance can be built and fed to a CNN for interpolation. This work makes use of a large synthetic dataset but still results in good performance on real world data, allowing the researchers to then modify the shape of specular virtual objects while still maintaing a realistic surface appearance. This work was then extended for illumination estimation in 'What is Around the Camera', by using a precalculated sparse reflectance map in combination with a segmented background image. In this work, a full HDR environment map is predicted to a degree of accuracy that allows the superimposition of rendered geometry with fairly accurate lighting. Both of these works use a Convolutional-Deconvolutional approach to produce a new image as output. The limitations of this work however are due to required prior calculations rather than restrictive assumptions about the scene. While the network can handle objects of multiple materials, they must be segmented and seperate sparse RMs calculated. Furthermore the calculation of the sparse RM relies upon knowledge of the surface normals of the object being used. The researchers point to previous work \todo{Talk about this} on the usage of CNNs for surface normal and depth estimation but fail to demonstrate the accuracy of their work with these more noisy estimated surface normals. It is also apparent that there is significant data loss in the calculation of the sparse reflectance map, which makes significant assumptions about the object in question, ignoring the effects of shadows and how lighting changes based on both position and surface orientation. I believe that with the use of a deeper network that exploits multiple images to infer geometry, the lossy reflectance mapping step can be removed. The benefit if this is that the model would be able to learn optimal image points for lighting inference, and exploit more image effects such as shadows. Furthermore the need for hardware-calculated surface normals woud be unnecessary as the convolutional features learned in the network could be used for stereo matching.
 \todo{talk about this awesome microsoft thingy for recurrency etc. http://www.cs.wm.edu/~ppeers/showPublication.php?id=Xia:2016:RSS}
-\begin{enumerate}
-\item Commercial lighting modelling
-\item Previous stochastic lighting estimation.
-\item Previous ML lighting estimation
-\item Previous CNN lighting estimation
-\item Prior art
-\end{enumerate}
 
 % -----------------------------------------------------------------------------
 
@@ -283,56 +280,42 @@ Most of the previous work has had to rely on significant assumptions for the sce
 {\bf A topic-specific chapter, of roughly $15$ pages} 
 \vspace{1cm} 
 
-\noindent
-This chapter is intended to describe what you did: the goal is to explain
-the main activity or activities, of any type, which constituted your work 
-during the project.  The content is highly topic-specific, but for many 
-projects it will make sense to split the chapter into two sections: one 
-will discuss the design of something (e.g., some hardware or software, or 
-an algorithm, or experiment), including any rationale or decisions made, 
-and the other will discuss how this design was realised via some form of 
-implementation.  
-
-This is, of course, far from ideal for {\em many} project topics.  Some
-situations which clearly require a different approach include:
-
 \begin{itemize}
-\item In a project where asymptotic analysis of some algorithm is the goal,
-      there is no real ``design and implementation'' in a traditional sense
-      even though the activity of analysis is clearly within the remit of
-      this chapter.
-\item In a project where analysis of some results is as major, or a more
-      major goal than the implementation that produced them, it might be
-      sensible to merge this chapter with the next one: the main activity 
-      is such that discussion of the results cannot be viewed separately.
+\item Goal, how and why
+\item Deep reflectance Maps
+\item What is around the camera
+\item Dataset creation
+\item Architecture design
+\item Training
 \end{itemize}
 
-\noindent
-Note that it is common to include evidence of ``best practice'' project 
-management (e.g., use of version control, choice of programming language 
-and so on).  Rather than simply a rote list, make sure any such content 
-is useful and/or informative in some way: for example, if there was a 
-decision to be made then explain the trade-offs and implications 
-involved.
-
-\section{Example Section}
-
-\subsection{Example Sub-section}
-
-
-\subsubsection{Example Sub-sub-section}
-
-This is an example sub-sub-section;
-the following content is auto-generated dummy text.
-\lipsum
-
-\paragraph{Example paragraph.}
-
-This is an example paragraph; note the trailing full-stop in the title,
-which is intended to ensure it does not run into the text.
-
-% -----------------------------------------------------------------------------
-
+\section{Reproducing Prior Art in Tensorflow}
+The first step in the project was to attempt to reproduce similar prior work in the area, to assess its aplicability in the field of AR and create a fair benchmark for evaluating new models and approaches. The began with a reimplementation of 'Deep Reflectance Maps', a recent work that demonstrated promising results from a CNN based approach. This work was a necessary prerequisite to 'What is around the Camera?', the most similar research to my project. The project was provided with a dataset for replication, but without any source code. Fortunately the architecture was well documented and so easily reproduced in a modern deep learning framework. For this work I used Tensorflow, a python deep learning framework that gave me the flexibility to add unique network features such as a reflectance mapping step, as well as export the model to different platforms.
+\newline
+The network in question is a Convolutional-Deconvolutional network trained to produce dense reflectance maps from single sparse reflectance maps as input. The training data was provided as the segmented image of an object, in this case a Shapenet car, and surface normals. It was necessary to first construct a system for extracting a sparse reflectance map from these inputs according to the approximation stated in the work. A reflectance map is a map from every surface normal to a luminance value, and can be thought of as the appearance of a material on a perfect gaussian sphere. In this case each point on the sphere has a unique surface normal, with no possibility for self-shading. In the case of the Shapenet car, there are many repetitions of the same surface normal, often with different illuminations, as well as some missing surface normals altogether. We build a sparse representation map,
+\[ R_i = max(n\cdot n_i \cdot L)\],
+where the reflectance R, at angle i on the gauss sphere is the maximum illumination, L, of all pixels sharing i in the original image. It is important to note that we only consider a half-sphere as surface facing away from the camera are naturally occuded. Also some information is lost by taking a maximum illumination, as we make the rough assumption that any darker pixels with the same surface orientation must be due to self-shading. This is the case as we are modelling the target in question as a point object, with all lights infinitely far away, which is the approximation being made with the use of Environment Maps.
+\newline
+The process for calculating the reflectance is mathematically intensive, but can be represented in a graph form as
+\begin{algorithm}
+$ diffs \leftarrow sphere \times input^T $\;
+$ reflectance \leftarrow mask(intensity, diffs > \cos(0.0872665)) $\;
+$ indices \leftarrow argmax(reflectance) $\;
+$ reflectance_map \leftarrow colour[indices] $\;
+\end{algorithm}
+using matrix multiplication and boolean masks. This was initially implemented sqequentially in the numpy maths package as a proof-of-concept but was too slow to operate on the number of training samples required. By migrating the implementation to use native tensorflow operations, the per-batch runtime was reduced from 6 seconds to 20ms, making it feasible to use during training.
+\newline
+The network architecture was fairly simple, consisting of 'encode' blocks made up of convolutional layers, followed by batch normalization, max pooling and the relu activation funcction. This was easy to implement in Tensorflow, leaving most of the time for training and optimizing the process. Due to the quantity of training data provided (50,000 samples) it was necessary to pipeline the input data stream to make best use of the hardware resources available on BlueCrystal4. By using a pipeline, it is possible to use the CPU for preprocessing operations such as data conversion and image resizing, leaving the GPU for the more intensive training process. This resulted in much faster training and allowed for a larger batch size than was used in the previous work. The model was trained for 50 epochs to produce results of similar quality to the original. Furthermore it was possible to compare the results to an end-to-end implementation which only used the original images as input. It was demonstrated that the reflectance mapping lead to an improvement in quality, however the end-to-end approach was still able to infer a reasonable lighting estimation.
+\newline
+During the implementation of the previous work, I constructed wrapper functions to use as building blocks to quickly construct 'encode' and 'decode' layers for future networks. This made implementing the 'What is behind the camera?' network far easier. This work was provided with both the original dataset of synthetic and real images, as well as source code. However the source code was provided for the 'MatConvNet' matlab library, which was slow, lacked documentation and unavailable on many platforms. As such I thought it beneficial to also reproduce this work in Tensorflow, using many of the utilities created for the last model. This network is very similar, taking a sparse reflectance map, along with a segmented background, as input and producing a High Dynamic Range environment map as output.
+\newline
+Unfortunately this task presented difficulties in data formatting that resulted in poor training until they were resolved. Firstly to encourage the network to extract luminance, the input data was first converted to CiE LAB colour space using a Tensorflow utility from the 'Pix2Pix' network \footcite{https://github.com/affinelayer/pix2pix-tensorflow/blob/master/pix2pix.py}. While the conversion proved accurate for the traditional RGB color inputs, it was unable to convert HDR formatted images, in this case the ground truth environment map. This is due to how HDR images are stored, to capture a larger range of light intensities thatn RGB. For this task we used the Radiance RGBE file format, which is simpler than the OpenEXR alternative \todo{give an example}. The data is stored as RGB values with an exponent, but interpreted in python as floating point RGB values with a very large range. This data needed to be formatted in such as was as to reduce the range to 0,1 whithout data loss. After experimenting with different ways of formatting the data I decided to use a logarithmic representation, after shifting the values to be above 1. In this format I was able to fully reconstruct the original HDR image, and the LAB space outputs of my network could also be converted into HDR without any loss of quality.
+\newline
+The original work consisted of two models, one that used single material objects and one that used segmented multi-material objects. The multi-material network was a very simple improvement on the original, where the object was first segmented into 3 materials, and fed as input to 3 identical convolutional networks. The output of these convolutions was then concatenated and fed into the deconvolutional step to again produce a single HDR environment map. As I was able to achieve good results with the single material network, I thought it was unnecessary to also train the multi-material model. I trained over 50 epochs, each consisting of 56,000 samples, with a learning rate of 1.6e-9. The output to this architecture was a 64x64 HDR environment map that could then be imported into graphics software for qualitative analysis. Being such a low resolution, it bared little structural resembles to the original full resolution environment map. It did however appear to be a good approximation of the low-resolution version, and would result in very reasonable lighting when used as an HDRI to render objects, when compared to the original. It was found that the quality of the approximation depended heavily on the density of the provided reflectance map, and the complexity of the lighting in the scene. In cases where the scene was outside, even with very sparse reflectance maps, the network was able to infer features such as sky and ground colour as well as approximate sun position. This was due to the simplicity of the scene lighting, leading to cases where the lighting conditions could be adequately approximated almost entirely from the background image. Some indoor scene, especially those containing a mix of synthetic lights and windows resulted in very poor predictions. In these scenes, very dense reflectance maps had to be provided to produce good results. \todo{Put some images here}
+\section{Stereo Model Architecture}
+It was apparent from the results of the previous work that the sparse reflectance map and background combination was not enough data to construct a robust model for both indoor and outdoor scenes. By explicitly calculating the reflectance, ignoring shadow information and assuming point-like objects, much of the appearance data is removed. Furthermore the surface normal calculation required is impractical under many use cases. Instead of relying on explicit reflectance maps, I took a new approach to design models that could exploit the additional spatial information of stereo images to infer surface normals, allowing the network to learn it's own model of reflectance. While this approach requires more information (multiple images), this information is actually available in use cases such as AR and film editing. One consideration was to simply use a stereo matching technique to calculate a relative depth map from the stero images and find the surface normals. These estimated normals could then be used in the previous network to estimate the environment lighting. However stereo matching is a difficult task that often involves human intervention, and does in fact rely on extracting identical convolutional features from the two images and finding their spatial differences.  Rather than performing two sets of convolutions, it appeared sensible to use a 'siamese' network to learn features to extract the same data from the two input images. The convolutional network would then be able to infer the depth information from the spatial differences in the learned features, and use this information, along with the colour data to predict illumination.
+\newline
+The previous work was adapted to a siamese network by sharing weights between the convolutional layers. The two inputs are fed into two identical 'Encode' blocks, consisting of a number of convolutional layers with batch normalization and max pooling. However, during the training process, only the weights for the first path are trained. These weights are duplicated in the second path to ensure that the same convolutions are being performed on each image of the pair. The output of these two paths is then concatenated before being passed into the deconvolutional steps. Multi-scale features are also used, passing features for the second path into the deconvolutional layers. An important difference in this network is that we do not provide the network an explicit background image, in fact the resolution of the background is lowered to give a depth-of-field effect. In real stereo images, the background would also move with the camera, however capturing this data is impractical. Fortunately due to the parallax effect, the background appears to move far less than the foreground anyway and so this approximation does not cause significant issues. The model was trained with similar parameters to the previous network, using a L1 loss function on the predicted and ground truth environment map.
 \chapter{Critical Evaluation}
 \label{chap:evaluation}
 
