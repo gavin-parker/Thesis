@@ -14,4 +14,6 @@ tf.app.flags.DEFINE_string('test-model-dir', 'best_dematerial', 'Directory of mo
 tf.app.flags.DEFINE_float('weight-decay', 0.0005, 'Weight decay factor.')
 tf.app.flags.DEFINE_string('train-dir', "/mnt/black/MultiNatIllum/data/single_material_multiple_objects/singlets/",
                            'Path to training set')
+tf.app.flags.DEFINE_string('val-dir', "/mnt/black/MultiNatIllum/data/single_material_multiple_objects/singlets/",
+                           'Path to validation set')
 FLAGS = tf.app.flags.FLAGS

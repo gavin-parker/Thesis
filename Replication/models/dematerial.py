@@ -191,7 +191,7 @@ class Model:
         train_writer.close()
         sess.close()
 
-    def test_model(self, sess=None):
+    def test_model(self, sess=None, model_dir=None):
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.per_process_gpu_memory_fraction = 0.5
         if sess is None:
@@ -202,15 +202,17 @@ class Model:
             "{}/{}_{}".format(FLAGS.log_dir, "Validation: " + time.strftime("%H:%M:%S"), FLAGS.learning_rate),
             sess.graph)
         sess.run(tf.local_variables_initializer())
-        print("restoring {}".format(FLAGS.test_model_dir))
-        saver.restore(sess, FLAGS.test_model_dir)
+        print("restoring {}".format(model_dir))
+        saver.restore(sess, model_dir)
+        total_loss = 0
         for i in range(0, 1000):
                 loss, summaries, render_summary = sess.run(
                 [self.loss, self.summaries, self.render_summary])
                 [test_writer.add_summary(s, i) for s in summaries]
                 [test_writer.add_summary(s, i) for s in render_summary]
+                total_loss += loss
                 test_writer.flush()
 
         test_writer.close()
         sess.close()
-        return
+        return total_loss

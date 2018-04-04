@@ -26,5 +26,5 @@ def unique_2d(flat_input, flat_intensity, sphere):
         reflectance = tf.boolean_mask(flat_intensity, tf.greater(diffs, math.cos(0.0872665)), axis=1)
     else:
         reflectance = tf.multiply(tf.cast(tf.greater(diffs, math.cos(0.0872665)), dtype=tf.float16), flat_intensity)
-    indices = tf.argmax(reflectance, axis=1, output_type=tf.int32, name="max_reflectance")
+        indices = tf.argmax(reflectance, axis=1, output_type=tf.int32, name="max_reflectance")
     return indices

@@ -59,3 +59,26 @@ def pool(x, strides=(2, 2)):
         pool_size=[2, 2],
         strides=strides,
         padding='same')
+
+import tensorflow as tf
+
+"""Takes a 256x256 image and reduces to 8x8xN, using shared weights"""
+
+def siamese_encode(input, reuse=False):
+    with tf.name_scope("siamese_encode"):
+        with tf.variable_scope("siamese_1") as scope:
+            filters_a = tf.layers.conv2d(input, 64, [3, 3], activation=tf.nn.relu, padding='SAME',
+                                   kernel_initializer=tf.contrib.layers.xavier_initializer_conv2d(),
+                                   reuse=reuse)
+            filters_a = tf.layers.max_pooling2d(filters_a, pool_size=[2, 2], strides=[2, 2], padding='SAME')
+        with tf.variable_scope("siamese_2") as scope:
+            filters_b = tf.layers.conv2d(filters_a, 128, [3, 3], activation=tf.nn.relu, padding='SAME',
+                                   kernel_initializer=tf.contrib.layers.xavier_initializer_conv2d(),
+                                   reuse=reuse)
+            filters_b = tf.layers.max_pooling2d(filters_b, pool_size=[2, 2], strides=[2, 2], padding='SAME')
+        with tf.variable_scope("siamese_3") as scope:
+            filters_c = tf.layers.conv2d(filters_b, 256, [3, 3], activation=tf.nn.relu, padding='SAME',
+                                   kernel_initializer=tf.contrib.layers.xavier_initializer_conv2d(),
+                                   reuse=reuse)
+            filters_c = tf.layers.max_pooling2d(filters_c, pool_size=[2, 2], strides=[2, 2], padding='SAME')
+    return [filters_a, filters_b, filters_c]

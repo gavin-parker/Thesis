@@ -77,6 +77,28 @@ def denormalize_hdr(image):
     return image_delog
 
 
+"""Estimate the surface normals from a depth image"""
+def depth_to_normals(image):
+    threshold = image.max
+    mask = np.less(image, threshold).astype(np.float32)
+    mask = np.repeat(mask[:,:,np.newaxis], 3, axis=2)
+    dxdz, dydz = np.gradient(image)
+    norms = np.ones((image.shape[0], image.shape[1], 3))
+    norms[:,:,0] = -dxdz
+    norms[:,:,1] = -dydz
+    len = np.sqrt(np.square(dxdz) + np.square(dydz) + 1.0)
+    norms[:,:,0] /= len
+    norms[:,:,1] /= len
+    norms[:,:,2] /= len
+    norms = norms * mask
+    pretty_norms = (norms + 1.0) * 0.5
+    pretty_norms *= 255
+    cv2.imshow('norms', pretty_norms.astype(np.uint8))
+    cv2.waitKey(10000)
+    print(norms)
+
+
+
 """
 Tensorflow implementation of http://www.graphics.cornell.edu/%7Ebjw/rgbe/rgbe.c for RGBE to float decoding
 
@@ -97,15 +119,16 @@ rgbe2float(float *red, float *green, float *blue, unsigned char rgbe[4])
 """
 
 
-def preprocess_hdr(filename, size=64, double_precision=True, use_lab=False):
+def preprocess_hdr(filename, input_size=32, output_size=64):
     rgbe_image = tf.py_func(parse_hdr, [filename], tf.float32)
-    image = tf.reshape(rgbe_image, [64, 64, 3])
-    image = tf.image.resize_images(image, [64, 64])
+    image = tf.reshape(rgbe_image, [input_size, input_size, 3])
+    image = tf.image.resize_images(image, [output_size, output_size])
     return image
 
 
 def parse_hdr(filename):
     img = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
+    #img = cv2.resize(image, (256, 256)) 
     return img.astype(np.float32)
 
 
@@ -141,10 +164,8 @@ def stereo_stream(dir):
         tf.convert_to_tensor(sorted(glob.glob("{}/renders/left/*.png".format(dir))), dtype=tf.string))
     right = tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(sorted(glob.glob("{}/renders/right/*.png".format(dir))), dtype=tf.string))
-    image_paths = sorted(glob.glob("{}/renders/right/*.png".format(dir)))
-    envmap_paths = [dir + "/hdris/" + os.path.basename(i).split('_')[0] + ".hdr" for i in image_paths]
     envmaps = tf.data.Dataset.from_tensor_slices(
-        tf.convert_to_tensor(envmap_paths, dtype=tf.string))
+        tf.convert_to_tensor(sorted(glob.glob("{}/renders/envmaps/*.hdr".format(dir))), dtype=tf.string))
     return left, right, envmaps
 
 

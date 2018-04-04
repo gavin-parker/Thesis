@@ -35,38 +35,6 @@
                       year={2018} ]{dissertation}
 
 \begin{document}
-
-% =============================================================================
-
-% This section simply introduces the structural guidelines.  It can clearly
-% be deleted (or commented out) if you use the file as a template for your
-% own dissertation: everything following it is in the correct order to use 
-% as is.
-
-\section*{Prelude}
-\thispagestyle{empty}
-
-A typical dissertation will be structured according to (somewhat) standard 
-sections, described in what follows.  However, it is hard and perhaps even 
-counter-productive to generalise: the goal is {\em not} to be prescriptive, 
-but simply to act as a guideline.  In particular, each page count given is
-important but {\em not} absolute: their aim is simply to highlight that a 
-clear, concise description is better than a rambling alternative that makes
-it hard to separate important content and facts from trivia.
-
-You can use this document as a \LaTeX-based~\cite{latexbook1,latexbook2} 
-template for your own dissertation by simply deleting extraneous sections
-and content; keep in mind that the associated {\tt Makefile} could be of
-use, in particular because it automatically executes %\mbox{\BibTeX} to 
-deal with the associated bibliography.  
-
-You can, on the other hand, opt {\em not} to use this template; this is a 
-perfectly acceptable approach.  Note that a standard cover and declaration 
-of authorship may still be produced online via
-\[
-\mbox{\url{http://www.cs.bris.ac.uk/Teaching/Resources/cover.html}}
-\]
-
 % =============================================================================
 
 % This macro creates the standard UoB title page by using information drawn
@@ -107,10 +75,10 @@ of authorship may still be produced online via
 \noindent
 In this paper we present a system for estimating the lighting in photographs and video streams of real scenes,  to be used for the realistic rendering of virtual objects and characters. Augmented Reality is a growing topic in computer graphics and vision, that involves superimposing synthetic information and images on real scenes, often with the aim of giving the illusion that the object is part of the real world. Current AR solutions use geometry estimation to correctly place and scale the virtual objects to fit into the real scene, but do very little to render those objects with other scene intrinsics. Our system uses a Siamese Convolutional Neural Network to extract the lighting intensities and directions from objects within a scene, such that virtual objects can be re-rendered with realistic parameters on-the-fly.
 
-The appearance of an object is made up of its material properties, its geometry and the lighting conditions, making estimation of any one of these factors from a single image a difficult task. Previous work has tackled lighting estimation by treating geometry estimation as a separate task, making use of depth cameras or known geometry. I have produced a CNN that relies on the relative invariance of these 3 unknowns with respect to time, by attempting to predict illumination from a series of views of an object.
+The appearance of an object is made up of its material properties, its geometry and the lighting conditions, making estimation of any one of these factors from a single image a difficult task. Previous work has tackled lighting estimation by treating geometry estimation as a separate task, making use of depth cameras or known geometry. I have produced a CNN that relies on the relative invariance of these 3 unknowns with respect to time, by attempting to predict illumination from a series of views of an object. This represents an improvement in practicality over the original work and takes the technique a step closer to being deployed on mobile devices.
 
 \begin{quote}
-My research hypothesis is that a siamese CNN provided with RGB stereo images, or a recurrent network provided with a video stream, will achieve similar results to Stamatios Georgoulis et al. while eliminating the need for explicit geometry estimation or the use of a depth camera.
+My research hypothesis is that a siamese CNN provided with RGB stereo images, will achieve similar results to Stamatios Georgoulis et al. while eliminating the need for explicit geometry estimation or the use of a depth camera.
 \end{quote}
 
 To test my hypothesis I performed research and implementation as follows:
@@ -143,11 +111,14 @@ dissertation''); an example is as follows:
 \begin{quote}
 \noindent
 \begin{itemize}
-\item Tensorflow
-\item OpenCV libraries
-\item Blender
-\item HDRIHaven
-\item Shapenet
+\item Tensorflow was used to construct and train deep learning models.
+\item OpenCV libraries were used for image parsing and manipulation in experiments and final models.
+\item Blender was used to evaluate the quality of produced HDRIs, and to create scenes for training data.
+\item HDRIHaven was used as a source of ground truth environment maps.
+\item Shapenet was used for example 3D model data for experiments.
+\item OpenEXR was used in experiments to parse Radiance HDR image data.
+\item Cycles renderer was used to produce photorealistic synthetic data.
+\item IKEA Dataset was used to train the final suite of models.
 \end{itemize}
 \end{quote}
 
@@ -164,7 +135,8 @@ dissertation''); an example is as follows:
 \begin{tabular}{lcl}
 AR                 &:     & Augmented Reality                                         \\
 CNN                 &:     & Convolutional Neural Network                             \\
-HDR					&:		& High Dynamic Range
+HDR					&:		& High Dynamic Range									\\
+SSIM				&:		& Structural Similarity
 \end{tabular}
 \end{quote}
 
@@ -316,6 +288,16 @@ The original work consisted of two models, one that used single material objects
 It was apparent from the results of the previous work that the sparse reflectance map and background combination was not enough data to construct a robust model for both indoor and outdoor scenes. By explicitly calculating the reflectance, ignoring shadow information and assuming point-like objects, much of the appearance data is removed. Furthermore the surface normal calculation required is impractical under many use cases. Instead of relying on explicit reflectance maps, I took a new approach to design models that could exploit the additional spatial information of stereo images to infer surface normals, allowing the network to learn it's own model of reflectance. While this approach requires more information (multiple images), this information is actually available in use cases such as AR and film editing. One consideration was to simply use a stereo matching technique to calculate a relative depth map from the stero images and find the surface normals. These estimated normals could then be used in the previous network to estimate the environment lighting. However stereo matching is a difficult task that often involves human intervention, and does in fact rely on extracting identical convolutional features from the two images and finding their spatial differences.  Rather than performing two sets of convolutions, it appeared sensible to use a 'siamese' network to learn features to extract the same data from the two input images. The convolutional network would then be able to infer the depth information from the spatial differences in the learned features, and use this information, along with the colour data to predict illumination.
 \newline
 The previous work was adapted to a siamese network by sharing weights between the convolutional layers. The two inputs are fed into two identical 'Encode' blocks, consisting of a number of convolutional layers with batch normalization and max pooling. However, during the training process, only the weights for the first path are trained. These weights are duplicated in the second path to ensure that the same convolutions are being performed on each image of the pair. The output of these two paths is then concatenated before being passed into the deconvolutional steps. Multi-scale features are also used, passing features for the second path into the deconvolutional layers. An important difference in this network is that we do not provide the network an explicit background image, in fact the resolution of the background is lowered to give a depth-of-field effect. In real stereo images, the background would also move with the camera, however capturing this data is impractical. Fortunately due to the parallax effect, the background appears to move far less than the foreground anyway and so this approximation does not cause significant issues. The model was trained with similar parameters to the previous network, using a L1 loss function on the predicted and ground truth environment map.
+\section{Dataset Creation}
+The most difficult part of many deep learning tasks, including this one, is the creation of an unbiased and generalised dataset. For the purposes of this task we needed a large dataset of stereo image pairs accompanied by an HDR environment map. Capturing this data in the wild is a very laborious process, and requires expensive camera equipment. Instead I took the more practical approach of generating and utilizing synthetic data, which presents its own set of unique problems. For this task we make use of the open source 3D modelling program 'Blender' and the accompanying raytracer 'Cycles'. This made it possible to create photo-accurate renders with realistic lighting and materials. The data must be accurate in terms of lighting, material and geometry if the model is to be able to generalise to real world scenarios. To ensure accurate geometry I used the IKEA dataset \footcite{http://ikea.csail.mit.edu/} of 3D models, which includes a large range of furniture accurately modelled. The objects represent a good analogue for real geometry one might find in scenes, with some objects self-occluding and self shadowing. The models contained a mix of flat surfaces, edges and curves although being furniture the dataset contained a bias towards flat surfaces. We believe this is reasonable however, as most scenes in AR applications and films will be dominated by flat surfaces such as floors and walls.
+\newline
+To introduce further variance into the dataset, we make sure to apply different materials to the furniture to represent the range of materials found in real scenes. It is important that these materials react realistically to the lighting in the scene, rather than relying on explicitly lambertian surfaces. For this task we make use of Blender's 'Principled BSDF' shader \footcite{https://docs.blender.org/manual/en/dev/render/cycles/nodes/types/shaders/principled.html}, referred to as an 'Uber' shader for it's ability to represent any range of materials. Bidirectional Scaterring Distribution Functions are able to accurately simulate the reflection of light on a surface, and by varying parameters such as albedo colour, reflectiveness and subsurface scattering we are able to approximate a range of real materials. While most surfaces can be represented using this shader, our dataset generator does contain some restrictions. Notably, while we vary material properties and colour, we do not apply texture to the object, so the subtle variations that can be seen in materials like cloth or carbon fibre are not simulated. However we believe that in most cases these subtleties are not visible due to the quality of the input video stream from AR platforms and do not have a significant in the overall reflective properties of most surfaces.
+\newline
+To generate our ground truth environments, and to light the objects we use HDRI images taken from \footcite{https://hdrihaven.com/}. These environment maps are used as both backgrounds and light sources by blender to illuminate the provided objects. These HDRI images are captured from real environments and are claimed to be accurately colour corrected. To further augment the dataset and prevent overfitting we introduce random rotation. For each stereo pair we load a random model from our dataset, apply a random material and select a random environment. We then move our virtual camera to a random orientation, within a reasonable range, facing the target object. We also re-render the environment map to have it's forward direction aligned with that of the observer camera. \todo{Probably a diagram of this stuff} This prevents the network from simply learning to select from our modest set of HDRIs, and instead encourages it to learn to extract the environment entirely from the input. This generator was used to produce 55,000 image sets, making use of 28-core intel processors on the Blue Crystal 4 supercomputer. After experimentaiton, it was found that due to the small image sizes and work distribution of path tracing, that high core-count CPUs outperformed the GPU renderer implementation.
+\section{Experiments}
+\subsection{Fixed Stereo}
+\subsection{Variable Pan Stereo}
+\subsection{Variable Pan and Angle}
 \chapter{Critical Evaluation}
 \label{chap:evaluation}
 

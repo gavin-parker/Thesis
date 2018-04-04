@@ -3,7 +3,6 @@ import os
 import preprocessing_ops as preprocessing
 import layers
 import time
-from stereo_model import *
 from rendering import renderer as rend
 from params import FLAGS
 import glob
@@ -25,13 +24,13 @@ class Model:
     def __init__(self):
         with tf.device('/cpu:0'):
             envmap = self.env_files.map(
-                lambda x: preprocessing.preprocess_hdr(x, 64, double_precision=True, use_lab=False),
+                lambda x: preprocessing.preprocess_hdr(x, input_size=32, output_size=64),
                 num_parallel_calls=4)
             left = self.left_files.map(
-                lambda x: preprocessing.preprocess_color(x, [256, 256, 3], double_precision=True),
+                lambda x: preprocessing.preprocess_color(x, [512, 512, 3], double_precision=True),
                 num_parallel_calls=4)
             right = self.right_files.map(
-                lambda x: preprocessing.preprocess_color(x, [256, 256, 3], double_precision=True),
+                lambda x: preprocessing.preprocess_color(x, [512, 512, 3], double_precision=True),
                 num_parallel_calls=4)
 
             dataset = tf.data.Dataset.zip((left, right, envmap)).repeat().batch(FLAGS.batch_size).prefetch(
@@ -88,16 +87,19 @@ class Model:
 
     def encode(self, left, right):
 
-        l_encodings = siamese_encode(left, reuse=False)
-        r_encodings = siamese_encode(right, reuse=True)
+        l_encodings = layers.siamese_encode(left, reuse=False)
+        r_encodings = layers.siamese_encode(right, reuse=True)
 
-        fully_encoded = tf.concat([l_encodings[-1], r_encodings[-1]], axis=-1)
+        joint = tf.concat([l_encodings[-1], r_encodings[-1]], axis=-1)
         # fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
-        fully_encoded = layers.encode_layer(fully_encoded, 1024, (3, 3), (1, 1), 1, maxpool=False)
-        decode_1 = layers.decode_layer(fully_encoded, 512, (3, 3), (2, 2), 3)
-        decode_2 = layers.decode_layer(tf.concat([decode_1, r_encodings[-2]], axis=-1), 512, (3, 3), (2, 2), 3)
-        decode_3 = layers.decode_layer(tf.concat([decode_2, r_encodings[-3]], axis=-1), 256, (3, 3), (2, 2), 3)
-        decode_4 = layers.decode_layer(tf.concat([decode_3, r_encodings[-4]], axis=-1), 128, (3, 3), (2, 2), 1)
+        joint_b = layers.encode_layer(joint, 512, (3, 3), (2, 2), 1, maxpool=True)
+        joint_c = layers.encode_layer(joint_b, 512, (3, 3), (2, 2), 1, maxpool=True)
+        joint_d = layers.encode_layer(joint_c, 1024, (3, 3), (2, 2), 1, maxpool=True)
+
+        decode_1 = layers.decode_layer(joint_d, 512, (3, 3), (2, 2), 3)
+        decode_2 = layers.decode_layer(decode_1, 512, (3, 3), (2, 2), 3)
+        decode_3 = layers.decode_layer(decode_2, 256, (3, 3), (2, 2), 3)
+        decode_4 = layers.decode_layer(decode_3, 128, (3, 3), (2, 2), 1)
 
         return layers.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
 
@@ -138,7 +140,7 @@ class Model:
             run_metadata = tf.RunMetadata()
         tf.train.start_queue_runners(sess=sess)
         train_writer = tf.summary.FileWriter(
-            "{}/{}_{}".format(FLAGS.log_dir, time.strftime("%H:%M:%S"), FLAGS.learning_rate),
+            "{}/{}_{}_deep".format(FLAGS.log_dir, time.strftime("%H:%M:%S"), FLAGS.learning_rate),
             sess.graph)
 
         saver = tf.train.Saver()
@@ -161,7 +163,7 @@ class Model:
                         run_metadata=run_metadata)
                     t1 = time.time()
                     [train_writer.add_summary(s, epoch * epoch_size + i) for s in summaries]
-                    saver.save(sess, os.path.join("stereo_graph", 'model'))
+                    saver.save(sess, os.path.join("stereo_graph_deep", 'model'))
                     if FLAGS.debug:
                         train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
                                                       global_step=None)
@@ -174,7 +176,7 @@ class Model:
         train_writer.close()
         sess.close()
 
-    def test_model(self, sess=None):
+    def test_model(self, sess=None, model_dir=None):
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.per_process_gpu_memory_fraction = 0.5
         if sess is None:
@@ -185,15 +187,19 @@ class Model:
             "{}/{}_{}".format(FLAGS.log_dir, "Validation: " + time.strftime("%H:%M:%S"), FLAGS.learning_rate),
             sess.graph)
         sess.run(tf.local_variables_initializer())
-        print("restoring {}".format(FLAGS.test_model_dir))
-        saver.restore(sess, FLAGS.test_model_dir)
-        for i in range(0, 1000):
+        print("restoring {}".format(model_dir))
+        saver.restore(sess, model_dir)
+        total_loss = 0
+        epoch_size = len(glob.glob("{}/left/*.png".format(FLAGS.val_dir)))
+        epoch_size /= FLAGS.batch_size
+        for i in range(0, epoch_size):
             loss, summaries, render_summary = sess.run(
                 [self.loss, self.summaries, self.render_summary])
             [test_writer.add_summary(s, i) for s in summaries]
             [test_writer.add_summary(s, i) for s in render_summary]
+            total_loss += loss
             test_writer.flush()
 
         test_writer.close()
         sess.close()
-        return
+        return total_loss
