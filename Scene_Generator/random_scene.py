@@ -101,6 +101,7 @@ class SceneGenerator:
     def render_envmap(self, name='test'):
         self.scene.render.resolution_x = 512
         self.scene.render.resolution_y = 512
+        self.scene.render.resolution_percentage = 100
         self.envmap_camera.rotation_euler = self.render_camera.rotation_euler
         self.scene.camera = self.envmap_camera
         self.scene.view_settings.view_transform = 'Raw'

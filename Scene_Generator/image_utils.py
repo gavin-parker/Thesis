@@ -9,6 +9,12 @@ def resize_img_dir(dir):
         resized = cv2.resize(img, (64, 64))
         cv2.imwrite("{}/{}.hdr".format(dir, i), resized)
 
+
+def print_image(dir):
+    img = cv2.imread(dir, cv2.IMREAD_UNCHANGED)
+    print(img)
+
+
 if __name__ == "__main__":
     print("resizing...")
-    resize_img_dir('/home/gavin/Downloads/hdris')
+    print_image('/home/gavin/test_depth.hdr')

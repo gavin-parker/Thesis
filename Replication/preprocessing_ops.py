@@ -150,13 +150,14 @@ def preprocess_gt(filename, double_precision=False):
     return format_image(image, [256, 256, 3], 32)
 
 
-def image_stream(path, order=None):
-    if order is not None:
-        return tf.data.Dataset.from_tensor_slices(
-            tf.convert_to_tensor(sorted(glob.glob(path)), dtype=tf.string))
-    else:
-        return tf.data.Dataset.from_tensor_slices(
-            tf.convert_to_tensor(sorted(glob.glob(path)), dtype=tf.string))
+def image_stream(path):
+    files = sorted(glob.glob(path))
+    train_count = len(files) * 0.9
+    training = files[:train_count]
+    validation = files[train_count+1:-1]
+    return tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(training), dtype=tf.string), tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(validation), dtype=tf.string)
 
 
 def stereo_stream(dir):
