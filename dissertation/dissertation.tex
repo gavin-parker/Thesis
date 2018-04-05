@@ -73,9 +73,11 @@
 \chapter*{Executive Summary}
 
 \noindent
-In this paper we present a system for estimating the lighting in photographs and video streams of real scenes,  to be used for the realistic rendering of virtual objects and characters. Augmented Reality is a growing topic in computer graphics and vision, that involves superimposing synthetic information and images on real scenes, often with the aim of giving the illusion that the object is part of the real world. Current AR solutions use geometry estimation to correctly place and scale the virtual objects to fit into the real scene, but do very little to render those objects with other scene intrinsics. Our system uses a Siamese Convolutional Neural Network to extract the lighting intensities and directions from objects within a scene, such that virtual objects can be re-rendered with realistic parameters on-the-fly.
+In this paper I present a system for estimating the lighting in photographs and video streams of real scenes,  to be used for the realistic rendering of virtual objects and characters. We make use of stereo views of an object to construct a lighting prediction without the need for known geometry.
+\newline
+Augmented Reality is a growing topic in computer graphics and vision, that involves superimposing synthetic information and images on real scenes, often with the aim of giving the illusion that the object is part of the real world. Current AR solutions use geometry estimation to correctly place and scale the virtual objects to fit into the real scene, but do very little to render those objects with other scene intrinsics. Our system uses a Siamese Convolutional Neural Network to extract the lighting intensities and directions from objects within a scene, such that virtual objects can be re-rendered with realistic lighting parameters on-the-fly.
 
-The appearance of an object is made up of its material properties, its geometry and the lighting conditions, making estimation of any one of these factors from a single image a difficult task. Previous work has tackled lighting estimation by treating geometry estimation as a separate task, making use of depth cameras or known geometry. I have produced a CNN that relies on the relative invariance of these 3 unknowns with respect to time, by attempting to predict illumination from a series of views of an object. This represents an improvement in practicality over the original work and takes the technique a step closer to being deployed on mobile devices.
+The appearance of an object is made up of its material properties, its geometry and the lighting conditions, making estimation of any one of these factors from a single image a difficult task. Previous work has tackled lighting estimation by treating geometry estimation as a separate task, making use of depth cameras or known geometry. I have produced a CNN that relies on the relative invariance of these 3 unknowns with respect to time, by attempting to predict illumination from a series of views of an object. This represents an improvement in practicality over the previous work and takes the technique a step closer to being deployed on mobile devices.
 
 \begin{quote}
 My research hypothesis is that a siamese CNN provided with RGB stereo images, will achieve similar results to Stamatios Georgoulis et al. while eliminating the need for explicit geometry estimation or the use of a depth camera.
@@ -88,7 +90,8 @@ To test my hypothesis I performed research and implementation as follows:
 \item Researched existing algorithms and neural network architectures for lighting and geometry estimation.
 \item Replicated the work of Stamatios Georgoulis et al. by building CNNs that can interpolate sparse reflectance maps and predict environment map lighting from single objects with provided geometry.
 \item Implemented a dataset generator that could produce realistic lighting parameters and images for training networks.
-\item Created a new siamese architecture to encode geometry from stereo images and estimate lighting conditions
+\item Created a new siamese architecture to encode geometry from stereo images and estimate lighting conditions.
+\item Assessed the quality of these networks with a suite of image similarity benchmarks.
 \end{itemize}
 
 % -----------------------------------------------------------------------------
@@ -252,15 +255,6 @@ CNNs can exploit different features in a scene to determine lighting such as sha
 {\bf A topic-specific chapter, of roughly $15$ pages} 
 \vspace{1cm} 
 
-\begin{itemize}
-\item Goal, how and why
-\item Deep reflectance Maps
-\item What is around the camera
-\item Dataset creation
-\item Architecture design
-\item Training
-\end{itemize}
-
 \section{Reproducing Prior Art in Tensorflow}
 The first step in the project was to attempt to reproduce similar prior work in the area, to assess its aplicability in the field of AR and create a fair benchmark for evaluating new models and approaches. The began with a reimplementation of 'Deep Reflectance Maps', a recent work that demonstrated promising results from a CNN based approach. This work was a necessary prerequisite to 'What is around the Camera?', the most similar research to my project. The project was provided with a dataset for replication, but without any source code. Fortunately the architecture was well documented and so easily reproduced in a modern deep learning framework. For this work I used Tensorflow, a python deep learning framework that gave me the flexibility to add unique network features such as a reflectance mapping step, as well as export the model to different platforms.
 \newline
@@ -294,41 +288,52 @@ The most difficult part of many deep learning tasks, including this one, is the 
 To introduce further variance into the dataset, we make sure to apply different materials to the furniture to represent the range of materials found in real scenes. It is important that these materials react realistically to the lighting in the scene, rather than relying on explicitly lambertian surfaces. For this task we make use of Blender's 'Principled BSDF' shader \footcite{https://docs.blender.org/manual/en/dev/render/cycles/nodes/types/shaders/principled.html}, referred to as an 'Uber' shader for it's ability to represent any range of materials. Bidirectional Scaterring Distribution Functions are able to accurately simulate the reflection of light on a surface, and by varying parameters such as albedo colour, reflectiveness and subsurface scattering we are able to approximate a range of real materials. While most surfaces can be represented using this shader, our dataset generator does contain some restrictions. Notably, while we vary material properties and colour, we do not apply texture to the object, so the subtle variations that can be seen in materials like cloth or carbon fibre are not simulated. However we believe that in most cases these subtleties are not visible due to the quality of the input video stream from AR platforms and do not have a significant in the overall reflective properties of most surfaces.
 \newline
 To generate our ground truth environments, and to light the objects we use HDRI images taken from \footcite{https://hdrihaven.com/}. These environment maps are used as both backgrounds and light sources by blender to illuminate the provided objects. These HDRI images are captured from real environments and are claimed to be accurately colour corrected. To further augment the dataset and prevent overfitting we introduce random rotation. For each stereo pair we load a random model from our dataset, apply a random material and select a random environment. We then move our virtual camera to a random orientation, within a reasonable range, facing the target object. We also re-render the environment map to have it's forward direction aligned with that of the observer camera. \todo{Probably a diagram of this stuff} This prevents the network from simply learning to select from our modest set of HDRIs, and instead encourages it to learn to extract the environment entirely from the input. This generator was used to produce 55,000 image sets, making use of 28-core intel processors on the Blue Crystal 4 supercomputer. After experimentaiton, it was found that due to the small image sizes and work distribution of path tracing, that high core-count CPUs outperformed the GPU renderer implementation.
+
+\begin{figure}[h]
+\centering
+\begin{tabular}{| c | c | c | c |}
+\includegraphics[width=3cm]{images/left/0} &
+\includegraphics[width=3cm]{images/right/0} &
+\includegraphics[width=3cm]{images/normals/0} &
+\includegraphics[width=3cm]{images/hdri/0.png} \\
+\includegraphics[width=3cm]{images/left/11} &
+\includegraphics[width=3cm]{images/right/11} &
+\includegraphics[width=3cm]{images/normals/11} &
+\includegraphics[width=3cm]{images/hdri/11.png} \\
+\includegraphics[width=3cm]{images/left/22} &
+\includegraphics[width=3cm]{images/right/22} &
+\includegraphics[width=3cm]{images/normals/22} &
+\includegraphics[width=3cm]{images/hdri/22.png} \\
+\end{tabular}
+\caption{Generated data examples - Left, Right, Surface Normals, Environment Map (Tonemapped to RGB)}
+\label{data_examples}
+\end{figure}
 \section{Experiments}
-\subsection{Fixed Stereo}
-\subsection{Variable Pan Stereo}
-\subsection{Variable Pan and Angle}
+To assess the accuraccy and performance of the models, I set up a series of experiments on the same training and test data set. I trained the Siamese Stereo model for 100 epochs, with a learning rate of 1.7e-9, and evaulated predictions on 1000 test samples. I repeated this step for the same model without the siamese shared weights, and for the original 'What is around the Camera?' work.
+
 \chapter{Critical Evaluation}
 \label{chap:evaluation}
 
-{\bf A topic-specific chapter, of roughly $15$ pages} 
-\vspace{1cm} 
+\section{Model Accuracy}
+To evaluate the accuracy of the models we use a suite of image comparison measures on the produced HDRI environment maps. It is essential that the metrics used suitably evaulate the image similarity, and so we consider which image properties are most influential of the resulting lighting. The most basic estimation should be able to capture the direction and intensity of direct lights within the scene. Often there are few direct lights, but their effect on lighting dominates the overall scene illumination. Better predictions will be able to capture some information on indirect lighting, such as sky or wall colour and brightness.
+\todo{Talk a bit more about this}
+\newline 
+We start with two basic difference metrics, the L1 and L2 norm, which are both per-pixel Minkowski distances. These measures are fast to calculate and simple to implement and so are often used as the loss function in image regression tasks. L2 norm involves the squaring of pixel differences, and exagerrates the effect of large pixel differences on the overall similarity score. In the HDR domain this can mean that direct lights, such as the sun, which are predicted to be in a slightly different direction, will have a severe impact on the similarity, despite having a minor effect on the resulting illumination. When we inspect light sources in sRGB photographs, it appears as if the light source is large and emmitting light from a radius, as the higher brightness values fall outside of the cameras exposure bracket. \ref{rgb_example} demonstrates this effect, as parts of the woman's face, as well as the surrounding sky have the same colour values as the center of the sun, as the camera fails to capture the brightness rage. A minor misprediction in sun position here will have little effect on the L2 distance, but in HDR would have a significant impact.
+\newline
+Another commonly used image comparison metric is the SSIM \footcite{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=1284395},
+\[SSIM(x,y) = \frac{(2u_xu_y + c_1)(2\sigma_{xy} + c_2)}{(u^2_x + u^2_y + c_1)(\sigma^2_x + \sigma^2_y + c_2)}\]
+which aims to predict the accuracy of an image with human perception. It is a measure of structure, which takes luminance and contrast into account, and so many be better suited for HDR. Finally, we assess the models ability to identify the direction of the provailing light source, by taking the spherical distance between the brightest pixel in the ground truth and predicted image.
+\todo{Put a table of results here followed by discussion}
 
-\noindent
-This chapter is intended to evaluate what you did.  The content is highly 
-topic-specific, but for many projects will have flavours of the following:
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{exposure_example}
+\caption{High lighting values in a standard RGB image}
+\label{rgb_example}
+\end{figure}
 
-\begin{enumerate}
-\item functional  testing, including analysis and explanation of failure 
-      cases,
-\item behavioural testing, often including analysis of any results that 
-      draw some form of conclusion wrt. the aims and objectives,
-      and
-\item evaluation of options and decisions within the project, and/or a
-      comparison with alternatives.
-\end{enumerate}
-
-\noindent
-This chapter often acts to differentiate project quality: even if the work
-completed is of a high technical quality, critical yet objective evaluation 
-and comparison of the outcomes is crucial.  In essence, the reader wants to
-learn something, so the worst examples amount to simple statements of fact 
-(e.g., ``graph X shows the result is Y''); the best examples are analytical 
-and exploratory (e.g., ``graph X shows the result is Y, which means Z; this 
-contradicts [1], which may be because I use a different assumption'').  As 
-such, both positive {\em and} negative outcomes are valid {\em if} presented 
-in a suitable manner.
-
+\section{Model Performance}
+It is not only important to assess the accuracy of the predicted lighting, but also the resource requirements. A model that produces rough approximations with a lower memory footprint and computation time is still valuable, especially in the field of AR.
 % -----------------------------------------------------------------------------
 
 \chapter{Conclusion}
