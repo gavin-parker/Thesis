@@ -8,17 +8,24 @@ HDR_MIN = 0.0
 HDR_MAX = 1.0
 EPS = 1e-12
 
+
 def get_input_size(file):
     image_file = cv2.imread(file, cv2.IMREAD_UNCHANGED)
     return image_file.shape
+
 
 def zero_mask(image):
     flat = tf.reshape(image, [-1, 3])
     totals = tf.reduce_sum(flat, axis=-1)
     flat_mask = tf.not_equal(totals, 0)
     mask = tf.stack([flat_mask] * 3, axis=-1)
-    mask = tf.to_float(mask)
+    mask = tf.cast(mask, tf.float16)
     return tf.reshape(mask, tf.shape(image))
+
+def flip_mask(mask):
+    bool_mask = tf.cast(mask, tf.bool)
+    flipped = tf.logical_not(bool_mask)
+    return tf.cast(flipped, tf.float16)
 
 def get_stereo_dataset(dir, batch_size):
     left_files, right_files, env_files = stereo_stream(dir)
@@ -36,25 +43,24 @@ def get_stereo_dataset(dir, batch_size):
         buffer_size=2 * batch_size)
     return dataset
 
+
 def get_dematerial_dataset(dir, batch_size):
     right_files, norm_files, env_files = dematerial_stream(dir)
-    background = right_files.map(
-        lambda x: preprocess_color(x, input_shape=[128, 128, 3], double_precision=True),
+    right = right_files[0].map(
+        lambda x: preprocess_color(x, right_files[1], output_size=128, double_precision=False),
         num_parallel_calls=4)
-    envmap = env_files.map(
-        lambda x: preprocess_hdr(x, 64, double_precision=True, use_lab=False),
+    envmap = env_files[0].map(
+        lambda x: preprocess_hdr(x, env_files[1], output_size=64),
         num_parallel_calls=4)
-    reflectance = norm_files.map(
-        lambda x: preprocess_color(x, [128, 128, 3], double_precision=True),
+    norms = norm_files[0].map(
+        lambda x: preprocess_color(x, norm_files[1],output_size=128, double_precision=False),
         num_parallel_calls=4)
 
-    dataset = tf.data.Dataset.zip((reflectance, background, envmap)).shuffle(128).repeat().batch(
-        FLAGS.batch_size).prefetch(
-        buffer_size=2 * FLAGS.batch_size)
-    iterator = dataset.make_one_shot_iterator()
-    batch = iterator.get_next()
+    dataset = tf.data.Dataset.zip((right, norms, envmap)).shuffle(128).repeat().batch(
+        batch_size).prefetch(
+        buffer_size=2 * batch_size)
+    return dataset
 
-    return batch
 
 def format_image(image, in_shape, out_size, mask_alpha=False, normalize=False):
     alpha = []
@@ -75,7 +81,8 @@ def format_image(image, in_shape, out_size, mask_alpha=False, normalize=False):
     return image
 
 
-def get_norm_sphere(single_sphere, batch_size):
+def get_norm_sphere(batch_size):
+    single_sphere = tf.image.decode_image(tf.read_file("normal_sphere.png"), channels=3)
     batch_sphere = tf.stack([single_sphere] * batch_size, axis=0)
     # mask = zero_mask(batch_sphere)
     batch_sphere = tf.map_fn(lambda x: format_image(x, [1024, 1024, 3], 1024), batch_sphere,
@@ -93,13 +100,13 @@ def unit_norm(image, channels=3):
     return tf.reshape(norm_flat, tf.shape(image))
 
 
-def preprocess_color(filename, input_shape=[256, 256, 3], double_precision=False):
+def preprocess_color(filename, input_shape, output_size=256, double_precision=False):
     file = tf.read_file(filename, name="read_image")
     image = tf.image.decode_png(file, channels=3, name="decode_color")
     if not double_precision:
-        image = tf.cast(format_image(image, input_shape, 256), tf.float16)
+        image = tf.cast(format_image(image, input_shape, output_size), tf.float16)
     else:
-        image = tf.cast(format_image(image, input_shape, 256), tf.float32)
+        image = tf.cast(format_image(image, input_shape, output_size), tf.float32)
     # if use_lab:
     #    new_image = tf.py_func(rgb_to_lab, [image], tf.float32)
     #    image = tf.reshape(new_image, tf.shape(image))
@@ -117,18 +124,20 @@ def denormalize_hdr(image):
 
 
 """Estimate the surface normals from a depth image"""
+
+
 def depth_to_normals(image):
     threshold = image.max
     mask = np.less(image, threshold).astype(np.float32)
-    mask = np.repeat(mask[:,:,np.newaxis], 3, axis=2)
+    mask = np.repeat(mask[:, :, np.newaxis], 3, axis=2)
     dxdz, dydz = np.gradient(image)
     norms = np.ones((image.shape[0], image.shape[1], 3))
-    norms[:,:,0] = -dxdz
-    norms[:,:,1] = -dydz
+    norms[:, :, 0] = -dxdz
+    norms[:, :, 1] = -dydz
     len = np.sqrt(np.square(dxdz) + np.square(dydz) + 1.0)
-    norms[:,:,0] /= len
-    norms[:,:,1] /= len
-    norms[:,:,2] /= len
+    norms[:, :, 0] /= len
+    norms[:, :, 1] /= len
+    norms[:, :, 2] /= len
     norms = norms * mask
     pretty_norms = (norms + 1.0) * 0.5
     pretty_norms *= 255
@@ -136,7 +145,7 @@ def depth_to_normals(image):
     cv2.waitKey(10000)
 
 
-def preprocess_hdr(filename, input_shape=[32,32,3], output_size=64):
+def preprocess_hdr(filename, input_shape=[32, 32, 3], output_size=64):
     rgbe_image = tf.py_func(parse_hdr, [filename], tf.float32)
     image = tf.reshape(rgbe_image, input_shape)
     image = tf.image.resize_images(image, [output_size, output_size])
@@ -145,7 +154,7 @@ def preprocess_hdr(filename, input_shape=[32,32,3], output_size=64):
 
 def parse_hdr(filename):
     img = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
-    #img = cv2.resize(image, (256, 256)) 
+    # img = cv2.resize(image, (256, 256))
     return img.astype(np.float32)
 
 
@@ -171,7 +180,7 @@ def image_stream(path):
     files = sorted(glob.glob(path))
     train_count = int(len(files) * 0.9)
     training = files[0:train_count]
-    validation = files[train_count+1:-1]
+    validation = files[train_count + 1:-1]
     return tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(training)), tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(validation))
@@ -192,7 +201,8 @@ def dematerial_stream(dir):
         tf.convert_to_tensor(right_files, dtype=tf.string))
     envmaps = tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(envmap_files, dtype=tf.string))
-    return (right,right_shape), (norms,norm_shape), (envmaps, envmap_shape)
+    return (right, right_shape), (norms, norm_shape), (envmaps, envmap_shape)
+
 
 def stereo_stream(dir):
     left_files = sorted(glob.glob("{}/left/*.png".format(dir)))
@@ -209,7 +219,7 @@ def stereo_stream(dir):
         tf.convert_to_tensor(right_files, dtype=tf.string))
     envmaps = tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(envmap_files, dtype=tf.string))
-    return (left,left_shape), (right,right_shape), (envmaps, envmap_shape)
+    return (left, left_shape), (right, right_shape), (envmaps, envmap_shape)
 
 
 # based on https://github.com/torch/image/blob/9f65c30167b2048ecbe8b7befdc6b2d6d12baee9/generic/image.c

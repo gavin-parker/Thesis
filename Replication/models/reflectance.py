@@ -1,5 +1,5 @@
 import tensorflow as tf
-from reflectance_ops import Reflectance
+import reflectance_ops
 import os
 import preprocessing_ops as preprocessing
 import layers as ed
@@ -50,7 +50,7 @@ class Model:
         (appearance, orientation, gt) = input_batch
         normal_sphere_flat = tf.reshape(self.batch_sphere, [FLAGS.batch_size, -1, 3])
         with tf.device('/gpu:0'):
-            sparse_rm = tf.map_fn(Reflectance.online_reflectance,
+            sparse_rm = tf.map_fn(reflectance_ops.online_reflectance,
                                   (appearance, orientation, normal_sphere_flat), dtype=tf.float16, name="reflectance")
             sparse_rm = tf.cast(tf.reshape(sparse_rm, [FLAGS.batch_size, 128, 128, 3]), dtype=tf.float32, name="recast")
 

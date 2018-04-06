@@ -3,19 +3,16 @@ import math
 import numpy as np
 
 
-class Reflectance:
-    @staticmethod
-    # Assuming uint8
-    def online_reflectance((color_image, normal_image, normal_sphere_flat)):
-        normal_flat = tf.reshape(normal_image, [-1, 3])
-        color_flat = tf.reshape(color_image, [-1, 3])
-        intensity_flat = tf.sqrt(tf.reduce_sum(tf.square(color_flat), axis=-1))
-        indices = unique_2d(normal_flat, intensity_flat, normal_sphere_flat)
+def online_reflectance((color_image, normal_image, normal_sphere_flat)):
+    normal_flat = tf.reshape(normal_image, [-1, 3], name="flatten_normals")
+    color_flat = tf.reshape(color_image, [-1, 3], name="flatten_rgb")
+    intensity_flat = tf.sqrt(tf.reduce_sum(tf.square(color_flat), axis=-1))
+    indices = unique_2d(normal_flat, intensity_flat, normal_sphere_flat)
 
-        flat_reflmap = tf.gather(color_flat, indices)
+    flat_reflmap = tf.gather(color_flat, indices)
 
-        reflmap = tf.reshape(flat_reflmap, tf.shape(color_image))
-        return reflmap
+    reflmap = tf.reshape(flat_reflmap, tf.shape(color_image))
+    return reflmap
 
 
 # Computes 128x128 matrix to represent dot products of pixels

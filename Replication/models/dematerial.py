@@ -3,7 +3,7 @@ import os
 import preprocessing_ops as preprocessing
 import layers
 import time
-
+import reflectance_ops
 from rendering import renderer as rend
 from params import FLAGS
 
@@ -25,15 +25,34 @@ class Model:
     if FLAGS.real:
         synth_path = 'real'
     train_path = FLAGS.train_dir + "{}/{}".format(synth_path, train_path)
-    print(train_path)
+    train_dataset = preprocessing.get_dematerial_dataset(FLAGS.train_dir, FLAGS.batch_size)
+    val_dataset = preprocessing.get_dematerial_dataset(FLAGS.val_dir, FLAGS.batch_size)
+    iter_train_handle = train_dataset.make_one_shot_iterator().string_handle()
+    iter_val_handle = val_dataset.make_one_shot_iterator().string_handle()
+    handle = tf.placeholder(tf.string, shape=[])
+
     def __init__(self):
         with tf.device('/cpu:0'):
-            training_batch = self.get_dataset_iterators((self.bg_files, self.envmap_files, self.reflectance_files))
-            validation_batch = self.get_dataset_iterators((self.bg_files, self.envmap_files, self.reflectance_files))
-
+            iterator = tf.data.Iterator.from_string_handle(
+                self.handle, self.train_dataset.output_types, self.train_dataset.output_shapes)
+            (rgb_image, rgb_normals, envmap) = iterator.get_next()
+            self.sphere = preprocessing.get_norm_sphere(FLAGS.batch_size)
+            self.sphere = preprocessing.unit_norm(self.sphere[:, :, :, :3], channels=3)
+            self.zero_mask = preprocessing.zero_mask(rgb_normals)
+            appearance = rgb_image * self.zero_mask
+            rgb_normals = rgb_normals * self.zero_mask
+            bg = rgb_image * preprocessing.flip_mask(self.zero_mask)
+            bg = tf.cast(bg, tf.float32)
         with tf.device('/gpu:0'):
-            gt_norm = preprocessing.normalize_hdr(gt)
-            bg_lab, refl_lab, gt_lab = bg, refl, gt
+            normal_sphere_flat = tf.reshape(self.sphere, [FLAGS.batch_size, -1, 3])
+            sparse_rm = tf.map_fn(reflectance_ops.online_reflectance,
+                                  (appearance, rgb_normals, normal_sphere_flat), dtype=tf.float16,
+                                  name="reflectance")
+            refl = tf.cast(tf.reshape(sparse_rm, [FLAGS.batch_size, 128, 128, 3]), dtype=tf.float32,
+                                name="recast")
+
+            gt_norm = preprocessing.normalize_hdr(envmap)
+            bg_lab, refl_lab, gt_lab = bg, refl, gt_norm
             if FLAGS.lab_space:
                 bg_lab = tf.map_fn(preprocessing.rgb_to_lab, bg)
                 refl_lab = tf.map_fn(preprocessing.rgb_to_lab, refl)
@@ -48,18 +67,15 @@ class Model:
             self.train_op = self.optimize()
             pred_pretty = tf.map_fn(preprocessing.lab_to_rgb, prediction)
             self.converted_prediction = preprocessing.denormalize_hdr(pred_pretty)
-            self.summaries = self.summary(bg, refl, gt_lab, prediction, gt, bg_lab, refl_lab)
-            render_sim, envmap_sim, pred_render, gt_render = tf.py_func(rend.render_summary, [self.converted_prediction[0], gt[0]], [tf.float32, tf.float32, tf.uint8, tf.uint8])
+            self.summaries = self.summary(bg, refl, gt_lab, prediction, envmap, bg_lab, refl_lab)
+            render_sim, envmap_sim, pred_render, gt_render = tf.py_func(rend.render_summary, [self.converted_prediction[0], envmap[0]], [tf.float32, tf.float32, tf.uint8, tf.uint8])
             render_image_summaries = tf.summary.merge([tf.summary.image('Ground Truth Render', tf.expand_dims(gt_render,0), max_outputs=1),
                                         tf.summary.image('Predicted Render', tf.expand_dims(pred_render,0), max_outputs=1)])
             render_similarities = tf.summary.merge([tf.summary.scalar('Render Similarity', render_sim),
                                         tf.summary.scalar('Envmap Similarity', envmap_sim)])
             self.render_summary = [render_similarities, render_image_summaries]
-
-            self.gt = gt
+            self.validate()
         return
-
-
 
     """Calculate a prediction RM and intermediary sparse RM"""
 
@@ -69,6 +85,7 @@ class Model:
     """Calculate the l2 norm loss between the prediction and ground truth"""
 
     def loss_calculation(self, prediction, gt_lab):
+        prediction = tf.image.resize_images(prediction, [64,64])
         self.loss = tf.reduce_sum(tf.abs(prediction - gt_lab))
 
     def gabriel_loss(self, prediction_log, gt_log):
@@ -115,7 +132,8 @@ class Model:
                      tf.summary.image('Input Background', bg, max_outputs=1),
                      tf.summary.image('CIELAB Background', bg_lab, max_outputs=1),
                      tf.summary.image('Input Reflectance Map', reflectance, max_outputs=1),
-                     tf.summary.image('CIELAB Reflectance Map', refl_lab, max_outputs=1)]
+                     tf.summary.image('CIELAB Reflectance Map', refl_lab, max_outputs=1),
+                     tf.summary.image('Gauss Sphere', self.sphere, max_outputs=1)]
 
         scalar_summary = tf.summary.merge([tf.summary.scalar("Loss", self.loss),
                                           tf.summary.scalar("Max difference", self.diff),
@@ -123,80 +141,7 @@ class Model:
         img_summary = tf.summary.merge(summaries)
         return img_summary, scalar_summary
 
-    """Train the model with the settings provided in FLAGS"""
-
-    def train(self, sess=None):
-
-        config = tf.ConfigProto(allow_soft_placement=True)
-        config.gpu_options.per_process_gpu_memory_fraction = 0.95
-
-        if sess is None:
-            sess = tf.Session(config=config)
-        sess.run(tf.local_variables_initializer())
-        sess.run(tf.global_variables_initializer())
-
-        options, run_metadata = None, None
-        if FLAGS.debug:
-            options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
-            run_metadata = tf.RunMetadata()
-        tf.train.start_queue_runners(sess=sess)
-        train_writer = tf.summary.FileWriter("{}/{}_{}".format(FLAGS.log_dir, time.strftime("%H:%M:%S"), FLAGS.learning_rate),
-                                             sess.graph)
-
-        saver = tf.train.Saver()
-        if FLAGS.fine_tune:
-            saver.restore(sess, FLAGS.test_model_dir)
-        epoch_size = 56238 / FLAGS.batch_size
-        print("beginning training with learning rate: {}".format(FLAGS.learning_rate))
-        print("Epoch size: {}".format(epoch_size))
-        print("Batch size: {}".format(FLAGS.batch_size))
-        # generate batches and run graph
-        for epoch in range(0, FLAGS.max_epochs):
-            t0 = time.time()
-            for i in range(0, epoch_size):
-                sess.run([self.loss, self.train_op], options=options,
-                         run_metadata=run_metadata)
-                if i % 100 == 0:
-                    err, summaries = sess.run(
-                        [self.loss, self.summaries], options=options,
-                        run_metadata=run_metadata)
-                    t1 = time.time()
-                    [train_writer.add_summary(s,  epoch * epoch_size + i) for s in summaries]
-                    saver.save(sess, os.path.join("dematerial_graph_momentum", 'model'))
-                    if FLAGS.debug:
-                        train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
-                                                      global_step=None)
-                    train_writer.flush()
-                    print("Loss:{}".format(err))
-                    print("{} sec per sample".format((t1 - t0) / (100 * FLAGS.batch_size)))
-                    if FLAGS.debug:
-                        return
-        print("finished")
-        train_writer.close()
-        sess.close()
-
-    def test_model(self, sess=None, model_dir=None):
-        config = tf.ConfigProto(allow_soft_placement=True)
-        config.gpu_options.per_process_gpu_memory_fraction = 0.5
-        if sess is None:
-            sess = tf.Session(config=config)
-
-        saver = tf.train.Saver()
-        test_writer = tf.summary.FileWriter(
-            "{}/{}_{}".format(FLAGS.log_dir, "Validation: " + time.strftime("%H:%M:%S"), FLAGS.learning_rate),
-            sess.graph)
-        sess.run(tf.local_variables_initializer())
-        print("restoring {}".format(model_dir))
-        saver.restore(sess, model_dir)
-        total_loss = 0
-        for i in range(0, 1000):
-                loss, summaries, render_summary = sess.run(
-                [self.loss, self.summaries, self.render_summary])
-                [test_writer.add_summary(s, i) for s in summaries]
-                [test_writer.add_summary(s, i) for s in render_summary]
-                total_loss += loss
-                test_writer.flush()
-
-        test_writer.close()
-        sess.close()
-        return total_loss
+    def validate(self):
+        validation_loss = self.loss
+        self.val_loss, self.val_update = tf.metrics.mean(validation_loss)
+        self.validation_summary = tf.summary.merge([tf.summary.scalar("Validation Loss", self.val_loss)])
