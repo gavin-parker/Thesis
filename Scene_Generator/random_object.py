@@ -116,14 +116,16 @@ class SceneGenerator:
                                                                                 '{}.png'.format(name))
 
 
-        self.scene.use_nodes = True
+        self.scene.use_nodes = False
         bpy.ops.render.render(write_still=True)
         self.scene.use_nodes = False
         self.surface_normals()
+        bpy.context.scene.render.layers["RenderLayer"].use_sky = False
         bpy.data.scenes['Scene'].render.filepath = "{}/renders/norms/{}".format(scene_dir,
                                                                          '{}.png'.format(name))
-        bpy.ops.render.render(write_still=True)
 
+        bpy.ops.render.render(write_still=True)
+        bpy.context.scene.render.layers["RenderLayer"].use_sky = True
     def light_scene(self):
         envmap = random.choice(self.envmaps)
         bpy.data.images.load(envmap, check_existing=False)

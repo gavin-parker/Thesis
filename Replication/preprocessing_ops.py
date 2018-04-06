@@ -8,6 +8,9 @@ HDR_MIN = 0.0
 HDR_MAX = 1.0
 EPS = 1e-12
 
+def get_input_size(file):
+    image_file = cv2.imread(file, cv2.IMREAD_UNCHANGED)
+    return image_file.shape
 
 def zero_mask(image):
     flat = tf.reshape(image, [-1, 3])
@@ -17,6 +20,41 @@ def zero_mask(image):
     mask = tf.to_float(mask)
     return tf.reshape(mask, tf.shape(image))
 
+def get_stereo_dataset(dir, batch_size):
+    left_files, right_files, env_files = stereo_stream(dir)
+    envmap = env_files[0].map(
+        lambda x: preprocess_hdr(x, env_files[1], output_size=64),
+        num_parallel_calls=4)
+    left = left_files[0].map(
+        lambda x: preprocess_color(x, left_files[1], double_precision=True),
+        num_parallel_calls=4)
+    right = right_files[0].map(
+        lambda x: preprocess_color(x, right_files[1], double_precision=True),
+        num_parallel_calls=4)
+
+    dataset = tf.data.Dataset.zip((left, right, envmap)).repeat().batch(batch_size).prefetch(
+        buffer_size=2 * batch_size)
+    return dataset
+
+def get_dematerial_dataset(dir, batch_size):
+    right_files, norm_files, env_files = dematerial_stream(dir)
+    background = right_files.map(
+        lambda x: preprocess_color(x, input_shape=[128, 128, 3], double_precision=True),
+        num_parallel_calls=4)
+    envmap = env_files.map(
+        lambda x: preprocess_hdr(x, 64, double_precision=True, use_lab=False),
+        num_parallel_calls=4)
+    reflectance = norm_files.map(
+        lambda x: preprocess_color(x, [128, 128, 3], double_precision=True),
+        num_parallel_calls=4)
+
+    dataset = tf.data.Dataset.zip((reflectance, background, envmap)).shuffle(128).repeat().batch(
+        FLAGS.batch_size).prefetch(
+        buffer_size=2 * FLAGS.batch_size)
+    iterator = dataset.make_one_shot_iterator()
+    batch = iterator.get_next()
+
+    return batch
 
 def format_image(image, in_shape, out_size, mask_alpha=False, normalize=False):
     alpha = []
@@ -56,7 +94,8 @@ def unit_norm(image, channels=3):
 
 
 def preprocess_color(filename, input_shape=[256, 256, 3], double_precision=False):
-    image = tf.image.decode_image(tf.read_file(filename), channels=3, name="decode_color")
+    file = tf.read_file(filename, name="read_image")
+    image = tf.image.decode_png(file, channels=3, name="decode_color")
     if not double_precision:
         image = tf.cast(format_image(image, input_shape, 256), tf.float16)
     else:
@@ -95,33 +134,11 @@ def depth_to_normals(image):
     pretty_norms *= 255
     cv2.imshow('norms', pretty_norms.astype(np.uint8))
     cv2.waitKey(10000)
-    print(norms)
 
 
-
-"""
-Tensorflow implementation of http://www.graphics.cornell.edu/%7Ebjw/rgbe/rgbe.c for RGBE to float decoding
-
-rgbe2float(float *red, float *green, float *blue, unsigned char rgbe[4])
-{
-  float f;
-
-  if (rgbe[3]) {   /*nonzero pixel*/
-    f = ldexp(1.0,rgbe[3]-(int)(128+8));
-    *red = rgbe[0] * f;
-    *green = rgbe[1] * f;
-    *blue = rgbe[2] * f;
-  }
-  else
-    *red = *green = *blue = 0.0;
-}
-
-"""
-
-
-def preprocess_hdr(filename, input_size=32, output_size=64):
+def preprocess_hdr(filename, input_shape=[32,32,3], output_size=64):
     rgbe_image = tf.py_func(parse_hdr, [filename], tf.float32)
-    image = tf.reshape(rgbe_image, [input_size, input_size, 3])
+    image = tf.reshape(rgbe_image, input_shape)
     image = tf.image.resize_images(image, [output_size, output_size])
     return image
 
@@ -152,22 +169,47 @@ def preprocess_gt(filename, double_precision=False):
 
 def image_stream(path):
     files = sorted(glob.glob(path))
-    train_count = len(files) * 0.9
-    training = files[:train_count]
+    train_count = int(len(files) * 0.9)
+    training = files[0:train_count]
     validation = files[train_count+1:-1]
     return tf.data.Dataset.from_tensor_slices(
-        tf.convert_to_tensor(training), dtype=tf.string), tf.data.Dataset.from_tensor_slices(
-        tf.convert_to_tensor(validation), dtype=tf.string)
+        tf.convert_to_tensor(training)), tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(validation))
 
+
+def dematerial_stream(dir):
+    right_files = sorted(glob.glob("{}/right/*.png".format(dir)))
+    norm_files = sorted(glob.glob("{}/norms/*.png".format(dir)))
+    envmap_files = sorted(glob.glob("{}/envmaps/*.hdr".format(dir)))
+    right_shape = get_input_size(right_files[0])
+    norm_shape = get_input_size(norm_files[0])
+    envmap_shape = get_input_size(envmap_files[0])
+    assert len(right_files) == len(envmap_files)
+    assert right_shape == norm_shape
+    norms = tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(norm_files, dtype=tf.string))
+    right = tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(right_files, dtype=tf.string))
+    envmaps = tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(envmap_files, dtype=tf.string))
+    return (right,right_shape), (norms,norm_shape), (envmaps, envmap_shape)
 
 def stereo_stream(dir):
+    left_files = sorted(glob.glob("{}/left/*.png".format(dir)))
+    right_files = sorted(glob.glob("{}/right/*.png".format(dir)))
+    envmap_files = sorted(glob.glob("{}/envmaps/*.hdr".format(dir)))
+    left_shape = get_input_size(left_files[0])
+    right_shape = get_input_size(right_files[0])
+    envmap_shape = get_input_size(envmap_files[0])
+    assert len(left_files) == len(right_files) == len(envmap_files)
+    assert left_shape == right_shape
     left = tf.data.Dataset.from_tensor_slices(
-        tf.convert_to_tensor(sorted(glob.glob("{}/renders/left/*.png".format(dir))), dtype=tf.string))
+        tf.convert_to_tensor(left_files, dtype=tf.string))
     right = tf.data.Dataset.from_tensor_slices(
-        tf.convert_to_tensor(sorted(glob.glob("{}/renders/right/*.png".format(dir))), dtype=tf.string))
+        tf.convert_to_tensor(right_files, dtype=tf.string))
     envmaps = tf.data.Dataset.from_tensor_slices(
-        tf.convert_to_tensor(sorted(glob.glob("{}/renders/envmaps/*.hdr".format(dir))), dtype=tf.string))
-    return left, right, envmaps
+        tf.convert_to_tensor(envmap_files, dtype=tf.string))
+    return (left,left_shape), (right,right_shape), (envmaps, envmap_shape)
 
 
 # based on https://github.com/torch/image/blob/9f65c30167b2048ecbe8b7befdc6b2d6d12baee9/generic/image.c

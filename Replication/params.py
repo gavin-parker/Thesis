@@ -4,6 +4,7 @@ tf.app.flags.DEFINE_float('learning-rate', 1.6e-7, 'Learning Rate. (default: %(d
 tf.app.flags.DEFINE_integer('max-epochs', 50, 'Number of epochs to run. (default: %(default)d)')
 tf.app.flags.DEFINE_integer('batch-size', 4, 'BatchSize. (default: %(default)d)')
 tf.app.flags.DEFINE_boolean('debug', False, 'Enable debug options. (default: %(default)d)')
+tf.app.flags.DEFINE_boolean('profile', False, 'Enable profile options. (default: %(default)d)')
 tf.app.flags.DEFINE_boolean('validate', False, 'Operate on validation set. (default: %(default)d)')
 tf.app.flags.DEFINE_boolean('test', False, 'Run test renders. (default: %(default)d)')
 tf.app.flags.DEFINE_boolean('real', False, 'Operate on real data set. (default: %(default)d)')

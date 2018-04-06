@@ -1,11 +1,8 @@
 import tensorflow as tf
-import os
 import preprocessing_ops as preprocessing
 import layers
-import time
 from rendering import renderer as rend
 from params import FLAGS
-import glob
 
 """ Convolutional-Deconvolutional model for extracting reflectance maps from input images with normals.
     Extracts sparse reflectance maps, with the CNN performing data interpolation"""
@@ -18,34 +15,28 @@ regularizer = tf.contrib.layers.l1_regularizer(scale=FLAGS.weight_decay)
 class Model:
     global_step = tf.Variable(0, trainable=False)
     learning_rate = tf.train.exponential_decay(FLAGS.learning_rate, global_step, 1, 0.95, staircase=False)
-
-    left_files, right_files, env_files = preprocessing.stereo_stream(FLAGS.train_dir)
+    validation_step = tf.placeholder_with_default(False, [])
+    train_dataset = preprocessing.get_stereo_dataset(FLAGS.train_dir, FLAGS.batch_size)
+    val_dataset = preprocessing.get_stereo_dataset(FLAGS.val_dir, FLAGS.batch_size)
+    iter_train_handle = train_dataset.make_one_shot_iterator().string_handle()
+    iter_val_handle = val_dataset.make_one_shot_iterator().string_handle()
+    handle = tf.placeholder(tf.string, shape=[])
 
     def __init__(self):
         with tf.device('/cpu:0'):
-            envmap = self.env_files.map(
-                lambda x: preprocessing.preprocess_hdr(x, input_size=32, output_size=64),
-                num_parallel_calls=4)
-            left = self.left_files.map(
-                lambda x: preprocessing.preprocess_color(x, [512, 512, 3], double_precision=True),
-                num_parallel_calls=4)
-            right = self.right_files.map(
-                lambda x: preprocessing.preprocess_color(x, [512, 512, 3], double_precision=True),
-                num_parallel_calls=4)
 
-            dataset = tf.data.Dataset.zip((left, right, envmap)).repeat().batch(FLAGS.batch_size).prefetch(
-                buffer_size=2 * FLAGS.batch_size)
-            iterator = dataset.make_one_shot_iterator()
-            input_batch = iterator.get_next()
-            left_image = input_batch[0]
-            right_image = input_batch[1]
-            gt = input_batch[2]
+            iterator = tf.data.Iterator.from_string_handle(
+                self.handle, self.train_dataset.output_types, self.train_dataset.output_shapes)
+            train_batch = iterator.get_next()
+            left_image = train_batch[0]
+            right_image = train_batch[1]
+            gt = train_batch[2]
         with tf.device('/gpu:0'):
             gt_norm = preprocessing.normalize_hdr(gt)
             left_lab = tf.map_fn(preprocessing.rgb_to_lab, left_image)
             right_lab = tf.map_fn(preprocessing.rgb_to_lab, right_image)
             gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
-            prediction = self.inference((left_image, right_image, gt_lab))
+            prediction = self.inference((left_lab, right_lab, gt_lab))
             self.diff = tf.abs(tf.reduce_max(gt_lab) - tf.reduce_max(prediction))
             self.loss_calculation(prediction, gt_lab)
             self.train_op = self.optimize()
@@ -61,8 +52,8 @@ class Model:
             render_similarities = tf.summary.merge([tf.summary.scalar('Render Similarity', render_sim),
                                                     tf.summary.scalar('Envmap Similarity', envmap_sim)])
             self.render_summary = [render_similarities, render_image_summaries]
-
             self.gt = gt
+            self.validate()
         return
 
     """Calculate a prediction RM and intermediary sparse RM"""
@@ -122,84 +113,7 @@ class Model:
         img_summary = tf.summary.merge(summaries)
         return img_summary, scalar_summary
 
-    """Train the model with the settings provided in FLAGS"""
-
-    def train(self, sess=None):
-
-        config = tf.ConfigProto(allow_soft_placement=True)
-        config.gpu_options.per_process_gpu_memory_fraction = 0.95
-
-        if sess is None:
-            sess = tf.Session(config=config)
-        sess.run(tf.local_variables_initializer())
-        sess.run(tf.global_variables_initializer())
-
-        options, run_metadata = None, None
-        if FLAGS.debug:
-            options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
-            run_metadata = tf.RunMetadata()
-        tf.train.start_queue_runners(sess=sess)
-        train_writer = tf.summary.FileWriter(
-            "{}/{}_{}_deep".format(FLAGS.log_dir, time.strftime("%H:%M:%S"), FLAGS.learning_rate),
-            sess.graph)
-
-        saver = tf.train.Saver()
-        if FLAGS.fine_tune:
-            saver.restore(sess, FLAGS.test_model_dir)
-        epoch_size = len(glob.glob("{}/renders/left/*.png".format(FLAGS.train_dir)))
-        epoch_size /= FLAGS.batch_size
-        print("beginning training with learning rate: {}".format(FLAGS.learning_rate))
-        print("Epoch size: {}".format(epoch_size))
-        print("Batch size: {}".format(FLAGS.batch_size))
-        # generate batches and run graph
-        for epoch in range(0, FLAGS.max_epochs):
-            t0 = time.time()
-            for i in range(0, epoch_size):
-                sess.run([self.loss, self.train_op], options=options,
-                         run_metadata=run_metadata)
-                if i % 100 == 0:
-                    err, summaries = sess.run(
-                        [self.loss, self.summaries], options=options,
-                        run_metadata=run_metadata)
-                    t1 = time.time()
-                    [train_writer.add_summary(s, epoch * epoch_size + i) for s in summaries]
-                    saver.save(sess, os.path.join("stereo_graph_deep", 'model'))
-                    if FLAGS.debug:
-                        train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
-                                                      global_step=None)
-                    train_writer.flush()
-                    print("Loss:{}".format(err))
-                    print("{} sec per sample".format((t1 - t0) / (100 * FLAGS.batch_size)))
-                    if FLAGS.debug:
-                        return
-        print("finished")
-        train_writer.close()
-        sess.close()
-
-    def test_model(self, sess=None, model_dir=None):
-        config = tf.ConfigProto(allow_soft_placement=True)
-        config.gpu_options.per_process_gpu_memory_fraction = 0.5
-        if sess is None:
-            sess = tf.Session(config=config)
-
-        saver = tf.train.Saver()
-        test_writer = tf.summary.FileWriter(
-            "{}/{}_{}".format(FLAGS.log_dir, "Validation: " + time.strftime("%H:%M:%S"), FLAGS.learning_rate),
-            sess.graph)
-        sess.run(tf.local_variables_initializer())
-        print("restoring {}".format(model_dir))
-        saver.restore(sess, model_dir)
-        total_loss = 0
-        epoch_size = len(glob.glob("{}/left/*.png".format(FLAGS.val_dir)))
-        epoch_size /= FLAGS.batch_size
-        for i in range(0, epoch_size):
-            loss, summaries, render_summary = sess.run(
-                [self.loss, self.summaries, self.render_summary])
-            [test_writer.add_summary(s, i) for s in summaries]
-            [test_writer.add_summary(s, i) for s in render_summary]
-            total_loss += loss
-            test_writer.flush()
-
-        test_writer.close()
-        sess.close()
-        return total_loss
+    def validate(self):
+        validation_loss = self.loss
+        self.val_loss, self.val_update = tf.metrics.mean(validation_loss)
+        self.validation_summary = tf.summary.merge([tf.summary.scalar("Validation Loss", self.val_loss)])

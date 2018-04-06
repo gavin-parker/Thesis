@@ -26,10 +26,6 @@ class Model:
         synth_path = 'real'
     train_path = FLAGS.train_dir + "{}/{}".format(synth_path, train_path)
     print(train_path)
-    bg_files, bg_val = preprocessing.image_stream("{}/background/*.png".format(train_path))
-    envmap_files, env_val = preprocessing.image_stream("{}/envmap_latlong/*.hdr".format(train_path))
-    reflectance_files, refl_val = preprocessing.image_stream("{}/reflectanceMap_latlong/*.png".format(train_path))
-
     def __init__(self):
         with tf.device('/cpu:0'):
             training_batch = self.get_dataset_iterators((self.bg_files, self.envmap_files, self.reflectance_files))
@@ -63,24 +59,7 @@ class Model:
             self.gt = gt
         return
 
-    def get_dataset_iterators(self, (bg_files, envmap_files, reflectance_files)):
-        background = self.bg_files.map(
-            lambda x: preprocessing.preprocess_color(x, input_shape=[128, 128, 3], double_precision=True),
-            num_parallel_calls=4)
-        envmap = self.envmap_files.map(
-            lambda x: preprocessing.preprocess_hdr(x, 64, double_precision=True, use_lab=False),
-            num_parallel_calls=4)
-        reflectance = self.reflectance_files.map(
-            lambda x: preprocessing.preprocess_color(x, [128, 128, 3], double_precision=True),
-            num_parallel_calls=4)
 
-        dataset = tf.data.Dataset.zip((reflectance, background, envmap)).shuffle(128).repeat().batch(
-            FLAGS.batch_size).prefetch(
-            buffer_size=2 * FLAGS.batch_size)
-        iterator = dataset.make_one_shot_iterator()
-        batch = iterator.get_next()
-
-        return batch
 
     """Calculate a prediction RM and intermediary sparse RM"""
 

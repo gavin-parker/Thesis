@@ -60,10 +60,10 @@
 % by simply commenting out the associated macro.
 
 \tableofcontents
-\listoffigures
-\listoftables
-\listofalgorithms
-\lstlistoflistings
+%\listoffigures
+%\listoftables
+%\listofalgorithms
+%\lstlistoflistings
 
 % The following sections are part of the front matter, but are not generated
 % automatically by LaTeX; the use of \chapter* means they are not numbered.
@@ -73,11 +73,11 @@
 \chapter*{Executive Summary}
 
 \noindent
-In this paper I present a system for estimating the lighting in photographs and video streams of real scenes,  to be used for the realistic rendering of virtual objects and characters. We make use of stereo views of an object to construct a lighting prediction without the need for known geometry.
+In this paper I present a system for estimating the lighting in photographs and video streams of real scenes, that improves on previous work by eliminating the need for explicit geometry estimation or reflectance mapping steps. We make use of similar features in stereo views of an object to construct a lighting prediction without the need for known geometry, which can then be used to render superimposed objects with realistic illumination parameters.
 \newline
 Augmented Reality is a growing topic in computer graphics and vision, that involves superimposing synthetic information and images on real scenes, often with the aim of giving the illusion that the object is part of the real world. Current AR solutions use geometry estimation to correctly place and scale the virtual objects to fit into the real scene, but do very little to render those objects with other scene intrinsics. Our system uses a Siamese Convolutional Neural Network to extract the lighting intensities and directions from objects within a scene, such that virtual objects can be re-rendered with realistic lighting parameters on-the-fly.
 
-The appearance of an object is made up of its material properties, its geometry and the lighting conditions, making estimation of any one of these factors from a single image a difficult task. Previous work has tackled lighting estimation by treating geometry estimation as a separate task, making use of depth cameras or known geometry. I have produced a CNN that relies on the relative invariance of these 3 unknowns with respect to time, by attempting to predict illumination from a series of views of an object. This represents an improvement in practicality over the previous work and takes the technique a step closer to being deployed on mobile devices.
+The appearance of an object is made up of its material properties, its geometry and the lighting conditions, making estimation of any one of these factors from a single image a difficult task. Previous work has tackled lighting estimation by treating geometry estimation as a separate problem, making use of depth cameras or known geometry. I have produced a CNN that relies on the relative invariance of these 3 unknowns with respect to time, by attempting to predict illumination from a series of views of an object. By using a Siamese approach, with shared weights, the Neural Network is able to identify similar features \todo{/position?} in multiple views of the scene, and infer depth. This represents an improvement in practicality over the previous work and takes the technique a step closer to being deployed on mobile devices.
 
 \begin{quote}
 My research hypothesis is that a siamese CNN provided with RGB stereo images, will achieve similar results to Stamatios Georgoulis et al. while eliminating the need for explicit geometry estimation or the use of a depth camera.
@@ -93,24 +93,10 @@ To test my hypothesis I performed research and implementation as follows:
 \item Created a new siamese architecture to encode geometry from stereo images and estimate lighting conditions.
 \item Assessed the quality of these networks with a suite of image similarity benchmarks.
 \end{itemize}
-
-% -----------------------------------------------------------------------------
-
 \chapter*{Supporting Technologies}
 
 {\bf A compulsory section, of at most $1$ page}
 \vspace{1cm} 
-
-\noindent
-This section should present a detailed summary, in bullet point form, 
-of any third-party resources (e.g., hardware and software components) 
-used during the project.  Use of such resources is always perfectly 
-acceptable: the goal of this section is simply to be clear about how
-and where they are used, so that a clear assessment of your work can
-result.  The content can focus on the project topic itself (rather,
-for example, than including ``I used \mbox{\LaTeX} to prepare my 
-dissertation''); an example is as follows:
-
 \begin{quote}
 \noindent
 \begin{itemize}
@@ -136,10 +122,12 @@ dissertation''); an example is as follows:
 \begin{quote}
 \noindent
 \begin{tabular}{lcl}
-AR                 &:     & Augmented Reality                                         \\
-CNN                 &:     & Convolutional Neural Network                             \\
-HDR					&:		& High Dynamic Range									\\
-SSIM				&:		& Structural Similarity
+AR                 &:     & Augmented Reality                                         	\\
+CNN                 &:     & Convolutional Neural Network                             	\\
+HDR					&:		& High Dynamic Range										\\
+SSIM				&:		& Structural Similarity										\\
+sRGB				&:		& standard Reg Green Blue									\\
+BR(S)DF				&:		& Bidirectional Reflectance(Scattering) Distribution Function
 \end{tabular}
 \end{quote}
 
@@ -151,12 +139,12 @@ SSIM				&:		& Structural Similarity
 \vspace{1cm} 
 
 \noindent
-It is common practice (although totally optional) to acknowledge any
-third-party advice, contribution or influence you have found useful
-during your work.  Examples include support from friends or family, 
-the input of your Supervisor and/or Advisor, external organisations 
-or persons who  have supplied resources of some kind (e.g., funding, 
-advice or time), and so on.
+% It is common practice (although totally optional) to acknowledge any
+%third-party advice, contribution or influence you have found useful
+%during your work.  Examples include support from friends or family, 
+%the input of your Supervisor and/or Advisor, external organisations 
+%or persons who  have supplied resources of some kind (e.g., funding, 
+%dvice or time), and so on.
 
 % =============================================================================
 
@@ -183,18 +171,19 @@ advice or time), and so on.
 \section{Computer Graphics and Lighting}
 
 \noindent
-Traditional computer graphics involves creating virtual scenes, with geometry represented as a series of surfaces in 3D space. Each surface is given properties such as texture and material, and virtual lights are placed in the scene with given intensities and colors. Given the position and size of a virtual camera images can be produced by calculating the resultant color at every point on a the screen, produced by a combination of the lighting and surface properties. This can be achieved through either Raytracing which involves simulating the paths of all light rays that meet the camera within the scene. While physically accurate this is a slow process that is impractical for real-time rendering. In real-time rendering tasks a process called Rasterisation is used, where the geometry is culled so that only surfaces in view of the camera need to be considered. This, in combination with lighting and material approximations, makes it possible for convincing characters and objects to be rendered at 60 frames per second.
+Traditional computer graphics involves creating virtual scenes, with geometry represented as a series of surfaces in 3D space. Each surface is given properties such as texture and material, and virtual lights are placed in the scene with given intensities and colors. Given the position and size of a virtual camera images can be produced by calculating the resultant color at every point on a the screen, produced by a combination of the lighting and surface properties. This can be achieved through Raytracing which involves simulating the paths of all light rays that meet the camera within the scene. While physically accurate this is a slow process that is impractical for real-time rendering. In real-time rendering tasks a process called Rasterisation is used, where the geometry is culled so that only surfaces in view of the camera need to be considered. This, in combination with lighting and material approximations, makes it possible for convincing characters and objects to be rendered at 60 frames per second.
 \newline
-The material of a surface defines how it reflects or absorbs incoming light, and as a result characterizes its colour under different lighting conditions. In the physical world, no surface is perfectly even on a microscopic scale. When an incoming photon reaches a surface, its angle of reflection is actually dictated by whatever atoms it collides with, making per-photon reflections very difficult to predict even for very smooth surfaces. Furthermore many photons are actually absorbed by the material depending on it's colour properties. However, visible light is made up of a vast supply of photons, which can even be considered as a wave with properties like wavelength or amplitude. If we consider light on a macroscopic scale it is far easier to predict and represent. We often use the concept of 'colour' to refer to the wavelengths of light which an object reflects, where lighter objects reflect more wavelengths and darker objects reflect fewer and absorb more photons. It is essential to note that the colour something takes on is actually representative of the wavelengths of light that it reflects towards the light sensing device, be it an eye or a camera. Very smooth objects such as mirrors reflect most wavelengths, at very predictable angles, and so take on different colours depending on the viewpoint. These behaviours are captured in the 'Rendering Equation', 
+\todo{Maybe unnecessary}
+The material of a surface defines how it reflects or absorbs incoming light, and as a result characterizes its colour under different lighting conditions. In the physical world, no surface is perfectly even on a microscopic scale. When an incoming photon reaches a surface, its angle of reflection is actually dictated by the shape collides with, making per-photon reflections very difficult to predict even for very smooth surfaces. Furthermore many photons are actually absorbed by the material depending on it's colour properties and the lights wavelength. However, visible light is made up of a vast supply of photons, which can even be considered as a wave with properties like wavelength or amplitude. If we consider light on a macroscopic scale it is far easier to predict and represent. We often use the concept of 'colour' to refer to the wavelengths of light which an object reflects, where lighter objects reflect more wavelengths and darker objects reflect fewer and absorb more photons. It is essential to note that the colour something takes on is actually representative of the wavelengths of light that it reflects towards the light sensing device, be it an eye or a camera. Very smooth objects such as mirrors reflect most wavelengths, at very predictable angles, and so take on different colours depending on the viewpoint. These behaviours are captured in the 'Rendering Equation', 
 \[L_0(x, w_0, lambda) = L_e(x, w_0, lambda) + \int_{ohm}{f_r(x, w_i, w_o,lambda)L_i(x, w_i, lambda)dw_i}\],
  \todo{Simplify this}
 which Computer Graphics attempts to approximate.
 \newline
-In Computer Graphics, materials are often referred to as having 'Diffuse' and 'Specular' properties, which capture the aforementioned behaviour. This is in fact an approximation that allows for the efficient rendering of surfaces, though does not capture the light behaviour perfectly. 'Diffuse' refers to the wavelength, or colour, of light that is reflected off a surface equally in every direction. This can be thought of as the 'base colour', that is somewhat invariant to the viewpoint of the observer. 'Specularity' refers to how reflective an object is, and is often used to approximate the light being reflected directly from a light source towards the observer. The 'Phong Shading' model combines these two elements to roughly represent a variety of materials, under the assumption that reflective materials have a dominant component that can be modelled as a mirror. For example an unlaquered wooden panel will be very unreflective and may contain no 'specular' component at all as its colour remains fairly consistent when observed from every direction. On the other hand a plastic ball will have a dominant colour but also reflect a lot of the incoming light, which is modelled as a combination of the incoming light direction and the surface angle. Modern Raytracing makes use of a far more accurate model called a Bidirectional Reflectance Distribution Function, which defines a probability distribution function. This function gives the probablity of an incoming photon with angle of incidence i, reflecting with an angle of incidence j. Over many photons this is able to accurately capture the reflective behaviour of a surface, and is often used in combination with properties like 'Albedo' and 'Subsurface Scattering' to result in an almost photorealistic surface.
+In Computer Graphics, materials are often referred to as having 'Diffuse' and 'Specular' properties, which capture the aforementioned behaviour. This is in fact an approximation that allows for the efficient rendering of surfaces, though does not capture the light behaviour perfectly. 'Diffuse' refers to the wavelength, or colour, of light that is reflected off a surface equally in every direction. This can be thought of as the 'base colour', that is somewhat invariant to the viewpoint of the observer. A material that is entirely diffuse is often reffered to as 'Lambertian'. 'Specularity' refers to how reflective an object is, and is often used to approximate the light being reflected directly from a light source towards the observer. The 'Phong Shading' model combines these two elements to roughly represent a variety of materials, under the assumption that reflective materials have a dominant component that can be modelled as a mirror. For example an unlaquered wooden panel will be very unreflective and may contain no 'specular' component at all as its colour remains fairly consistent when observed from every direction. On the other hand a plastic ball will have a dominant colour but also reflect a lot of the incoming light, which is modelled as a combination of the incoming light direction and the surface angle. Modern Raytracing makes use of a far more accurate model called a Bidirectional Reflectance Distribution Function, which defines a probability distribution function. This function gives the probablity of an incoming photon with angle of incidence i, reflecting with an angle of incidence j. Over many photons this is able to accurately capture the reflective behaviour of a surface, and is often used in combination with properties like 'Albedo' and 'Subsurface Scattering' to result in an almost photorealistic surface.
 \newline
-A product of the reflective nature of surfaces results in 'indirect lighting', an effect that is extremely difficult to capture in real-time rendering. Often when rendering is expensive it is appropriate to approximate the lighting in the scene to contain only 'direct' and 'environment' lighting. In this approximation, all objects are lit by the environment light, which represents an approximate light in all directions at all points in the scene. This is very cheap to render, as provided there is no direct lighting, all points on a surface recieve a constant amount of light. Direct lighting refers to lighting objects based on their proximimity to a chosen light source, ignoring shadows that would require calculating and intersections between the light and the surface. Unfortunately this approximation results in very unconvincing images as in reality the light at a point is made up of all the photons being reflected from that point. The Phong shading model ignores the effect of photons being reflected many times within a scene, and so misses much of the subtle detail. A common way of calculating indirect lighting is 'Global Illumination', which involves tracing the paths of many light rays from light sources as they are reflected within the scene. To save computation is is often performed in reverse, where rays are drawn from the camera and reflected a constant number of times. The illumination of the final reflection is then computed from the direct lighting, which is then passed between the reflected surfaces to achieve the approximate lighting at the original scene point. This is a very expensive procedure and innapropriate for real-time rendering, where other approximations can be used. One such approximation is an 'Environment Map' or 'Environment Probe', which is the precomputed representation of all the incident light at a single point. This can be thought of as a panorama image at a single point, capturing both the direct and indirect light. While this cannot be used for every point in the scene, it is fair to assume that nearby objects have similar incident lighting. A common application is to use a large environment map to represent the lighting in outdoor scenes, where the main light source is the sky. This results in a vast improvement over a single Environment/Direct light combination, while still being inexpensive to compute. Furthermore, multiple environment maps can be blended together to roughly represent the lighting across larger scenes, often in combination with other approximations such as baked lighting.
+A product of the reflective nature of surfaces results in 'indirect lighting', an effect that is extremely difficult to capture in real-time rendering. The incoming light on a surface is made of photons arriving directly from light sources as well as photons being reflected from other surfaces. Often when rendering is expensive it is appropriate to approximate the lighting in the scene to contain only 'direct' and 'environment' lighting. In this approximation, all objects are lit by the environment light, which represents an approximate light in all directions at all points in the scene. This is very cheap to render, as provided there is no direct lighting, all points on a surface recieve a constant amount of light. Direct lighting refers to lighting objects based on their proximimity to a given light source, ignoring shadows that would require calculating and intersections between the light and the surface. Unfortunately this approximation results in very unconvincing images as in reality the light at a point is made up of all the photons being reflected from that point. The Phong shading model ignores the effect of photons being reflected many times within a scene, and so misses much of the subtle detail. A common way of calculating indirect lighting is 'Global Illumination', which involves tracing the paths of many light rays from light sources as they are reflected within the scene. To save computation is is often performed in reverse, where rays are drawn from the camera and reflected a constant number of times. The illumination of the final reflection is then computed from the direct lighting, which is then passed between the reflected surfaces to achieve the approximate lighting at the original scene point. This is a very expensive procedure and innapropriate for real-time rendering, where other approximations can be used. One such approximation is an 'Environment Map' or 'Environment Probe', which is the precomputed representation of all the incident light at a single point. This can be thought of as a panorama image at a single point, capturing both the direct and indirect light. While this cannot be used for every point in the scene, it is fair to assume that nearby objects have similar incident lighting. A common application is to use a large environment map to represent the lighting in outdoor scenes, where the main light source is the sky. This results in a vast improvement over a single Environment/Direct light combination, while still being inexpensive to compute. Furthermore, multiple environment maps can be blended together to roughly represent the lighting across larger scenes, often in combination with other approximations such as baked lighting.
 \newline
-A benefit on 'Environment Maps' is that rather than being computed, they can be captured from real-world data. This is a technique often used in films to apply the lighting from a set to virtual additions. This is achieved by taking photographs of a reflective sphere under different exposures to capture a range of lighting intensities. These images can then be composited to capture the range of light in a single format. By using a sphere, which has known geometry, it is easy to invert the image into a High Dynamic Range panorama. It is essential to use an HDR format, as RGB captures only a very narrow range of light.
+A benefit on 'Environment Maps' is that rather than being computed, they can be captured from real-world data. This is a technique often used in films to apply the lighting from a set to virtual additions. This is achieved by taking photographs of a reflective sphere under different exposures to capture a range of lighting intensities. These images can then be composited to capture the range of light in a single format. By using a sphere, which has known geometry, it is easy to invert the image into a High Dynamic Range panorama. It is essential to use an HDR format, as RGB captures only a very narrow range of light intensity.
 \section{Augmented Reality}
 Augmented Reality is an extension of computer graphics, where virtual objects are rendered on a real video stream to appear as if they are part of the original scene. This creates additional challenges as many of the parameters that are used in computer graphics are not available. While the material and geometry of the added objects is known, the geometry and lighting of the real scene must either be estimated, or manually recorded beforehand. The latter option tends to be used in films, where the layout of the scene and camera movements are known beforehand. In this case the geometry of the scene can be measured and recreated in 3D modelling or CAD software for a virtual approximation. Similarly, the lighting at points in the scene can be captured using a light probe, often a reflective sphere, and taking composite photographs at different exposures. This process results in an 'Environment Map' which captures the color and intensity of all the incoming light at a single point. With this data, additional characters can be rendered entirely in the virtual space, interacting with the approximated geometry and being lit by blended combinations of light probes across the scene. Provided that the virtual camera moves exactly as the real camera, the added object can be masked and overlaid onto the original video of the scene.
 \newline
@@ -226,7 +215,7 @@ The difficulty in the application of CNNs often lies in the 'training' stage; wh
 \chapter{Technical Background}
 \label{chap:technical}
 \section{Commercial Lighting Solutions}
-Lighting solutions in the film\&TV industry tend to involve precalculating or precapturing the lighting in a scene before adding virtual characters. In the film 'I,Robot', Digital Domain created a semi-automated system for capturing HDR environment maps using a rotating fisheye-lens camera. Once placed, the camera was able to take shots at multiple angles and at a range of exposures, before compositing the shots together to produce a usable HDR lighting map. Often these HDR maps are not used in isolation, but along with footage of a proxy for the virtual addition, so the filmmakers can qualitatively measure how the materials react with the set lighting. These techniques allow filmmakers to capture an approximation of lighting with limited camera equipment and makes it easier to create complex panning and dolly shots of scenes with real and virtual elements, which would otherwise require a green-screen. Over time, camera equipment has become more advanced and it is faster to take high quality shots at multiple exposures. As a result, later films such as 'The Curious Case of Benjamin Button' are able to utilise multiple lighting probes to illuminate characters. By taking lighting samples across the scene, virtual characters can then be lit partly according to their position in the world by blending environment maps together. This creates a more convincing final render as the approximate indirect lighting from nearby objects becomes more apparent. The downside of these hollywood techniques is that the lighting data must be captured beforehand for every environment used. This is a long, laborious and expensive process as the cameras required to take accurate shots at different exposures need to be extremely accurate to produce correct composites. It is also important to note that compositing images is difficult and also requires human input to match black levels, tones and camera properties that are hard to automate.
+Lighting solutions in the film\&TV industry tend to involve precalculating or precapturing the lighting in a scene before adding virtual characters. In the film 'I,Robot', Digital Domain \footcite{https://www.digitaldomain.com/work/i-robot/} \todo{Better references for this commercial stuff} created a semi-automated system for capturing HDR environment maps using a rotating fisheye-lens camera. Once placed, the camera was able to take shots at multiple angles and at a range of exposures, before compositing the shots together to produce a usable HDR lighting map. Often these HDR maps are not used in isolation, but along with footage of a proxy for the virtual addition, so the filmmakers can qualitatively measure how the materials react with the set lighting. These techniques allow filmmakers to capture an approximation of lighting with limited camera equipment and makes it easier to create complex panning and dolly shots of scenes with real and virtual elements, which would otherwise require a green-screen. Over time, camera equipment has become more advanced and it is faster to take high quality shots at multiple exposures. As a result, later films such as 'The Curious Case of Benjamin Button' are able to utilise multiple lighting probes to illuminate characters. By taking lighting samples across the scene, virtual characters can then be lit partly according to their position in the world by blending environment maps together. This creates a more convincing final render as the approximate indirect lighting from nearby objects becomes more apparent. The downside of these hollywood techniques is that the lighting data must be captured beforehand for every environment used. This is a long, laborious and expensive process as the cameras required to take accurate shots at different exposures need to be extremely accurate to produce correct composites. It is also important to note that compositing images is difficult and also requires human input to match black levels, tones and camera properties that are hard to automate.
 \newline
 Recent commercial AR platforms do contain some level of lighting estimation from input video data. Apple's ARKit is able to estimate the colour and intensity of the ambient lighting in some scenes \footcite{https://developer.apple.com/documentation/arkit/arlightestimate}, by analyzing the pixels of the incoming video frame. This technique adds some realism to AR applications, as objects can be dimmed or brightened with the scene, so as not to stand out. However this is a very rough estimate of lighting, and contains no directional information or approximation of indirect illumination  Google's ARCore has similar functionality, taking an average of the luminance values across the video to estimate the intensity \footcite{https://developers.google.com/ar/reference/unity/prefab/Environmental_Light}. It is possible to estimate the light direction from a face tracking scene however, by using the tracked face as a light probe \footcite{https://developer.apple.com/documentation/arkit/ardirectionallightestimate}. By using a face, the application is able to restrict the possible lighting scenearios to a range of likely geometries and materials that make up human faces. The platform is able to produce not only the primary light direction and intensity, but also an approximation of the environment lighting as spherical harmonics. While incredibly useful for some application such as the retouching of portrail photographs, the technique is not robust to different scenes as it relies on the approximation of some known geometry.
 \newline
@@ -235,17 +224,22 @@ Upcoming AR applications are experimenting with new methods of integrating the s
 Early techniques for lighting estimation were able to find the direction of a single primary light source, under significant constraints. In \footcite{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=990650}, Peter Nillius and Jan-Olof Eklundh were able to estimate a single light direction, provided the input image contained an appropriate lambertian surface. By making use of an 'occluding contour' it is possible to infer some detail of the geometry, as the surface of the visible edge of a contour that occludes itself will always be perpendicular to the view direction of the observer. Using the lambertian lighting model, along with the edge intensity it is possible to make a prediction using a bayesian network for the incoming light direction. This is a simple method that exploits inherent properties of real geometry, but has too many prerequisites to be practical. While it captures direction, it also ignores colour, intensity and any indirect lighting. 
 \todo{More basic stuff here}
 In \cite{Lalonde-2009-10350}, Lalonde et al. are able to estimate a more complete set of parameters for environmental lighting from single outdoor photographs. By segmenting the image into sky, ground and vertical surfaces, and extracting features like shadows, the authors are able to reliable predict the sun's position. While very robust for outdoor applications, this approach does not consider light intensity or colour. Furthermore, the reliance on outdoor scenes restricts its usage in AR.
-Scott Wehrwein et al. demonstrate a technique for sun direction and shadow detection from multiple input images \cite{http://www.cs.cornell.edu/projects/shadows/files/wehrwein_3dv15_shadows.pdf}. They use illunination rations to extract shadows, after constructing a sparse 3D representation of the scene from stereo matching of multiple images. By exploiting shadow boundaries on the derived surface normals, it is then possible to determine the light direction. This work shows how multiple views can be used to infer knowledge of the geometry of the scene, to make the problem of lighting estimation more constrained. However, like previous work it assumes a perfectly lambertian surface and clear outside conditions, restricting the possible lighting conditions significantly.
+Scott Wehrwein et al. demonstrate a technique for sun direction and shadow detection from multiple input images \cite{http://www.cs.cornell.edu/projects/shadows/files/wehrwein_3dv15_shadows.pdf}. They use illumination rations to extract shadows, after constructing a sparse 3D representation of the scene from stereo matching of multiple images. By exploiting shadow boundaries on the derived surface normals, it is then possible to determine the light direction. This work shows how multiple views can be used to infer knowledge of the geometry of the scene, to make the problem of lighting estimation more constrained. However, like previous work it assumes a perfectly lambertian surface and clear outside conditions, restricting the possible lighting conditions significantly.
+\newline
+It is clear that estimating a full representation of the illumination within a scene is very difficult given the number of unknowns. However predicting only the direct light sources is still very valuable, as this makes up the majority of the light within a scene, and can be combined with image colour values to give an approximation of the indirect lighting. Shadows are a good indicator of the direction and intensity of direct lighting. They not only give some indication of direction based on shape, but also the intensity through the contrast of colour values between areas that are shaded and unshaded. Takahiro et al. demonstrate techniques for recovering illumination from shadows in \footcite{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=1315013}. This work compares two methods, \textit{Spherical Harmonics} and \textit{Haar Wavelets} for estimating the illumination from cast shadows on known geometry. Spherical Harmonics are function defined over a whole sphere, and are useful for defining the light reflectance at a point, as in Global Illumination. The work demonstrates how this method fails to capture higher frequency illumination values, and presents \textit{Haar Wavelets} as an alternative. This method is able to approximate functions as a series of linear combinations of Haar functions, and is able to more efficiently capture a higher range of light frequencies at a point. \todo{Read more on this, spherical harmonics appear a lot}
+
 
 \footcite{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=790313}
 \todo{Talk about CNNs for estimating geometry/material}
 \section{Machine Learning for scene understanding}
 To calculate the lighting of a scene, some assumptions or approximations must be made about the material or geometry to constrain the problem. It is therefore important to consider previous techniques to extract these features from images, especially geometry estimation which has significant applications in the field of robotics. In 2015, David Eigen et al. demonstrated a CNN approach to estimate depth, surface normals and semantic labels from single input images \footcite{https://arxiv.org/pdf/1411.4734.pdf}. Here they use a 'multi-scale' architecture, where outputs from early features passed as input to later deconvolutional layers, as well as subsequent convolutional layers. Multi-scale features can often lead to faster inference as important features are 'short-circuited' closer to the output, reducing the need for large deep layers at inference time \todo{Citation needed ;) }. The results of this work are extremely promising, and suggest that a single RGB image may be enough to infer a complex understanding of the scene. If it is possible to understand variations in the illumination and material in a scene to find geometry then it follows that it is possible to understand geometry and material to find illumination.  However the network shown is very deep and trained primarily on indoor scenes. Its use in the field of AR is limited, as the hardware is much more limited in terms of GPU resources.
+\newline
+There has been some work in inverse lighting specifically for the rendering of AR objects, notably that of \footcite{https://link.springer.com/content/pdf/10.1007/s00371-010-0501-7.pdf}. In this work the user must simply provide a ping-pong ball, representative of a lambertian sphere, while the least-squares algorithm is performed on the lighting equation, using features of the sphere as constraints. This results in an approximation of illumination as a series of point lights and spherical harmonoics which can practically be used for rendering. The downside however is that the process of presenting the system with a known ball can take upwards of 20 seconds, and the resultant lightin is suitable for only primarily diffuse objects.
 \section{Machine Learning for Illumination Estimation}
 Most of the previous work has had to rely on significant assumptions for the scene to constrain the lighting to fit known phenomena, that can be exploited to estimate the illumination. It is clear that due to the unconstrained nature of the problem, that some assumptions about geometry, material and lighting must be made. Rather than making the required assumptions to fit a model, another approach is building a model to find and exploit assumptions from real data using machine learning. Given enough scene features and data it is possible to learn approximations and assumptions to produce a more robust model. In \footcite{https://arxiv.org/pdf/1611.06403.pdf}, Yannick Hold-Geoffroy et al. use a CNN-based technique to estimate sky parameters from outdoor photographs to a high enough degree of accuracy that virtual objects can be re-rendered. In this work, the output illumination model is constrained to the Hosek-Wilkie model with parameters representing the sun position, ground albedo and light wavelength. A dataset is then constructed by selecting small LDR sections of real HDR scene panoramas, resulting in a large number of sample photographs, and HDR lighting ground-truths. This work demonstrates extraordinary performance, but is limited in output format by the lighting model which is constrained to outdoor images with clear skies. This ignores the indirect lighting from scene objects and indoor scenes, but demonstrates how CNNs with the right data can be used to exploit more subtle image features to predict lighting.
 \newline
 CNNs can exploit different features in a scene to determine lighting such as shadows or object reflectance. One example that uses the latter is 'Deep Reflectance Maps' \footcite{https://arxiv.org/pdf/1511.04384.pdf} by Konstantinos Rematas et al. In this work it is demonstrated that better accuracy can be achieved by constraining the CNN input to a specific feature, in this case a sparse reflectance map. By taking the brightest pixel for every surface normal on an object, a sparse representation of it's reflectance can be built and fed to a CNN for interpolation. This work makes use of a large synthetic dataset but still results in good performance on real world data, allowing the researchers to then modify the shape of specular virtual objects while still maintaing a realistic surface appearance. This work was then extended for illumination estimation in 'What is Around the Camera', by using a precalculated sparse reflectance map in combination with a segmented background image. In this work, a full HDR environment map is predicted to a degree of accuracy that allows the superimposition of rendered geometry with fairly accurate lighting. Both of these works use a Convolutional-Deconvolutional approach to produce a new image as output. The limitations of this work however are due to required prior calculations rather than restrictive assumptions about the scene. While the network can handle objects of multiple materials, they must be segmented and seperate sparse RMs calculated. Furthermore the calculation of the sparse RM relies upon knowledge of the surface normals of the object being used. The researchers point to previous work \todo{Talk about this} on the usage of CNNs for surface normal and depth estimation but fail to demonstrate the accuracy of their work with these more noisy estimated surface normals. It is also apparent that there is significant data loss in the calculation of the sparse reflectance map, which makes significant assumptions about the object in question, ignoring the effects of shadows and how lighting changes based on both position and surface orientation. I believe that with the use of a deeper network that exploits multiple images to infer geometry, the lossy reflectance mapping step can be removed. The benefit if this is that the model would be able to learn optimal image points for lighting inference, and exploit more image effects such as shadows. Furthermore the need for hardware-calculated surface normals woud be unnecessary as the convolutional features learned in the network could be used for stereo matching.
-\todo{talk about this awesome microsoft thingy for recurrency etc. http://www.cs.wm.edu/~ppeers/showPublication.php?id=Xia:2016:RSS}
+\todo{talk about this awesome microsoft thing etc. http://www.cs.wm.edu/~ppeers/showPublication.php?id=Xia:2016:RSS}
 
 % -----------------------------------------------------------------------------
 
@@ -333,7 +327,7 @@ which aims to predict the accuracy of an image with human perception. It is a me
 \end{figure}
 
 \section{Model Performance}
-It is not only important to assess the accuracy of the predicted lighting, but also the resource requirements. A model that produces rough approximations with a lower memory footprint and computation time is still valuable, especially in the field of AR.
+It is not only important to assess the accuracy of the predicted lighting, but also the resource requirements. A model that produces rough approximations with a lower memory footprint and computation time is still valuable, especially in the field of AR. For this we assess the memory usage and average inference time for our validation set. Testing the model performance across different hardware configurations is beyond the scope of this project.
 % -----------------------------------------------------------------------------
 
 \chapter{Conclusion}
@@ -343,28 +337,33 @@ It is not only important to assess the accuracy of the predicted lighting, but a
 \vspace{1cm} 
 
 \noindent
-The concluding chapter of a dissertation is often underutilised because it 
-is too often left too close to the deadline: it is important to allocation
-enough attention.  Ideally, the chapter will consist of three parts:
+\section{Achievements}
+\section{Future Work}
+\subsection{Full Scene Inference}
+\subsection{Texture Resilient Inference}
+\subsection{Video Inference}
+%The concluding chapter of a dissertation is often underutilised because it 
+%is too often left too close to the deadline: it is important to allocation
+%enough attention.  Ideally, the chapter will consist of three parts:
 
-\begin{enumerate}
-\item (Re)summarise the main contributions and achievements, in essence
-      summing up the content.
-\item Clearly state the current project status (e.g., ``X is working, Y 
-      is not'') and evaluate what has been achieved with respect to the 
-      initial aims and objectives (e.g., ``I completed aim X outlined 
-      previously, the evidence for this is within Chapter Y'').  There 
-      is no problem including aims which were not completed, but it is 
-      important to evaluate and/or justify why this is the case.
-\item Outline any open problems or future plans.  Rather than treat this
-      only as an exercise in what you {\em could} have done given more 
-      time, try to focus on any unexplored options or interesting outcomes
-      (e.g., ``my experiment for X gave counter-intuitive results, this 
-      could be because Y and would form an interesting area for further 
-      study'' or ``users found feature Z of my software difficult to use,
-      which is obvious in hindsight but not during at design stage; to 
-      resolve this, I could clearly apply the technique of Smith [7]'').
-\end{enumerate}
+%\begin{enumerate}
+%\item (Re)summarise the main contributions and achievements, in essence
+%      summing up the content.
+%\item Clearly state the current project status (e.g., ``X is working, Y 
+%      is not'') and evaluate what has been achieved with respect to the 
+%      initial aims and objectives (e.g., ``I completed aim X outlined 
+%      previously, the evidence for this is within Chapter Y'').  There 
+%      is no problem including aims which were not completed, but it is 
+%      important to evaluate and/or justify why this is the case.
+%\item Outline any open problems or future plans.  Rather than treat this
+%      only as an exercise in what you {\em could} have done given more 
+%      time, try to focus on any unexplored options or interesting outcomes
+%      (e.g., ``my experiment for X gave counter-intuitive results, this 
+%      could be because Y and would form an interesting area for further 
+%      study'' or ``users found feature Z of my software difficult to use,
+%      which is obvious in hindsight but not during at design stage; to 
+%      resolve this, I could clearly apply the technique of Smith [7]'').
+%\end{enumerate}
 
 % =============================================================================
 
@@ -394,21 +393,21 @@ enough attention.  Ideally, the chapter will consist of three parts:
 \chapter{An Example Appendix}
 \label{appx:example}
 
-Content which is not central to, but may enhance the dissertation can be 
-included in one or more appendices; examples include, but are not limited
-to
+%Content which is not central to, but may enhance the dissertation can be 
+%included in one or more appendices; examples include, but are not limited
+%to
 
-\begin{itemize}
-\item lengthy mathematical proofs, numerical or graphical results which 
-      are summarised in the main body,
-\item sample or example calculations, 
-      and
-\item results of user studies or questionnaires.
-\end{itemize}
+%\begin{itemize}
+%\item lengthy mathematical proofs, numerical or graphical results which 
+%      are summarised in the main body,
+%\item sample or example calculations, 
+%      and
+%\item results of user studies or questionnaires.
+%\end{itemize}
 
-\noindent
-Note that in line with most research conferences, the marking panel is not
-obliged to read such appendices.
+%\noindent
+%Note that in line with most research conferences, the marking panel is not
+%obliged to read such appendices.
 
 % =============================================================================
 
