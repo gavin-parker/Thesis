@@ -30,7 +30,7 @@ class Model:
     iter_train_handle = train_dataset.make_one_shot_iterator().string_handle()
     iter_val_handle = val_dataset.make_one_shot_iterator().string_handle()
     handle = tf.placeholder(tf.string, shape=[])
-
+    name = 'dematerial'
     def __init__(self):
         with tf.device('/cpu:0'):
             iterator = tf.data.Iterator.from_string_handle(

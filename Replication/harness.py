@@ -8,7 +8,7 @@ import os
 """Train the model with the settings provided in FLAGS"""
 
 
-def train(model=None, sess=None):
+def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
     assert model
 
     config = tf.ConfigProto(allow_soft_placement=True)
@@ -27,7 +27,7 @@ def train(model=None, sess=None):
         run_metadata = tf.RunMetadata()
     tf.train.start_queue_runners(sess=sess)
     train_writer = tf.summary.FileWriter(
-        "{}/{}_{}_deep".format(FLAGS.log_dir, time.strftime("%H:%M:%S"), FLAGS.learning_rate),
+        "{}/{}".format(FLAGS.log_dir, name),
         sess.graph)
 
     saver = tf.train.Saver()

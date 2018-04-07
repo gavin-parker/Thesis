@@ -5,7 +5,7 @@ import cv2
 from multiprocessing import Pool
 from skimage.measure import compare_ssim
 
-sphere_mask = np.sum(cv2.imread('mask_sphere.png'), axis=2).astype(np.bool)
+sphere_mask = np.sum(cv2.imread('test_scenes/mask_sphere.png'), axis=2).astype(np.bool)
 master = render_master.Master('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender')
 
 
@@ -37,7 +37,7 @@ def render_summary(pred_envmap, gt_envmap):
 
 
 class Renderer:
-    test_mask = np.sum(cv2.imread('mask_sphere.png'), axis=2).astype(np.bool)
+    test_mask = np.sum(cv2.imread('test_scenes/mask_sphere.png'), axis=2).astype(np.bool)
     master = render_master.Master('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender')
 
     def render_test(self, pred_envmap, gt_envmap, index):

@@ -25,7 +25,7 @@ class Model:
     global_step = tf.Variable(0, trainable=False)
     learning_rate = tf.train.exponential_decay(FLAGS.learning_rate, global_step,
                                                1, 0.95, staircase=False)
-
+    name = 'reflectance'
     def __init__(self):
 
         inputs = self.input_files.map(preprocessing.preprocess_color, num_parallel_calls=4)

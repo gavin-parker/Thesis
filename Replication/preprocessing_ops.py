@@ -3,11 +3,26 @@ import glob
 import cv2
 import numpy as np
 import os
+import math
 
 HDR_MIN = 0.0
 HDR_MAX = 1.0
 EPS = 1e-12
 
+thetas = np.arange(0,128)
+rhos = np.arange(0,128)
+convmap = np.ones([128,128,2])
+
+#for i in thetas:
+#    for j in rhos:
+#        i_angle = ((i - 64)/64.0)*180.0
+#        j_angle = ((i - 64)/64.0)*180.0
+#        x = int(128*math.sin(j_angle)*math.cos(i_angle))
+#        y = int(128*math.sin(j_angle)*math.sin(i_angle))
+#        convmap[i,j,0] = x
+#        convmap[i,j,1] = y
+#
+#cartMap = tf.convert_to_tensor(convmap)
 
 def get_input_size(file):
     image_file = cv2.imread(file, cv2.IMREAD_UNCHANGED)
@@ -26,6 +41,7 @@ def flip_mask(mask):
     bool_mask = tf.cast(mask, tf.bool)
     flipped = tf.logical_not(bool_mask)
     return tf.cast(flipped, tf.float16)
+
 
 def get_stereo_dataset(dir, batch_size):
     left_files, right_files, env_files = stereo_stream(dir)

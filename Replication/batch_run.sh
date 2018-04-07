@@ -12,4 +12,4 @@ module load Python/2.7.11-foss-2016a
 module load libs/cudnn/8.0-cuda-8.0
 source ~/Thesis/tensorflow/bin/activate
 
-python main.py --dematerial --log-dir='/mnt/storage/scratch/gp14958/dm_logs' --batch-size=32 --learning-rate=1.6e-7 --train-dir='/mnt/storage/scratch/gp14958/MultiNatIllum/data/multiple_materials_single_object/singlets/'
+python main.py --dematerial --log-dir='/mnt/storage/scratch/gp14958/dm_logs' --batch-size=32 --learning-rate=1.7e-9 --train-dir='~/scratch/scene_data_experiment/renders' --val-dir='~/scratch/scene_data_experiment/val'
