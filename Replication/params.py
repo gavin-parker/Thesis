@@ -11,6 +11,7 @@ tf.app.flags.DEFINE_boolean('real', False, 'Operate on real data set. (default: 
 tf.app.flags.DEFINE_boolean('fine-tune', False, 'Pre-load previous best. (default: %(default)d)')
 tf.app.flags.DEFINE_boolean('lab-space', True, 'Use CIE Lab space. (default: %(default)d)')
 tf.app.flags.DEFINE_boolean('siamese', True, 'Used shared weights in conv layers. (default: %(default)d)')
+tf.app.flags.DEFINE_boolean('app', False, 'Dont load train data. (default: %(default)d)')
 tf.app.flags.DEFINE_string('log-dir', 'envmap_synthetic_results', 'Output Log directory')
 tf.app.flags.DEFINE_string('test-model-dir', 'best_dematerial', 'Directory of model for testing')
 tf.app.flags.DEFINE_float('weight-decay', 0.0005, 'Weight decay factor.')

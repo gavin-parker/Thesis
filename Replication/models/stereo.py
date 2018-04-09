@@ -1,7 +1,7 @@
 import tensorflow as tf
 import preprocessing_ops as preprocessing
 import layers
-from rendering import renderer as rend
+#from rendering import renderer as rend
 from params import FLAGS
 
 """ Convolutional-Deconvolutional model for extracting reflectance maps from input images with normals.
@@ -15,26 +15,33 @@ regularizer = tf.contrib.layers.l1_regularizer(scale=FLAGS.weight_decay)
 class Model:
     global_step = tf.Variable(0, trainable=False)
     learning_rate = tf.train.exponential_decay(FLAGS.learning_rate, global_step, 1, 0.95, staircase=False)
-    validation_step = tf.placeholder_with_default(False, [])
-    train_dataset = preprocessing.get_stereo_dataset(FLAGS.train_dir, FLAGS.batch_size)
-    val_dataset = preprocessing.get_stereo_dataset(FLAGS.val_dir, FLAGS.batch_size)
-    iter_train_handle = train_dataset.make_one_shot_iterator().string_handle()
-    iter_val_handle = val_dataset.make_one_shot_iterator().string_handle()
-    handle = tf.placeholder(tf.string, shape=[])
+    if not FLAGS.app:
+        validation_step = tf.placeholder_with_default(False, [])
+        train_dataset = preprocessing.get_stereo_dataset(FLAGS.train_dir, FLAGS.batch_size)
+        val_dataset = preprocessing.get_stereo_dataset(FLAGS.val_dir, FLAGS.batch_size)
+        iter_train_handle = train_dataset.make_one_shot_iterator().string_handle()
+        iter_val_handle = val_dataset.make_one_shot_iterator().string_handle()
+        handle = tf.placeholder(tf.string, shape=[])
     name = 'stereo'
     def __init__(self):
         with tf.device('/cpu:0'):
+            if FLAGS.app:
+                self.left_image = tf.placeholder(tf.float32, shape=[1,256,256,3])
+                self.right_image = tf.placeholder(tf.float32, shape=[1,256,256,3])
+                gt = tf.placeholder(tf.float32, shape=[1,64,64,3])
 
-            iterator = tf.data.Iterator.from_string_handle(
-                self.handle, self.train_dataset.output_types, self.train_dataset.output_shapes)
-            train_batch = iterator.get_next()
-            left_image = train_batch[0]
-            right_image = train_batch[1]
-            gt = train_batch[2]
+                pass
+            else:
+                iterator = tf.data.Iterator.from_string_handle(
+                    self.handle, self.train_dataset.output_types, self.train_dataset.output_shapes)
+                train_batch = iterator.get_next()
+                left_image = train_batch[0]
+                right_image = train_batch[1]
+                gt = train_batch[2]
         with tf.device('/gpu:0'):
             gt_norm = preprocessing.normalize_hdr(gt)
-            left_lab = tf.map_fn(preprocessing.rgb_to_lab, left_image)
-            right_lab = tf.map_fn(preprocessing.rgb_to_lab, right_image)
+            left_lab = tf.map_fn(preprocessing.rgb_to_lab, self.left_image)
+            right_lab = tf.map_fn(preprocessing.rgb_to_lab, self.right_image)
             gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
             prediction = self.inference((left_lab, right_lab, gt_lab))
             self.diff = tf.abs(tf.reduce_max(gt_lab) - tf.reduce_max(prediction))
@@ -42,16 +49,16 @@ class Model:
             self.train_op = self.optimize()
             pred_pretty = tf.map_fn(preprocessing.lab_to_rgb, prediction)
             self.converted_prediction = preprocessing.denormalize_hdr(pred_pretty)
-            self.summaries = self.summary(left_image, right_image, gt_lab, prediction, gt, left_lab, right_lab)
-            render_sim, envmap_sim, pred_render, gt_render = tf.py_func(rend.render_summary,
-                                                                        [self.converted_prediction[0], gt[0]],
-                                                                        [tf.float32, tf.float32, tf.uint8, tf.uint8])
-            render_image_summaries = tf.summary.merge(
-                [tf.summary.image('Ground Truth Render', tf.expand_dims(gt_render, 0), max_outputs=1),
-                 tf.summary.image('Predicted Render', tf.expand_dims(pred_render, 0), max_outputs=1)])
-            render_similarities = tf.summary.merge([tf.summary.scalar('Render Similarity', render_sim),
-                                                    tf.summary.scalar('Envmap Similarity', envmap_sim)])
-            self.render_summary = [render_similarities, render_image_summaries]
+            self.summaries = self.summary(self.left_image, self.right_image, gt_lab, prediction, gt, left_lab, right_lab)
+            #render_sim, envmap_sim, pred_render, gt_render = tf.py_func(rend.render_summary,
+            #                                                            [self.converted_prediction[0], gt[0]],
+            #                                                            [tf.float32, tf.float32, tf.uint8, tf.uint8])
+            #render_image_summaries = tf.summary.merge(
+            #    [tf.summary.image('Ground Truth Render', tf.expand_dims(gt_render, 0), max_outputs=1),
+            #     tf.summary.image('Predicted Render', tf.expand_dims(pred_render, 0), max_outputs=1)])
+            #render_similarities = tf.summary.merge([tf.summary.scalar('Render Similarity', render_sim),
+            #                                        tf.summary.scalar('Envmap Similarity', envmap_sim)])
+            #self.render_summary = [render_similarities, render_image_summaries]
             self.gt = gt
             self.validate()
         return

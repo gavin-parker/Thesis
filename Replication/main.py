@@ -3,7 +3,7 @@ from params import FLAGS
 
 import harness
 import sys
-
+from application import video_stream
 
 def main():
     model = None
@@ -28,4 +28,4 @@ def get_name(model):
 
 
 if __name__ == "__main__":
-    main()
+        main()
