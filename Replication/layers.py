@@ -60,7 +60,6 @@ def pool(x, strides=(2, 2)):
         strides=strides,
         padding='same')
 
-import tensorflow as tf
 
 """Takes a 256x256 image and reduces to 8x8xN, using shared weights"""
 

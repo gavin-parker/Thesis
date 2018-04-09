@@ -115,5 +115,8 @@ class Model:
 
     def validate(self):
         validation_loss = self.loss
-        self.val_loss, self.val_update = tf.metrics.mean(validation_loss)
-        self.validation_summary = tf.summary.merge([tf.summary.scalar("Validation Loss", self.val_loss)])
+        with tf.variable_scope("validation_mean") as scope:
+            self.val_loss, self.val_update = tf.metrics.mean(validation_loss)
+            self.validation_summary = tf.summary.merge([tf.summary.scalar("Validation Loss", self.val_loss)])
+            stream_vars = tf.contrib.framework.get_variables(scope, collection=tf.GraphKeys.LOCAL_VARIABLES)
+            self.reset_mean = [tf.variables_initializer(stream_vars)]

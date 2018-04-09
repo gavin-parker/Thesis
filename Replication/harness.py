@@ -53,7 +53,7 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
                     run_metadata=run_metadata)
                 t1 = time.time()
                 [train_writer.add_summary(s, epoch * epoch_size + i) for s in summaries]
-                saver.save(sess, os.path.join("stereo_graph_deep", 'model'))
+                saver.save(sess, os.path.join("name", 'model'))
                 if FLAGS.debug:
                     train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
                                                   global_step=None)
@@ -67,6 +67,7 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
             sess.run(model.val_update, feed_dict={model.handle: handle_val}, options=options,
                      run_metadata=run_metadata)
         validation_summary = sess.run(model.validation_summary, options=options, run_metadata=run_metadata)
+        sess.run(model.reset_mean)
         train_writer.add_summary(validation_summary, epoch)
         train_writer.flush()
     print("finished")

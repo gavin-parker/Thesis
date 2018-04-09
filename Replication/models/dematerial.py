@@ -67,7 +67,7 @@ class Model:
             self.train_op = self.optimize()
             pred_pretty = tf.map_fn(preprocessing.lab_to_rgb, prediction)
             self.converted_prediction = preprocessing.denormalize_hdr(pred_pretty)
-            self.summaries = self.summary(bg, refl, gt_lab, prediction, envmap, bg_lab, refl_lab)
+            self.summaries = self.summary(bg, refl, gt_lab, prediction, envmap, bg_lab, refl_lab, appearance, rgb_normals)
             render_sim, envmap_sim, pred_render, gt_render = tf.py_func(rend.render_summary, [self.converted_prediction[0], envmap[0]], [tf.float32, tf.float32, tf.uint8, tf.uint8])
             render_image_summaries = tf.summary.merge([tf.summary.image('Ground Truth Render', tf.expand_dims(gt_render,0), max_outputs=1),
                                         tf.summary.image('Predicted Render', tf.expand_dims(pred_render,0), max_outputs=1)])
@@ -123,7 +123,7 @@ class Model:
 
     """Create tensorboard summaries of images and loss"""
 
-    def summary(self, bg, reflectance, gt_lab, pred, gt, bg_lab, refl_lab):
+    def summary(self, bg, reflectance, gt_lab, pred, gt, bg_lab, refl_lab, rgb, norms):
         self.pred_lab = pred
         summaries = [tf.summary.image('Generated Envmap', pred, max_outputs=1),
                      tf.summary.image('Ground Truth Envmap', gt_lab, max_outputs=1),
@@ -133,7 +133,9 @@ class Model:
                      tf.summary.image('CIELAB Background', bg_lab, max_outputs=1),
                      tf.summary.image('Input Reflectance Map', reflectance, max_outputs=1),
                      tf.summary.image('CIELAB Reflectance Map', refl_lab, max_outputs=1),
-                     tf.summary.image('Gauss Sphere', self.sphere, max_outputs=1)]
+                     tf.summary.image('Gauss Sphere', self.sphere, max_outputs=1),
+                     tf.summary.image('Surface Normals', norms, max_outputs=1),
+                     tf.summary.image('Surface Appearance', rgb, max_outputs=1)]
 
         scalar_summary = tf.summary.merge([tf.summary.scalar("Loss", self.loss),
                                           tf.summary.scalar("Max difference", self.diff),
@@ -143,5 +145,8 @@ class Model:
 
     def validate(self):
         validation_loss = self.loss
-        self.val_loss, self.val_update = tf.metrics.mean(validation_loss)
-        self.validation_summary = tf.summary.merge([tf.summary.scalar("Validation Loss", self.val_loss)])
+        with tf.variable_scope("validation_mean") as scope:
+            self.val_loss, self.val_update = tf.metrics.mean(validation_loss)
+            self.validation_summary = tf.summary.merge([tf.summary.scalar("Validation Loss", self.val_loss)])
+            stream_vars = tf.contrib.framework.get_variables(scope, collection=tf.GraphKeys.LOCAL_VARIABLES)
+            self.reset_mean = [tf.variables_initializer(stream_vars)]

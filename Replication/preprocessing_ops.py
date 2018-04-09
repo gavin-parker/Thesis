@@ -69,7 +69,7 @@ def get_dematerial_dataset(dir, batch_size):
         lambda x: preprocess_hdr(x, env_files[1], output_size=64),
         num_parallel_calls=4)
     norms = norm_files[0].map(
-        lambda x: preprocess_color(x, norm_files[1],output_size=128, double_precision=False),
+        lambda x: preprocess_orientation(x, norm_files[1],output_size=128, double_precision=False),
         num_parallel_calls=4)
 
     dataset = tf.data.Dataset.zip((right, norms, envmap)).shuffle(128).repeat().batch(
@@ -178,10 +178,10 @@ def write_hdr(filename, image):
     cv2.imwrite(filename, image)
 
 
-def preprocess_orientation(filename, double_precision=False):
+def preprocess_orientation(filename, input_shape, output_size=256, double_precision=False):
     image = tf.image.decode_image(tf.read_file(filename), channels=4, name="decode_norm")
     orientation = unit_norm(
-        format_image(image, [256, 256, 3], 128, mask_alpha=True)[:, :, :3], channels=3)
+        format_image(image, input_shape, output_size, mask_alpha=True)[:, :, :3], channels=3)
     if not double_precision:
         return tf.cast(orientation, tf.float16)
     return tf.cast(orientation, tf.float32)
