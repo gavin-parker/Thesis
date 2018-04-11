@@ -44,18 +44,20 @@ def flip_mask(mask):
 
 
 def get_stereo_dataset(dir, batch_size):
-    left_files, right_files, env_files = stereo_stream(dir)
+    left_files, right_files, env_files, norm_files = stereo_stream(dir)
     envmap = env_files[0].map(
         lambda x: preprocess_hdr(x, env_files[1], output_size=64),
         num_parallel_calls=4)
     left = left_files[0].map(
         lambda x: preprocess_color(x, left_files[1], double_precision=True),
         num_parallel_calls=4)
+    norms = norm_files[0].map(
+        lambda x: preprocess_orientation(x, norm_files[1], double_precision=True),
+        num_parallel_calls=4)
     right = right_files[0].map(
         lambda x: preprocess_color(x, right_files[1], double_precision=True),
         num_parallel_calls=4)
-
-    dataset = tf.data.Dataset.zip((left, right, envmap)).repeat().batch(batch_size).prefetch(
+    dataset = tf.data.Dataset.zip((left, right, envmap, norms)).repeat().batch(batch_size).prefetch(
         buffer_size=2 * batch_size)
     return dataset
 
@@ -223,11 +225,13 @@ def dematerial_stream(dir):
 def stereo_stream(dir):
     left_files = sorted(glob.glob("{}/left/*.png".format(dir)))
     right_files = sorted(glob.glob("{}/right/*.png".format(dir)))
+    norm_files = sorted(glob.glob("{}/norms/*.png".format(dir)))
     envmap_files = sorted(glob.glob("{}/envmaps/*.hdr".format(dir)))
     left_shape = get_input_size(left_files[0])
     right_shape = get_input_size(right_files[0])
+    norms_shape = get_input_size(norm_files[0])
     envmap_shape = get_input_size(envmap_files[0])
-    assert len(left_files) == len(right_files) == len(envmap_files)
+    assert len(left_files) == len(right_files) == len(envmap_files) == len(norm_files)
     assert left_shape == right_shape
     left = tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(left_files, dtype=tf.string))
@@ -235,7 +239,9 @@ def stereo_stream(dir):
         tf.convert_to_tensor(right_files, dtype=tf.string))
     envmaps = tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(envmap_files, dtype=tf.string))
-    return (left, left_shape), (right, right_shape), (envmaps, envmap_shape)
+    norms = tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(norm_files, dtype=tf.string))
+    return (left, left_shape), (right, right_shape), (envmaps, envmap_shape), (norms, norms_shape)
 
 
 # based on https://github.com/torch/image/blob/9f65c30167b2048ecbe8b7befdc6b2d6d12baee9/generic/image.c
