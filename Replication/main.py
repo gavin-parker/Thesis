@@ -1,4 +1,4 @@
-from models import reflectance, dematerial, stereo
+from models import stereo
 from params import FLAGS
 
 import harness
@@ -7,10 +7,10 @@ from application import video_stream
 
 def main():
     model = None
-    if '--reflectance' in sys.argv:
-        model = reflectance.Model()
-    if '--dematerial' in sys.argv:
-        model = dematerial.Model()
+    #if '--reflectance' in sys.argv:
+    #    model = reflectance.Model()
+    #if '--dematerial' in sys.argv:
+    #    model = dematerial.Model()
     if '--stereo' in sys.argv:
         model = stereo.Model()
     name = get_name(model)

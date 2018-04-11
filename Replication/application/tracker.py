@@ -10,7 +10,7 @@ class Tracker:
     start_pos = np.asarray([0, 0])
     dist_thresh = 0
     infer = True
-    model = None
+
     def __init__(self, frame, bbox):
         self.tracker = cv2.TrackerKCF_create()
         self.tracker.init(frame, bbox)
@@ -33,31 +33,31 @@ class Tracker:
                 # Do the inference here
                 self.view_b = frame[self.start_bbox[1]:self.start_bbox[1] + self.start_bbox[3],
                               self.start_bbox[0]:self.start_bbox[0] + self.start_bbox[2]]
-                #cv2.imshow('view_a', self.view_a)
-                #cv2.imshow('view_b', self.view_b)
                 self.infer = False
-                print("calculating...")
-                model = stereo.Model()
-                with tf.Session(config=tf.ConfigProto(
-      allow_soft_placement=True)) as sess:
-                    saver = tf.train.Saver()
-                    saver.restore(sess, '/home/gavin/scene_data/stereo_graph_deep/model')
-                    left_image = cv2.resize(self.view_a, (256,256)).astype(np.float32)
-                    right_image = cv2.resize(self.view_b, (256,256)).astype(np.float)
-                    left_image = cv2.normalize(left_image.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
-                    right_image = cv2.normalize(right_image.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
-                    left_image = np.expand_dims(left_image, axis=0)
-                    right_image = np.expand_dims(right_image, axis=0)
-                    print(right_image.shape)
-                    prediction = sess.run(model.converted_prediction, feed_dict={model.left_image:left_image, model.right_image:right_image})
-                    cv2.imwrite('result.hdr', prediction[0])
-                    print(prediction)
                 self.tracker = None
+                cv2.imshow('a', self.view_a)
+                cv2.imshow('b', self.view_b)
+                cv2.waitKey()
+
+                return True
             rect = bbox_to_rect(bbox)
             cv2.rectangle(frame, rect[0], rect[1], (0, 0, 255))
+        return False
 
-
-    # def stereo_inference(self):
+    def predict(self, model, sess, name="result.hdr"):
+        self.view_a = cv2.cvtColor(self.view_a, cv2.COLOR_BGR2RGB)
+        self.view_b = cv2.cvtColor(self.view_b, cv2.COLOR_BGR2RGB)
+        left_image = cv2.resize(self.view_a, (256, 256)).astype(np.float32)
+        right_image = cv2.resize(self.view_b, (256, 256)).astype(np.float)
+        left_image = cv2.normalize(left_image.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
+        right_image = cv2.normalize(right_image.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
+        left_image = np.expand_dims(left_image, axis=0)
+        right_image = np.expand_dims(right_image, axis=0)
+        print(right_image.shape)
+        prediction = sess.run(model.converted_prediction,
+                              feed_dict={model.left_image: left_image, model.right_image: right_image})
+        cv2.imwrite(name, prediction[0])
+        print(prediction)
 
 
 def square_bbox(bbox):
@@ -71,6 +71,7 @@ def square_bbox(bbox):
         bbox[0] = bbox[0] - diff / 2
         bbox[2] += diff
     return bbox
+
 
 def bbox_center(bbox):
     rect = bbox_to_rect(bbox)
