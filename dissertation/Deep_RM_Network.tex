@@ -1,0 +1,40 @@
+
+\begin{center}
+\begin{figure}
+\begin{tikzpicture}[
+network/.style={rectangle,draw=green!50,fill=green!5, thick, minimum height=4cm},
+layer/.style={rectangle, draw=black!50,anchor=center},
+]
+\node[](Normals){\includegraphics[width=2cm]{images/normals_1}};
+\node[below=of Normals]	(Appearance){\includegraphics[width=2cm]{images/appearance_1}};
+\node[rectangle, draw=red!50,fill=red!5, thick, text width=1cm](RM)[below right =0.5cm of Normals, above right =0.5cm of Appearance] {RM};
+\node[right=0.5cm of RM]	(Sparse RM){\includegraphics[width=2cm]{images/sparse_rm_1}};
+
+\node[network, minimum width=3cm] (CNN)  [right=0.5cm of Sparse RM]{};
+\node[layer, below=3mm of CNN.north, minimum width=2cm] (conv_1) {128};
+\node[layer, below=5mm of conv_1.south, minimum width=1cm] (conv_2) {32};
+\node[layer, below=5mm of conv_2.south, minimum width=0.75cm] (conv_3) {16};
+\node[layer, below=5mm of conv_3.south, minimum width=0.5cm] (conv_4) {8};
+
+\node[network, minimum width=3cm,draw=red!50,fill=red!5] (DCNN)  [right=0.5cm of CNN]{};
+\node[layer, below=7mm of DCNN.north, minimum width=1cm] (deconv_2) {32};
+\node[layer, below=7mm of deconv_2.south, minimum width=0.75cm] (deconv_3) {16};
+\node[layer, below=7mm of deconv_3.south, minimum width=0.5cm] (deconv_4) {8};
+
+\node[right=of DCNN]	(Reflectance){\includegraphics[width=2cm]{images/gt_lighting_1_warped}};
+
+\node[above=2mm of CNN.north, opacity=0](a){};
+\node[below=2mm of CNN.south, opacity=0](b){};
+\node[above=2mm of DCNN.north, opacity=0](c){};
+
+\draw[->] (Normals.east) -| (RM.west);
+\draw[->] (Appearance.east) -| (RM.west);
+\draw[->] (RM.east) -- (Sparse RM.west);
+\draw[->] (Sparse RM.east) |- (a.center) -- (CNN.north);
+\draw[->] (CNN.south) -- (b.center) -| (DCNN.south);
+\draw[->] (DCNN.north) -- (c.center) -| (Reflectance.west);
+
+\end{tikzpicture}
+\caption{Deep Reflectance Maps - Combine known (or inferred) surface normals to form a sparse reflectance map. A series of Convolutional layers is followed by a series of Deconvolutional layers to estimate a dense RM. Each layer is followed by batch normalization, max pooling and the Relu activation function.}
+\end{figure}
+\end{center}
