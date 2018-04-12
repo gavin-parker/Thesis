@@ -18,7 +18,7 @@ class SceneGenerator:
     envmap_camera = bpy.data.objects["Envmap_Camera"]
     render_camera = bpy.data.objects["Camera"]
     camera_limits = [(0.8, 1.3), (-0.1, 0.1), (-3.14, 3.14)]
-    envmaps = glob.glob('{}/hdris/*.hdr'.format(scene_dir))
+    envmaps = glob.glob('{}/hdris/*'.format(scene_dir))
     tables = [obj.name for obj in scene.objects if "Table" in obj.name]
     imported_objects = []
     table = {}
@@ -106,26 +106,27 @@ class SceneGenerator:
         self.scene.render.resolution_percentage = 100
         self.scene.render.resolution_x = 512
         self.scene.render.resolution_y = 512
+        move_object(self.scene.camera, (-1, 0.0, 0.0))
         self.nodes["File Output"].base_path = "{}/renders/normals/".format(scene_dir)
         self.nodes["File Output"].file_slots[0].path = name + '_'
         bpy.data.scenes['Scene'].render.filepath = "{}/renders/left/{}".format(scene_dir,
                                                                                '{}.png'.format(name))
         bpy.ops.render.render(write_still=True)
-        move_object(self.scene.camera, (0.5, 0.0, 0.0))
+        move_object(self.scene.camera, (1, 0.0, 0.0))
         bpy.data.scenes['Scene'].render.filepath = "{}/renders/right/{}".format(scene_dir,
                                                                                 '{}.png'.format(name))
 
 
-        self.scene.use_nodes = False
+        #self.scene.use_nodes = True
         bpy.ops.render.render(write_still=True)
-        self.scene.use_nodes = False
+        #self.scene.use_nodes = False
         self.surface_normals()
         bpy.context.scene.render.layers["RenderLayer"].use_sky = False
         bpy.data.scenes['Scene'].render.filepath = "{}/renders/norms/{}".format(scene_dir,
                                                                          '{}.png'.format(name))
-
         bpy.ops.render.render(write_still=True)
         bpy.context.scene.render.layers["RenderLayer"].use_sky = True
+
     def light_scene(self):
         envmap = random.choice(self.envmaps)
         bpy.data.images.load(envmap, check_existing=False)

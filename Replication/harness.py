@@ -53,7 +53,7 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
                     run_metadata=run_metadata)
                 t1 = time.time()
                 [train_writer.add_summary(s, epoch * epoch_size + i) for s in summaries]
-                saver.save(sess, os.path.join("name", 'model'))
+                saver.save(sess, os.path.join(name, 'model'))
                 if FLAGS.debug:
                     train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
                                                   global_step=None)

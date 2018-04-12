@@ -12,6 +12,7 @@ def test():
 
 if __name__ == "__main__":
     cores = cpu_count()
+    render(0)
     id = 0
     print("using {} cores".format(cores))
     for arg in sys.argv:

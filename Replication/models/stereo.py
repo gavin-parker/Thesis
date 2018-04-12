@@ -1,7 +1,7 @@
 import tensorflow as tf
 import preprocessing_ops as preprocessing
 import layers
-#from rendering import renderer as rend
+# from rendering import renderer as rend
 from params import FLAGS
 
 """ Convolutional-Deconvolutional model for extracting reflectance maps from input images with normals.
@@ -23,14 +23,14 @@ class Model:
         iter_val_handle = val_dataset.make_one_shot_iterator().string_handle()
         handle = tf.placeholder(tf.string, shape=[])
     name = 'stereo'
+
     def __init__(self):
         with tf.device('/cpu:0'):
             if FLAGS.app:
-                self.left_image = tf.placeholder(tf.float32, shape=[1,256,256,3])
-                self.right_image = tf.placeholder(tf.float32, shape=[1,256,256,3])
-                gt = tf.placeholder(tf.float32, shape=[1,64,64,3])
-
-                pass
+                self.left_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
+                self.right_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
+                self.norm_image = tf.placeholder(tf.float32, shape=[1, 64, 64, 3])
+                gt = tf.placeholder(tf.float32, shape=[1, 64, 64, 3])
             else:
                 iterator = tf.data.Iterator.from_string_handle(
                     self.handle, self.train_dataset.output_types, self.train_dataset.output_shapes)
@@ -38,7 +38,7 @@ class Model:
                 self.left_image = train_batch[0]
                 self.right_image = train_batch[1]
                 self.norm_image = train_batch[3]
-                self.norm_image = tf.image.resize_images(self.norm_image, (64,64))
+                self.norm_image = tf.image.resize_images(self.norm_image, (64, 64))
                 gt = train_batch[2]
         with tf.device('/gpu:0'):
             gt_norm = preprocessing.normalize_hdr(gt)
@@ -51,7 +51,8 @@ class Model:
             self.train_op = self.optimize()
             pred_pretty = tf.map_fn(preprocessing.lab_to_rgb, predictions[0])
             self.converted_prediction = preprocessing.denormalize_hdr(pred_pretty)
-            self.summaries = self.summary(self.left_image, self.right_image, gt_lab, predictions, gt, left_lab, right_lab)
+            self.summaries = self.summary(self.left_image, self.right_image, gt_lab, predictions, gt, left_lab,
+                                          right_lab)
 
             self.gt = gt
             self.validate()
@@ -99,7 +100,9 @@ class Model:
         decode_1 = layers.decode_layer(encoded, 512, (3, 3), (2, 2), 3)
         decode_2 = layers.decode_layer(decode_1, 512, (3, 3), (2, 2), 3)
         decode_3 = layers.decode_layer(decode_2, 256, (3, 3), (2, 2), 3)
-        decode_4 = layers.decode_layer(decode_3, 128, (3, 3), (2, 2), 1)
+        decode_4 = layers.decode_layer(decode_3, 128, (3, 3), (2, 2), 2)
+        #decode_5 = layers.decode_layer(decode_4, 64, (3, 3), (2, 2), 2)
+        #decode_6 = layers.decode_layer(decode_5, 32, (3, 3), (2, 2), 2)
         return layers.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
 
     """Create tensorboard summaries of images and loss"""

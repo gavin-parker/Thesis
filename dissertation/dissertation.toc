@@ -14,9 +14,11 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.2}Lighting Estimation Research}{8}{section.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.3}Machine Learning for scene understanding}{8}{section.2.3}
+\contentsline {section}{\numberline {2.3}Machine Learning for scene understanding}{9}{section.2.3}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.4}Machine Learning for Illumination Estimation}{9}{section.2.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.5}Predicting Light Probes}{10}{section.2.5}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Project Execution}{11}{chapter.3}
 \defcounter {refsection}{0}\relax 
@@ -24,7 +26,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3.2}Stereo Model Architecture}{13}{section.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.3}Dataset Creation}{13}{section.3.3}
+\contentsline {section}{\numberline {3.3}Dataset Creation}{14}{section.3.3}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3.4}Experiments}{15}{section.3.4}
 \defcounter {refsection}{0}\relax 

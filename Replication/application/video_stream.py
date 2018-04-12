@@ -51,10 +51,10 @@ class Application:
             saver.restore(self.sess, '/home/gavin/scene_data/model_eigen/model_eigen')
 
     def show_video(self):
-        self.cap = cv2.VideoCapture('test_2.mp4')
+        self.cap = cv2.VideoCapture('/home/gavin/hdr_tests/vid.mp4')
 
         self.frame_number = 0
-        while self.cap.isOpened():
+        while True:
             ret, self.frame = self.cap.read()
             if not ret:
                 continue
@@ -62,8 +62,6 @@ class Application:
             if self.mode is 'TRACK':
                 self.track()
                 time.sleep(0.03)
-                sphere = spherize(self.frame)
-                cv2.imshow('sphere', sphere)
             elif self.mode is 'DEPTH':
                 depth = self.depth()
                 dzdx, dzdy = np.gradient(depth)

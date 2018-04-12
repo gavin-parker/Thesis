@@ -2057,16 +2057,18 @@
     <bcf:citekey order="6">Lalonde-2009-10350</bcf:citekey>
     <bcf:citekey order="7">http://www.cs.cornell.edu/projects/shadows/files/wehrwein_3dv15_shadows.pdf</bcf:citekey>
     <bcf:citekey order="8">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=1315013</bcf:citekey>
-    <bcf:citekey order="9">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=790313</bcf:citekey>
-    <bcf:citekey order="10">https://arxiv.org/pdf/1411.4734.pdf</bcf:citekey>
-    <bcf:citekey order="11">https://link.springer.com/content/pdf/10.1007/s00371-010-0501-7.pdf</bcf:citekey>
-    <bcf:citekey order="12">https://arxiv.org/pdf/1611.06403.pdf</bcf:citekey>
-    <bcf:citekey order="13">https://arxiv.org/pdf/1704.00090.pdf</bcf:citekey>
-    <bcf:citekey order="14">https://arxiv.org/pdf/1511.04384.pdf</bcf:citekey>
-    <bcf:citekey order="15">https://github.com/affinelayer/pix2pix-tensorflow/blob/master/pix2pix.py</bcf:citekey>
-    <bcf:citekey order="16">http://ikea.csail.mit.edu/</bcf:citekey>
-    <bcf:citekey order="17">https://docs.blender.org/manual/en/dev/render/cycles/nodes/types/shaders/principled.html</bcf:citekey>
-    <bcf:citekey order="18">https://hdrihaven.com/</bcf:citekey>
-    <bcf:citekey order="19">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=1284395</bcf:citekey>
+    <bcf:citekey order="9">http://www.cs.wm.edu/\nobreakspace {}ppeers/showPublication.php?id=Xia:2016:RSS</bcf:citekey>
+    <bcf:citekey order="10">http://hazirbas.com/datasets/ddff12scene/</bcf:citekey>
+    <bcf:citekey order="11">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=790313</bcf:citekey>
+    <bcf:citekey order="12">https://arxiv.org/pdf/1411.4734.pdf</bcf:citekey>
+    <bcf:citekey order="13">https://link.springer.com/content/pdf/10.1007/s00371-010-0501-7.pdf</bcf:citekey>
+    <bcf:citekey order="14">https://arxiv.org/pdf/1611.06403.pdf</bcf:citekey>
+    <bcf:citekey order="15">https://arxiv.org/pdf/1704.00090.pdf</bcf:citekey>
+    <bcf:citekey order="16">https://arxiv.org/pdf/1511.04384.pdf</bcf:citekey>
+    <bcf:citekey order="17">https://github.com/affinelayer/pix2pix-tensorflow/blob/master/pix2pix.py</bcf:citekey>
+    <bcf:citekey order="18">http://ikea.csail.mit.edu/</bcf:citekey>
+    <bcf:citekey order="19">https://docs.blender.org/manual/en/dev/render/cycles/nodes/types/shaders/principled.html</bcf:citekey>
+    <bcf:citekey order="20">https://hdrihaven.com/</bcf:citekey>
+    <bcf:citekey order="21">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=1284395</bcf:citekey>
   </bcf:section>
 </bcf:controlfile>

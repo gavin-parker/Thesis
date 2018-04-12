@@ -69,6 +69,7 @@
 %\RequirePackage{dtk-logos}
 \RequirePackage{biblatex}
 \usepackage{todonotes}
+\usepackage{wrapfig}
 \usepackage{biblatex}
 
 % =============================================================================

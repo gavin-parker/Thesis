@@ -56,6 +56,7 @@ class Tracker:
         print(right_image.shape)
         prediction = sess.run(model.converted_prediction,
                               feed_dict={model.left_image: left_image, model.right_image: right_image})
+        cv2.imshow('env', prediction[0])
         cv2.imwrite(name, prediction[0])
         print(prediction)
 

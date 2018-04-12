@@ -1,16 +1,15 @@
-from models import stereo
+from models import stereo, reflectance, dematerial
 from params import FLAGS
 
 import harness
 import sys
-from application import video_stream
 
 def main():
     model = None
-    #if '--reflectance' in sys.argv:
-    #    model = reflectance.Model()
-    #if '--dematerial' in sys.argv:
-    #    model = dematerial.Model()
+    if '--reflectance' in sys.argv:
+        model = reflectance.Model()
+    if '--dematerial' in sys.argv:
+        model = dematerial.Model()
     if '--stereo' in sys.argv:
         model = stereo.Model()
     name = get_name(model)
@@ -19,7 +18,7 @@ def main():
 
 
 def get_name(model):
-    name_flags = ['learning_rate', 'batch_size', 'max_epochs', 'lab_space']
+    name_flags = ['learning_rate', 'batch_size', 'max_epochs', 'lab_space', 'log_prefix']
     name = model.name
     for flag in FLAGS.__flags:
         if flag in name_flags:
