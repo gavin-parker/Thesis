@@ -77,7 +77,7 @@ In this paper we present a system for estimating the lighting in photographs and
 \newline
 Augmented Reality is a growing topic in computer graphics and vision, that involves superimposing synthetic information and images on real scenes, often with the aim of giving the illusion that the object is part of the real world. Current AR solutions use geometry estimation to correctly place and scale the virtual objects to fit into the real scene, but do very little to render those objects with other scene intrinsics. Our system uses a Siamese Convolutional Neural Network to extract the lighting intensities and directions from objects within a scene, such that virtual objects can be re-rendered with realistic lighting parameters on-the-fly.
 
-The appearance of an object is made up of its material properties, its geometry and the lighting conditions, making estimation of any one of these factors from a single image a difficult task. Previous work has tackled lighting estimation by treating geometry estimation as a separate problem, making use of depth cameras or known geometry. This has a significant performance penalty, and estimated surface normals are often too noisy to be useful. I have produced a CNN that relies on the relative invariance of these 3 unknowns with respect to time, by attempting to predict illumination from a series of views of an object. By using a Siamese approach, with shared weights, the Neural Network is able to identify similar features \todo{/position?} in multiple views of the scene, and infer geometry. This represents an improvement in practicality over the previous work and takes the technique a step closer to being deployed on mobile devices.
+The appearance of an object is made up of its material properties, its geometry and the lighting conditions, making estimation of any one of these factors from a single image a difficult task. Previous work has tackled lighting estimation by treating geometry estimation as a separate problem, making use of depth cameras or known geometry. This has a significant performance penalty, and estimated surface normals are too noisy to be useful. I have produced a CNN that relies on the relative invariance of these 3 unknowns with respect to time, by attempting to predict illumination from a series of views of an object. By using a Siamese approach, with shared weights, the Neural Network is able to identify similar features \todo{/position?} in multiple views of the scene, and infer geometry. This represents an improvement in practicality over the previous work and takes the technique a step closer to being deployed on mobile devices.
 
 \begin{quote}
 My research hypothesis is that a siamese CNN provided with RGB stereo images, can predict a light probe at an object without the need for explicit geometry estimation or the use of a depth camera.
@@ -94,7 +94,17 @@ To test my hypothesis I performed research and implementation as follows:
 \item Assessed the quality of these networks with a suite of image similarity benchmarks.
 \end{itemize}
 
-Our network is able to achieve equivalent results to previous work, predicting lighting from an object with unknown geometry and material from stereo images or video frames.
+Our network is able to achieve equivalent results to previous work that relied on known geometry, and outperforms those that use estimated surface normals.
+
+\begin{figure}
+\centering
+\includegraphics[height=5cm]{images/examples/gt}\\
+    \vspace{0.5cm}
+\includegraphics[height=5cm]{images/examples/basic}
+
+\caption{Ground Truth Lighting - Current Basic AR Lighting - Our Model's Prediction}
+\label{example_1}
+\end{figure}
 \chapter*{Supporting Technologies}
 
 {\bf A compulsory section, of at most $1$ page}
@@ -110,6 +120,7 @@ Our network is able to achieve equivalent results to previous work, predicting l
 \item OpenEXR was used in experiments to parse Radiance HDR image data.
 \item Cycles renderer was used to produce photorealistic synthetic data.
 \item IKEA Dataset was used to train the final suite of models.
+\item The BlueCrystal4 was used to train models across multiple GPUs
 \end{itemize}
 \end{quote}
 
@@ -292,6 +303,7 @@ These works demonstrate that if surface geometry is known, a network can be trai
 \begin{tabular}{|c|c|c|c|c|}
 Model & Known Geometry & Known Material & Direct Lighting & Indirect Lighting \\
 Mirror Ball & \checkmark & \checkmark & \checkmark & \checkmark \\
+Nillius et al. & \checkmark & \checkmark & \checkmark & X \\
 
 
 \end{tabular}
@@ -425,9 +437,13 @@ We have presented a CNN approach for estimating the lighting at an object that e
 \noindent
 \section{Achievements}
 \section{Future Work}
+Our work demonstrates progress in lighting estimation, by inferring object geometry and exploiting changes in shading and reflectance between multiple views. However the model presented is limited in scope, and could be extended into more useful models of scene lighting.
 \subsection{Full Scene Inference}
+Our model, and that of 'Deep Reflectance Maps/What is Around the Camera?' is able to predict a low resolution model of incoming lighting at a single point in a scene, discretized by the size of the object used as a probe. This is useful if composited objects are to be placed at the same physical location of the probe, but is not able to provide an accurate lighting model for an entire scene. For this task it would be possible however, to find multiple possible probes within a scene, and produce multiple environment maps. If the relative location of the probes is provided, or can be inferred using a SLAM approach, they can be used to light objects at a range of points within the scene. One possible technique would be to use a K-nearest-neighbour blending of the probes based on their relative distance from a desired point. This would allow inserted animations to use more appropriate lighting as they move accross the scene, rather than using a single lighting sample. This is still an approximation and does not take into account the interaction between light and geometry within the scene. For example superimposed characters would not recieve shadows from real geometry. A more robust approach that would be more appropriate for mobile devices, and remove the need for the repeated estimation of light probes, would be to produce a model of light positions. Light source directions and intensities can be trivially extracted from environment maps using thresholding. If 2 environment maps are found it would be possible to triangulate the positions of major light sources, and simply represent them with virtual point lights. While shadowing would still be an issue without an accurate geometry model, this would be easier to render with and apply to moving virtual objects.
 \subsection{Texture Resilient Inference}
+Our model is only demonstrated on objects of uniform albedo, rather than those with varied colours and materials. This constrains the problem as lighter parts of the surface can be assumed to be more brightly lit than darker ones, rather than having different material properties. Konstantinos Rematas et al. tackle this problem with  preprocessing step, where an object is masked into 3 materials using a k means clustering on the pixel values. Each masked object section is then fed into the network and combined in intermediate layers. The downside of this is that the system can only cope with a set number of materials, with each material maintaining a constant albedo. An ideal system would be able to differentiate between changes in pixel values that are due to light and those due to material. This can somewhat be achieved by utilising the CIE LAB colour space, but there are still occurences where it is difficult to tell the difference between a dark material and a shadow. This is a difficult problem but can be somewhat approximated by finding surfaces with constant albedo or repeating patterns. Fortunately in indoor scenes, most objects are made of single explicit materials, making this easier to solve. Outdoor scenarios typically have less complicated lighting patterns, with the sun providing a single light source. In this case it can be assumed that shadows are cast in the same direction.
 \subsection{Video Inference}
+We have presented a system that is able to make use of parallel stereo views to infer the lighting at a point. However both suggested use cases of AR and video editing involve video footage with 6 degreees-of-freedom camera movement. This introduces a vast amount of complexity into the stereo matching problem; commercial solutions still struggle to solve camera movement that involves simultaneous rotation and translation. There has been recent progress in monocular slam to solve this, that integrates the intertia sensors with the camera from a mobile phone to determine roughly when the camera is being translated. In our case, a rotating camera may actually prove beneficial, as we are interested in the makeup of an object within the scene. By capturing information from different angles of our subject we can discover more about it's geometry and how it's reflections change with viewing angle. It could be useful to make use of an arbitrary number of video frames to continually refine the estimation. This could be achieved with a recurrent neural network, that maintains an internal representation between frames.
 \subsection{Spatial Lighting}
 Talk about light fields!
 %The concluding chapter of a dissertation is often underutilised because it 
