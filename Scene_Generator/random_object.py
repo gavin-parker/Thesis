@@ -18,7 +18,7 @@ class SceneGenerator:
     envmap_camera = bpy.data.objects["Envmap_Camera"]
     render_camera = bpy.data.objects["Camera"]
     camera_limits = [(0.8, 1.3), (-0.1, 0.1), (-3.14, 3.14)]
-    envmaps = glob.glob('{}/hdris/*'.format(scene_dir))
+    envmaps = glob.glob('{}/val_hdris/*'.format(scene_dir))
     tables = [obj.name for obj in scene.objects if "Table" in obj.name]
     imported_objects = []
     table = {}
@@ -182,18 +182,16 @@ def extract_material(category, materials, limit=4):
     return [i[0] for i in process.extract(category, materials, limit=limit)]
 
 
-def main():
-    prefix = 0
-    for arg in sys.argv:
-        if 'prefix' in arg:
-            prefix = int(arg.split('=')[1])
+def main(prefix):
     bpy.context.scene.render.engine = 'CYCLES'
     try:
         bpy.context.scene.cycles.device = 'GPU'
         bpy.context.user_preferences.addons['cycles'].preferences.compute_device_type = 'CUDA'
-        bpy.context.scene.render.tile_x = 512
-        bpy.context.scene.render.tile_y = 512
+        bpy.context.scene.render.tile_x = 256
+        bpy.context.scene.render.tile_y = 256
+        bpy.context.scene.render.use_persistent_data = True
     except TypeError:
+        return
         bpy.context.scene.render.tile_x = 64
         bpy.context.scene.render.tile_y = 64
         pass
@@ -212,4 +210,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    prefix = 0
+    for arg in sys.argv:
+        if 'prefix' in arg:
+            prefix = int(arg.split('=')[1])
+        main(prefix)

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.3.23)  14 APR 2018 11:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.3.23)  14 APR 2018 17:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1207,178 +1207,178 @@ l.215 \begin{center}
 Chapter 2.
 
 LaTeX Warning: Citation 'https://www.digitaldomain.com/work/i-robot/' on page 7
- undefined on input line 268.
+ undefined on input line 269.
 
 
 LaTeX Warning: Citation 'https://developer.apple.com/documentation/arkit/arligh
-testimate' on page 7 undefined on input line 270.
+testimate' on page 7 undefined on input line 271.
 
 
 LaTeX Warning: Citation 'https://developers.google.com/ar/reference/unity/prefa
-b/Environmental_Light' on page 7 undefined on input line 270.
+b/Environmental_Light' on page 7 undefined on input line 271.
 
 
 LaTeX Warning: Citation 'https://developer.apple.com/documentation/arkit/ardire
-ctionallightestimate' on page 7 undefined on input line 270.
+ctionallightestimate' on page 7 undefined on input line 271.
 
 [7
 
 ]
 
 LaTeX Warning: Citation 'http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
-r=990650' on page 8 undefined on input line 274.
+r=990650' on page 8 undefined on input line 275.
 
 
 LaTeX Warning: Citation 'Lalonde-2009-10350' on page 8 undefined on input line 
-276.
+277.
 
 
 LaTeX Warning: Citation 'http://www.cs.cornell.edu/projects/shadows/files/wehrw
-ein_3dv15_shadows.pdf' on page 8 undefined on input line 277.
+ein_3dv15_shadows.pdf' on page 8 undefined on input line 278.
 
 
 LaTeX Warning: Citation 'http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
-r=1315013' on page 8 undefined on input line 279.
+r=1315013' on page 8 undefined on input line 280.
 
 
 LaTeX Warning: Citation 'http://www.cs.wm.edu/\nobreakspace {}ppeers/showPublic
-ation.php?id=Xia:2016:RSS' on page 8 undefined on input line 281.
+ation.php?id=Xia:2016:RSS' on page 8 undefined on input line 282.
 
 
 LaTeX Warning: Citation 'http://hazirbas.com/datasets/ddff12scene/' on page 8 u
-ndefined on input line 283.
+ndefined on input line 284.
 
 
 LaTeX Warning: Citation 'http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
-r=790313' on page 8 undefined on input line 284.
+r=790313' on page 8 undefined on input line 285.
 
 [8]
 
 LaTeX Warning: Citation 'https://arxiv.org/pdf/1411.4734.pdf' on page 9 undefin
-ed on input line 287.
+ed on input line 288.
 
 
 LaTeX Warning: Citation 'https://link.springer.com/content/pdf/10.1007/s00371-0
-10-0501-7.pdf' on page 9 undefined on input line 289.
+10-0501-7.pdf' on page 9 undefined on input line 290.
 
 
 LaTeX Warning: Citation 'https://arxiv.org/pdf/1611.06403.pdf' on page 9 undefi
-ned on input line 291.
+ned on input line 292.
 
 
 LaTeX Warning: Citation 'https://arxiv.org/pdf/1704.00090.pdf' on page 9 undefi
-ned on input line 293.
+ned on input line 294.
 
 [9]
 
 LaTeX Warning: Citation 'https://arxiv.org/pdf/1511.04384.pdf' on page 10 undef
-ined on input line 295.
+ined on input line 296.
 
 [10]
 Chapter 3.
-<images/Dematerial.png, id=290, 1080.035pt x 580.1675pt>
+<images/Dematerial.png, id=292, 1080.035pt x 580.1675pt>
 File: images/Dematerial.png Graphic file (type png)
 
 <use images/Dematerial.png>
-Package pdftex.def Info: images/Dematerial.png used on input line 341.
+Package pdftex.def Info: images/Dematerial.png used on input line 342.
 (pdftex.def)             Requested size: 423.7334pt x 227.62204pt.
 
 
 LaTeX Warning: Citation 'https://github.com/affinelayer/pix2pix-tensorflow/blob
-/master/pix2pix.py' on page 11 undefined on input line 362.
+/master/pix2pix.py' on page 11 undefined on input line 363.
 
 [11
 
 ] [12 <./images/Dematerial.png>] [13]
-<images/Stereo.png, id=315, 693.59125pt x 618.31pt>
+<images/Stereo.png, id=316, 693.59125pt x 618.31pt>
 File: images/Stereo.png Graphic file (type png)
  <use images/Stereo.png>
-Package pdftex.def Info: images/Stereo.png used on input line 380.
+Package pdftex.def Info: images/Stereo.png used on input line 381.
 (pdftex.def)             Requested size: 255.33357pt x 227.62204pt.
 
 
 LaTeX Warning: Citation 'http://ikea.csail.mit.edu/' on page 14 undefined on in
-put line 384.
+put line 385.
 
 
 LaTeX Warning: Citation 'https://docs.blender.org/manual/en/dev/render/cycles/n
-odes/types/shaders/principled.html' on page 14 undefined on input line 386.
+odes/types/shaders/principled.html' on page 14 undefined on input line 387.
 
 
 LaTeX Warning: Citation 'https://hdrihaven.com/' on page 14 undefined on input 
-line 388.
+line 389.
 
-[14 <./images/Stereo.png>] <images/left/0.png, id=325, 256.96pt x 256.96pt>
+[14 <./images/Stereo.png>] <images/left/0.png, id=326, 256.96pt x 256.96pt>
 File: images/left/0.png Graphic file (type png)
 
 <use images/left/0.png>
-Package pdftex.def Info: images/left/0.png used on input line 393.
+Package pdftex.def Info: images/left/0.png used on input line 394.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/right/0.png, id=326, 256.96pt x 256.96pt>
+ <images/right/0.png, id=327, 256.96pt x 256.96pt>
 File: images/right/0.png Graphic file (type png)
 
 <use images/right/0.png>
-Package pdftex.def Info: images/right/0.png used on input line 394.
+Package pdftex.def Info: images/right/0.png used on input line 395.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/normals/0.png, id=327, 256.96pt x 256.96pt>
+ <images/normals/0.png, id=328, 256.96pt x 256.96pt>
 File: images/normals/0.png Graphic file (type png)
 
 <use images/normals/0.png>
-Package pdftex.def Info: images/normals/0.png used on input line 395.
+Package pdftex.def Info: images/normals/0.png used on input line 396.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/hdri/0.png, id=328, 256.96pt x 256.96pt>
+ <images/hdri/0.png, id=329, 256.96pt x 256.96pt>
 File: images/hdri/0.png Graphic file (type png)
 
 <use images/hdri/0.png>
-Package pdftex.def Info: images/hdri/0.png used on input line 396.
+Package pdftex.def Info: images/hdri/0.png used on input line 397.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/left/11.png, id=329, 513.92pt x 513.92pt>
+ <images/left/11.png, id=330, 513.92pt x 513.92pt>
 File: images/left/11.png Graphic file (type png)
 
 <use images/left/11.png>
-Package pdftex.def Info: images/left/11.png used on input line 397.
+Package pdftex.def Info: images/left/11.png used on input line 398.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/right/11.png, id=330, 513.92pt x 513.92pt>
+ <images/right/11.png, id=331, 513.92pt x 513.92pt>
 File: images/right/11.png Graphic file (type png)
 
 <use images/right/11.png>
-Package pdftex.def Info: images/right/11.png used on input line 398.
+Package pdftex.def Info: images/right/11.png used on input line 399.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/normals/11.png, id=331, 513.92pt x 513.92pt>
+ <images/normals/11.png, id=332, 513.92pt x 513.92pt>
 File: images/normals/11.png Graphic file (type png)
 
 <use images/normals/11.png>
-Package pdftex.def Info: images/normals/11.png used on input line 399.
+Package pdftex.def Info: images/normals/11.png used on input line 400.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/hdri/11.png, id=332, 401.5pt x 401.5pt>
+ <images/hdri/11.png, id=333, 401.5pt x 401.5pt>
 File: images/hdri/11.png Graphic file (type png)
 
 <use images/hdri/11.png>
-Package pdftex.def Info: images/hdri/11.png used on input line 400.
+Package pdftex.def Info: images/hdri/11.png used on input line 401.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
- <images/left/22.png, id=333, 513.92pt x 513.92pt>
+ <images/left/22.png, id=334, 513.92pt x 513.92pt>
 File: images/left/22.png Graphic file (type png)
 
 <use images/left/22.png>
-Package pdftex.def Info: images/left/22.png used on input line 401.
+Package pdftex.def Info: images/left/22.png used on input line 402.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/right/22.png, id=334, 513.92pt x 513.92pt>
+ <images/right/22.png, id=335, 513.92pt x 513.92pt>
 File: images/right/22.png Graphic file (type png)
 
 <use images/right/22.png>
-Package pdftex.def Info: images/right/22.png used on input line 402.
+Package pdftex.def Info: images/right/22.png used on input line 403.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/normals/22.png, id=335, 513.92pt x 513.92pt>
+ <images/normals/22.png, id=336, 513.92pt x 513.92pt>
 File: images/normals/22.png Graphic file (type png)
 
 <use images/normals/22.png>
-Package pdftex.def Info: images/normals/22.png used on input line 403.
+Package pdftex.def Info: images/normals/22.png used on input line 404.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/hdri/22.png, id=336, 401.5pt x 401.5pt>
+ <images/hdri/22.png, id=337, 401.5pt x 401.5pt>
 File: images/hdri/22.png Graphic file (type png)
 
 <use images/hdri/22.png>
-Package pdftex.def Info: images/hdri/22.png used on input line 404.
+Package pdftex.def Info: images/hdri/22.png used on input line 405.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
 
 
@@ -1392,13 +1392,57 @@ es/left/22.png (PNG copy)> <./images/right/22.png (PNG copy)> <./images/normals
 Chapter 4.
 
 LaTeX Warning: Citation 'http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
-r=1284395' on page 17 undefined on input line 421.
+r=1284395' on page 17 undefined on input line 422.
 
-<exposure_example.jpg, id=352, 2959.055pt x 2573.615pt>
+<images/validation/516.png, id=353, 256.96pt x 256.96pt>
+File: images/validation/516.png Graphic file (type png)
+
+<use images/validation/516.png>
+Package pdftex.def Info: images/validation/516.png used on input line 430.
+(pdftex.def)             Requested size: 56.9055pt x 56.90385pt.
+
+<images/validation/516_gt.jpg, id=354, 401.5pt x 401.5pt>
+File: images/validation/516_gt.jpg Graphic file (type jpg)
+
+<use images/validation/516_gt.jpg>
+Package pdftex.def Info: images/validation/516_gt.jpg used on input line 431.
+(pdftex.def)             Requested size: 56.9055pt x 56.90189pt.
+
+<images/validation/516_pred.jpg, id=355, 401.5pt x 401.5pt>
+File: images/validation/516_pred.jpg Graphic file (type jpg)
+
+<use images/validation/516_pred.jpg>
+Package pdftex.def Info: images/validation/516_pred.jpg used on input line 432.
+
+(pdftex.def)             Requested size: 56.9055pt x 56.90189pt.
+
+<images/validation/332.png, id=356, 256.96pt x 256.96pt>
+File: images/validation/332.png Graphic file (type png)
+
+<use images/validation/332.png>
+Package pdftex.def Info: images/validation/332.png used on input line 434.
+(pdftex.def)             Requested size: 56.9055pt x 56.90385pt.
+
+<images/validation/332_gt.jpg, id=357, 401.5pt x 401.5pt>
+File: images/validation/332_gt.jpg Graphic file (type jpg)
+
+<use images/validation/332_gt.jpg>
+Package pdftex.def Info: images/validation/332_gt.jpg used on input line 435.
+(pdftex.def)             Requested size: 56.9055pt x 56.90189pt.
+
+<images/validation/332_pred.jpg, id=358, 401.5pt x 401.5pt>
+File: images/validation/332_pred.jpg Graphic file (type jpg)
+
+<use images/validation/332_pred.jpg>
+Package pdftex.def Info: images/validation/332_pred.jpg used on input line 436.
+
+(pdftex.def)             Requested size: 56.9055pt x 56.90189pt.
+
+<exposure_example.jpg, id=359, 2959.055pt x 2573.615pt>
 File: exposure_example.jpg Graphic file (type jpg)
 
 <use exposure_example.jpg>
-Package pdftex.def Info: exposure_example.jpg used on input line 428.
+Package pdftex.def Info: exposure_example.jpg used on input line 446.
 (pdftex.def)             Requested size: 227.62206pt x 197.96083pt.
 
 
@@ -1406,14 +1450,17 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 [17
 
-] [18 <./exposure_example.jpg>]
+] [18 <./images/validation/516.png (PNG copy)> <./images/validation/516_gt.jpg>
+ <./images/validation/516_pred.jpg> <./images/validation/332.png (PNG copy)> <.
+/images/validation/332_gt.jpg> <./images/validation/332_pred.jpg> <./exposure_e
+xample.jpg>]
 Chapter 5.
 [19
 
 ]
 
 LaTeX Warning: Citation 'http://www.cs.wm.edu/\nobreakspace {}ppeers/showPublic
-ation.php?id=Xia:2016:RSS' on page 20 undefined on input line 453.
+ation.php?id=Xia:2016:RSS' on page 20 undefined on input line 471.
 
 [20]
 Appendix A.
@@ -1421,19 +1468,16 @@ Appendix A.
 
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 525.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 525.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 543.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 543.
  (./dissertation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 525.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 525.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 543.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 543.
 Package rerunfilecheck Info: File `dissertation.out' has not changed.
 (rerunfilecheck)             Checksum: F9107452594AD106AD9A922ED8602BEF;1462.
 
 
 LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 
 Package biblatex Warning: Please (re)run Biber on the file:
@@ -1445,13 +1489,13 @@ Package logreq Info: Writing requests to 'dissertation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 26712 strings out of 494910
- 481605 string characters out of 6179836
- 1027288 words of memory out of 5000000
- 29435 multiletter control sequences out of 15000+600000
+ 26753 strings out of 494910
+ 482665 string characters out of 6179836
+ 1027427 words of memory out of 5000000
+ 29467 multiletter control sequences out of 15000+600000
  12476 words of font info for 47 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 68i,12n,76p,2823b,875s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 68i,13n,76p,2823b,875s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texli
@@ -1468,10 +1512,10 @@ e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on dissertation.pdf (35 pages, 9293384 bytes).
+Output written on dissertation.pdf (35 pages, 10106497 bytes).
 PDF statistics:
- 465 PDF objects out of 1000 (max. 8388607)
- 385 compressed objects within 4 object streams
- 111 named destinations out of 1000 (max. 500000)
- 279 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 473 PDF objects out of 1000 (max. 8388607)
+ 387 compressed objects within 4 object streams
+ 113 named destinations out of 1000 (max. 500000)
+ 309 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -19,5 +19,5 @@ if __name__ == "__main__":
         if 'arr' in arg:
             id = int(arg.split('=')[1])
 
-    for i in range(100):
+    for i in range(10):
         render(id*1000 + i)

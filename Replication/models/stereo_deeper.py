@@ -30,7 +30,6 @@ class Model:
                 self.right_image = tf.placeholder(tf.float32, shape=[1,256,256,3])
                 self.norm_image = tf.placeholder(tf.float32, shape=[1,64,64,3])
                 gt = tf.placeholder(tf.float32, shape=[1,64,64,3])
-
                 pass
             else:
                 iterator = tf.data.Iterator.from_string_handle(
@@ -81,17 +80,18 @@ class Model:
 
     def encode(self, left, right):
 
-        l_encodings = layers.siamese_encode(left, reuse=False)
-        r_encodings = layers.siamese_encode(right, reuse=True)
-
-        joint = tf.concat([l_encodings[-1], r_encodings[-1]], axis=-1)
-        # fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
+        l_encodings = layers.siamese_encode_2(left, reuse=False)
+        r_encodings = layers.siamese_encode_2(right, reuse=True)
+        if FLAGS.dotprod:
+            joint = tf.matmul(l_encodings[-1], r_encodings[-1], transpose_b=True)
+            joint = tf.concat([l_encodings[-1], r_encodings[-1], joint], axis=-1)
+        else:
+            joint = tf.concat([l_encodings[-1], r_encodings[-1]], axis=-1)            # fully_encoded = tf.nn.dropout(fully_encoded, 0.5)
         joint_b = layers.encode_layer(joint, 512, (3, 3), (2, 2), 1, maxpool=True)
-        joint_c = layers.encode_layer(joint_b, 512, (3, 3), (2, 2), 1, maxpool=True)
-        joint_d = layers.encode_layer(joint_c, 1024, (3, 3), (2, 2), 1, maxpool=True)
+        joint_c = layers.encode_layer(joint_b, 1024, (3, 3), (2, 2), 1, maxpool=True)
 
-        env_pred = self.decode(joint_d)
-        norm_pred = self.decode(joint_d)
+        env_pred = self.decode(joint_c)
+        norm_pred = self.decode(joint_c)
 
         return env_pred, norm_pred
 
@@ -99,10 +99,10 @@ class Model:
         decode_1 = layers.decode_layer(encoded, 512, (3, 3), (2, 2), 3)
         decode_2 = layers.decode_layer(decode_1, 512, (3, 3), (2, 2), 3)
         decode_3 = layers.decode_layer(decode_2, 256, (3, 3), (2, 2), 3)
-        decode_4 = layers.decode_layer(decode_3, 128, (3, 3), (2, 2), 2)
+        #decode_4 = layers.decode_layer(decode_3, 128, (3, 3), (2, 2), 2)
         #decode_5 = layers.decode_layer(decode_4, 64, (3, 3), (2, 2), 2)
         #decode_6 = layers.decode_layer(decode_5, 32, (3, 3), (2, 2), 2)
-        return layers.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
+        return layers.encode_layer(decode_3, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
 
     """Create tensorboard summaries of images and loss"""
 
@@ -128,7 +128,7 @@ class Model:
         return img_summary, scalar_summary
 
     def validate(self):
-        validation_loss = self.loss
+        validation_loss = self.env_loss
         with tf.variable_scope("validation_mean") as scope:
             self.val_loss, self.val_update = tf.metrics.mean(validation_loss)
             self.validation_summary = tf.summary.merge([tf.summary.scalar("Validation Loss", self.val_loss)])
