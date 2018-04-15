@@ -98,11 +98,9 @@ Our network is able to achieve equivalent results to previous work that relied o
 
 \begin{figure}
 \centering
-\includegraphics[height=5cm]{images/examples/gt}\\
-    \vspace{0.5cm}
-\includegraphics[height=5cm]{images/examples/basic}
+\includegraphics[height=8cm]{images/examples/example_25p}\\
 
-\caption{Ground Truth Lighting - Current Basic AR Lighting - Our Model's Prediction}
+\caption{Ground Truth Lighting - Our Model's Prediction - Current Basic AR Lighting - }
 \label{example_1}
 \end{figure}
 \chapter*{Supporting Technologies}
@@ -194,6 +192,7 @@ which Computer Graphics attempts to approximate.
 In Computer Graphics, materials are often referred to as having 'Diffuse' and 'Specular' properties, which capture the aforementioned behaviour. This is in fact an approximation that allows for the efficient rendering of surfaces, though does not capture the light behaviour perfectly. 'Diffuse' refers to the wavelength, or colour, of light that is reflected off a surface equally in every direction. This can be thought of as the 'base colour', that is somewhat invariant to the viewpoint of the observer. A material that is entirely diffuse is often reffered to as 'Lambertian'. 'Specularity' refers to how reflective an object is, and is often used to approximate the light being reflected directly from a light source towards the observer. The 'Phong Shading' model combines these two elements to roughly represent a variety of materials, under the assumption that reflective materials have a dominant component that can be modelled as a mirror. For example an unlaquered wooden panel will be very unreflective and may contain no 'specular' component at all as its colour remains fairly consistent when observed from every direction. On the other hand a plastic ball will have a dominant colour but also reflect a lot of the incoming light, which is modelled as a combination of the incoming light direction and the surface angle. Modern Raytracing makes use of a far more accurate model called a Bidirectional Reflectance Distribution Function, which defines a probability distribution function. This function gives the probablity of an incoming photon with angle of incidence i, reflecting with an angle of incidence j. Over many photons this is able to accurately capture the reflective behaviour of a surface, and is often used in combination with properties like 'Albedo' and 'Subsurface Scattering' to result in an almost photorealistic surface.
 \begin{center}
 \begin{figure}
+\centering
 \begin{tikzpicture}
 \draw[gray, thick] (-1,0) -- (8,0); %floor
 \draw[gray, thick] (8,0) -- (8,4); % wall
@@ -214,6 +213,7 @@ A product of the reflective nature of surfaces results in 'indirect lighting', a
 A benefit of 'Environment Maps' is that rather than being computed, they can be captured from real-world data. This is a technique often used in films to apply the lighting from a set to virtual additions. This is achieved by taking photographs of a reflective sphere under different exposures to capture a range of lighting intensities. These images can then be composited to capture the range of light in a single format. By using a sphere, which has known geometry, it is easy to invert the image into a High Dynamic Range panorama. It is essential to use an HDR format, as RGB captures only a very narrow range of light intensity.
 \begin{center}
 \begin{figure}
+\centering
 \begin{tikzpicture}
 \node[draw, circle, minimum size=5cm, draw=gray!60] at (4,2) (env){};
 \node[above] at (env.north) {Environment Map};
@@ -365,8 +365,13 @@ Unfortunately this task presented difficulties in data formatting that resulted 
 The original work consisted of two models, one that used single material objects and one that used segmented multi-material objects. The multi-material network was a very simple improvement on the original, where the object was first segmented into 3 materials, and fed as input to 3 identical convolutional networks. The output of these convolutions was then concatenated and fed into the deconvolutional step to again produce a single HDR environment map. As I was able to achieve good results with the single material network, I thought it was unnecessary to also train the multi-material model, which effectively provided a denser reflectance map to the network. I trained over 50 epochs, each consisting of 56,000 samples, with a learning rate of 1.6e-9. The output to this architecture was a 64x64 HDR environment map that could then be imported into graphics software for qualitative analysis. Being such a low resolution, it bared little structural resembles to the original full resolution environment map. It did however appear to be a good approximation of the low-resolution version, and would result in very reasonable lighting when used as an HDRI to render objects, when compared to the original. It was found that the quality of the approximation depended heavily on the density of the provided reflectance map, and the complexity of the lighting in the scene. In cases where the scene was outside, even with very sparse reflectance maps, the network was able to infer features such as sky and ground colour as well as approximate sun position. This was due to the simplicity of the scene lighting, leading to cases where the lighting conditions could be adequately approximated almost entirely from the background image. Some indoor scene, especially those containing a mix of synthetic lights and windows resulted in very poor predictions. In these scenes, very dense reflectance maps had to be provided to produce good results. \todo{Put some images here}
 \newline
 It is important to note that while these results were promising, they were based on reflectance maps obtained using perfect surface normals, limiting their use in practical applications. 
-\section{Stereo Model Architecture}
-It was apparent from the results of the previous work that the sparse reflectance map and background combination was not enough data to construct a robust model for both indoor and outdoor scenes. By explicitly calculating the reflectance, ignoring shadow information and assuming point-like objects, much of the appearance data is removed. Furthermore the surface normal calculation required is impractical from a single image, due to the unconstrained nature of an object's appearance. Instead of relying on explicit reflectance maps, we took a new approach to design models that could exploit the additional spatial information of stereo images to infer surface normals, allowing the network to learn it's own model of reflectance. While this approach requires more information (multiple images), this information is available in use cases such as AR and film editing. One consideration was to simply use a stereo matching technique to calculate a relative depth map from the stereo images and find the surface normals. These estimated normals could then be used in the previous network to estimate the environment lighting. However stereo matching is a difficult task that often involves human intervention, and does in fact rely on extracting identical convolutional features from the two images and finding their spatial differences. Most stereo matching techniques are slow, and while they can produce a good estimate of the depth of objects in a scene, they cannot produce surface normals to the degree of accuracy we require. Instead we construct a model based on learned stereo matching, providing the model with two views of an object, allowing it to learn an internal representation of geometry and lighting. By using two views, provided to two sets of convolutional layers, before being combined in intermediate layers, the network can extract similar features and exploit consistencies between views. To this end we also present results from a 'siamese' network, where the weights in the convolutional layers are shared, such that the same features are extracted from each view. We also present a network that simultaneously estimates object geometry along with the scene lighting.
+\section{Stereo}
+It was apparent from the results of the previous work that the sparse reflectance map and background combination was not enough data to construct a robust model for both indoor and outdoor scenes. By explicitly calculating the reflectance, ignoring shadow information and assuming point-like objects, much of the appearance data is removed. Furthermore the surface normal calculation required is impractical from a single image, due to the unconstrained nature of an object's appearance. Instead of relying on explicit reflectance maps, we took a new approach to design models that could exploit the additional spatial information of stereo images to infer surface normals, allowing the network to learn it's own model of reflectance. While this approach requires more information (multiple images), this information is available in use cases such as AR and film editing. One consideration was to simply use a stereo matching technique to calculate a relative depth map from the stereo images and find the surface normals. These estimated normals could then be used in the previous network to estimate the environment lighting. However stereo matching is a difficult task that often involves human intervention, and does in fact rely on extracting identical convolutional features from the two images and finding their spatial differences. Most stereo matching techniques are slow, and while they can produce a good estimate of the depth of objects in a scene, they cannot produce surface normals to the degree of accuracy we require. Instead we construct a model based on learned stereo matching, providing the model with two views of an object, allowing it to learn an internal representation of geometry and lighting. By using two views, provided to two sets of convolutional layers, before being combined in intermediate layers, the network can extract similar features and exploit consistencies between views.
+\subsection{Model Architecture}
+To construct a model that produces good results, while minimising network size for performance and training times, it is important to carefully consider the problem being solved and the features and patterns that are being learned. By using stereo views we aim to find correspondance between similar features and an understanding of geometry due to the parallax effect. To this end we present results from a 'siamese' network, where the weights in the convolutional layers are shared, such that the same features are extracted from each view. The results from these layers are then passed through a single pipeline of convolutional and deconvolutional layers to produce the resulting environment map.
+\newline
+\todo{Dot product}
+We also present a network that simultaneously estimates object geometry along with the scene lighting. This network was used to qualitatively evaluate the scene data that the model was able to extract, with the assumption that if the model could not predict normals, it would struggle to predict lighting. We experimented with different techniques for feature extraction that would benefit geometry and lighting understanding.
 \newline
 For our prediction task we make the following assumptions:
 \begin{itemize}
@@ -378,6 +383,7 @@ For our prediction task we make the following assumptions:
 \end{itemize}
 The previous work was adapted to a siamese network by sharing weights between the convolutional layers. The two inputs are fed into two identical 'Encode' blocks, consisting of a number of convolutional layers with batch normalization and max pooling. However, during the training psrocess, only the weights for the first path are trained. These weights are duplicated in the second path to ensure that the same convolutions are being performed on each image of the pair. The output of these two paths is then concatenated before being passed into the deconvolutional steps. Multi-scale features are also used, passing features for the second path into the deconvolutional layers. An important difference in this network is that we do not provide the network an explicit background image, in fact the resolution of the background is lowered to give a depth-of-field effect. In real stereo images, the background would also move with the camera, however capturing this data is impractical. Fortunately due to the parallax effect, the background appears to move far less than the foreground anyway and so this approximation does not cause significant issues. The model was trained with similar parameters to the previous network, using a L1 loss function on the predicted and ground truth environment map.
 \begin{figure}
+\centering
 \includegraphics[height=8cm]{images/Stereo}
 \caption The stereo image architecture. Weights are shared in the first 3 encode blocks.
 \end{figure}
@@ -421,26 +427,86 @@ We start with two basic difference metrics, the L1 and L2 norm, which are both p
 \newline
 Another commonly used image comparison metric is the SSIM \footcite{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=1284395},
 \[SSIM(x,y) = \frac{(2u_xu_y + c_1)(2\sigma_{xy} + c_2)}{(u^2_x + u^2_y + c_1)(\sigma^2_x + \sigma^2_y + c_2)}\]
-which aims to predict the accuracy of an image with human perception. It is a measure of structure, which takes luminance and contrast into account, and so many be better suited for HDR. Finally, we assess the models ability to identify the direction of the provailing light source, by taking the spherical distance between the brightest pixel in the ground truth and predicted image.
+which aims to predict the accuracy of an image with human perception. It is a measure of structure, which takes luminance and contrast into account, and so is better suited for HDR. Finally, we assess the models ability to identify the direction of the provailing light source, by taking the distance between the brightest pixel in the ground truth and predicted image. For assessment we use a validation set of 1000 images, under new environment maps and models with random materials and rotations.
+\newline
+On our synthetic benchmark, our deep stereo model achieved a Mean Squared Error of 150.03, with the 50th and 75th percentile being 2.67 and 8.3 respectively. This implies that while the model performs well in most tested scenarios, there are some cases where the predictions are vastly incorrect, as shown in \ref{ssim_results}. For the SSIM test, the stereo model achieves a respectable average of 0.322, with 50th and 75th percentiles of 0.30 and 0.41. These results are close to that of the previous work that relied on known surface geometry.
 \todo{Put a table of results here followed by discussion}
 \begin{figure}
 \centering
-\begin{tabular}{|c|c|c|c|}
-	Input & Ground Truth Environment & Predicted Environment & SSIM Score \\
- \includegraphics[width=2cm]{images/validation/516}&
- \includegraphics[width=2cm]{images/validation/516_gt}&
- \includegraphics[width=2cm]{images/validation/516_pred}&
-  0.157 \\
- \includegraphics[width=2cm]{images/validation/332}&
- \includegraphics[width=2cm]{images/validation/332_gt}&
- \includegraphics[width=2cm]{images/validation/332_pred}&
-  0.002 \\
- 
+\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}|  }
+ \hline
+ \multicolumn{5}{|c|}{SSIM Evaluation} \\
+ \hline
+  & Input Data &Ground Truth Environment&Predicted Environment&SSIM Score\\
+ \hline
+ 25th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_ssim_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_ssim_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_ssim_pred_tm}}& 0.22\\
+ 50th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_ssim_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_ssim_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_ssim_pred_tm}}& 0.30\\
+ 75th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_ssim_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_ssim_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_ssim_pred_tm}}& 0.41\\
+
+ \hline
 \end{tabular}
+
+\label{ssim_results}
 \caption{Demonstration on test set.}
 
 \end{figure}
 
+\begin{figure}
+\centering
+\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}|  }
+ \hline
+ \multicolumn{5}{|c|}{MSE Evaluation} \\
+ \hline
+  & Input Data &Ground Truth Environment&Predicted Environment&MSE Score\\
+ \hline
+ 25th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_mse_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_mse_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_mse_pred_tm}}& 0.22\\
+ 50th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_mse_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_mse_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_mse_pred_tm}}& 0.30\\
+ 75th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_mse_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_mse_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_mse_pred_tm}}& 0.41\\
+ \hline
+\end{tabular}
+
+\label{mse_results}
+\caption{Demonstration on test set.}
+
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}|  }
+ \hline
+ \multicolumn{5}{|c|}{Direct Light Direction Evaluation} \\
+ \hline
+  & Input Data &Ground Truth Environment&Predicted Environment&MSE Score\\
+ \hline
+ 25th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_sun_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_sun_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_sun_pred_tm}}& 0.22\\
+ 50th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_sun_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_sun_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_sun_pred_tm}}& 0.30\\
+ 75th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_sun_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_sun_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_sun_pred_tm}}& 0.41\\
+ \hline
+\end{tabular}
+
+\label{mse_results}
+\caption{Demonstration on test set.}
+
+\end{figure}
+\todo{Oops looks like a training sample made it's way into the validation set}
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.5\textwidth]{exposure_example}
@@ -449,9 +515,7 @@ which aims to predict the accuracy of an image with human perception. It is a me
 \end{figure}
 
 \section{Model Performance}
-It is not only important to assess the accuracy of the predicted lighting, but also the resource requirements. A model that produces rough approximations with a lower memory footprint and computation time is still valuable, especially in the field of AR. For this we assess the memory usage and average inference time for our validation set. Testing the model performance across different hardware configurations is beyond the scope of this project.
-% -----------------------------------------------------------------------------
-
+It is not only important to assess the accuracy of the predicted lighting, but also the resource requirements. A model that produces rough approximations with a lower memory footprint and computation time is still valuable, especially in the field of AR. For this we assess the memory usage and average inference time for our validation set. Testing the model performance across different hardware configurations is beyond the scope of this project. Our model achieved an average per-image inference time of 32ms using an Nvidia GTX 1070 consumer GPU. For reference, this is just over 30 frames per second, the minimum framerate expected for smooth non-interactive video. The performance of the model is acceptable for use in video editing on home desktop computers and laptops. For use in mobile AR however, the inference time is far to slow to be used live on very frame. However as lighting conditions tend to remain constant for long periods of time, running inference every frame would be wasteful. A more practical approach would be to recalculate the lighting every time a major change in luminance values in the frame is detected, or when the user places an object - there is little to gain from calculating the lighting in physical areas where virtual objects will not be placed.
 \chapter{Conclusion}
 \label{chap:conclusion}
 We have presented a CNN approach for estimating the lighting at an object that exploits multiple views.

@@ -11,14 +11,14 @@ import addon_utils
 import math
 
 scene_dir = os.environ['SCENE_DIR']
-
+model_dir = os.environ['MODEL_DIR']
 
 class SceneGenerator:
     scene = bpy.context.scene
     envmap_camera = bpy.data.objects["Envmap_Camera"]
     render_camera = bpy.data.objects["Camera"]
     camera_limits = [(0.8, 1.3), (-0.1, 0.1), (-3.14, 3.14)]
-    envmaps = glob.glob('{}/val_hdris/*'.format(scene_dir))
+    envmaps = glob.glob('{}/hdris/*'.format(scene_dir))
     tables = [obj.name for obj in scene.objects if "Table" in obj.name]
     imported_objects = []
     table = {}
@@ -36,8 +36,8 @@ class SceneGenerator:
         mat_prop(self.material, 'Subsurface', random.uniform(0, 0.2))
         mat_prop(self.material, 'Subsurface Color', random_colour())
         mat_prop(self.material, 'Metallic', random.uniform(0, 1))
-        mat_prop(self.material, 'Specular', random.uniform(0, 1))
-        mat_prop(self.material, 'Roughness', random.uniform(0, 1))
+        mat_prop(self.material, 'Specular', random.uniform(0.3, 1))
+        mat_prop(self.material, 'Roughness', random.uniform(0, 0.6))
         for obj in objects:
             if obj.type != 'CAMERA' and obj.type != 'LAMP':
                 if obj.data.materials:
@@ -72,7 +72,7 @@ class SceneGenerator:
                 # bpy.ops.object.mode_set(mode='OBJECT')
                 obj.select = True
 
-    def place_random_object(self):
+    def place_random_object(self, name):
         path = random.choice(self.models)
         bpy.ops.import_scene.obj(filepath=path)
         for material in bpy.data.materials:
@@ -82,6 +82,9 @@ class SceneGenerator:
         bpy.ops.transform.resize(value=(0.1, 0.1, 0.1), constraint_axis=(False, False, False),
                                  constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED',
                                  proportional_edit_falloff='SMOOTH', proportional_size=1)
+        text_file = open("{}/meta/{}.txt".format(scene_dir, name), "w+")
+        text_file.write("Model: {}".format(path))
+        text_file.close()
         # bpy.ops.mesh.uv_texture_remove()
         self.car = objects
         return path
@@ -97,6 +100,8 @@ class SceneGenerator:
         self.scene.camera = self.render_camera
         bpy.data.cameras[self.scene.camera.name].clip_start = 0.0001
         bpy.data.cameras[self.scene.camera.name].clip_end = 1000
+        bpy.data.cameras[self.scene.camera.name].angle = 1.05
+
         random_rotation(self.scene.camera, self.camera_limits)
         self.random_material(self.car)
         bpy.ops.view3d.camera_to_view_selected()
@@ -104,22 +109,22 @@ class SceneGenerator:
         self.scene.view_settings.view_transform = 'Default'
         self.scene.render.image_settings.file_format = 'PNG'
         self.scene.render.resolution_percentage = 100
-        self.scene.render.resolution_x = 512
-        self.scene.render.resolution_y = 512
-        move_object(self.scene.camera, (-1, 0.0, 0.0))
-        self.nodes["File Output"].base_path = "{}/renders/normals/".format(scene_dir)
+        self.scene.render.resolution_x = 256
+        self.scene.render.resolution_y = 256
+        move_object(self.scene.camera, (-1.5, 0.0, 0.0))
+        self.nodes["File Output"].base_path = "{}/renders/bg/".format(scene_dir)
         self.nodes["File Output"].file_slots[0].path = name + '_'
         bpy.data.scenes['Scene'].render.filepath = "{}/renders/left/{}".format(scene_dir,
                                                                                '{}.png'.format(name))
         bpy.ops.render.render(write_still=True)
-        move_object(self.scene.camera, (1, 0.0, 0.0))
+        move_object(self.scene.camera, (3, 0.0, 0.0))
         bpy.data.scenes['Scene'].render.filepath = "{}/renders/right/{}".format(scene_dir,
                                                                                 '{}.png'.format(name))
 
 
-        #self.scene.use_nodes = True
+        self.scene.use_nodes = True
         bpy.ops.render.render(write_still=True)
-        #self.scene.use_nodes = False
+        self.scene.use_nodes = False
         self.surface_normals()
         bpy.context.scene.render.layers["RenderLayer"].use_sky = False
         bpy.data.scenes['Scene'].render.filepath = "{}/renders/norms/{}".format(scene_dir,
@@ -137,8 +142,8 @@ class SceneGenerator:
     def render_envmap(self, name='test'):
         for obj in self.car:
             obj.hide_render = True
-        self.scene.render.resolution_x = 32
-        self.scene.render.resolution_y = 32
+        self.scene.render.resolution_x = 64
+        self.scene.render.resolution_y = 64
         self.scene.render.resolution_percentage = 100
         self.envmap_camera.rotation_euler = self.render_camera.rotation_euler
         self.scene.camera = self.envmap_camera
@@ -174,7 +179,7 @@ def random_rotation(object, limits):
 
 def find_scene_data():
     categories = dict()
-    models = glob.glob('{}/models/*/*/*.obj'.format(scene_dir))
+    models = glob.glob('{}/models/*/*/*.obj'.format(model_dir))
     return models
 
 
@@ -182,36 +187,34 @@ def extract_material(category, materials, limit=4):
     return [i[0] for i in process.extract(category, materials, limit=limit)]
 
 
-def main(prefix):
+def main():
+    prefix = 0
+    for arg in sys.argv:
+        if 'prefix' in arg:
+            prefix = int(arg.split('=')[1])
     bpy.context.scene.render.engine = 'CYCLES'
     try:
         bpy.context.scene.cycles.device = 'GPU'
         bpy.context.user_preferences.addons['cycles'].preferences.compute_device_type = 'CUDA'
         bpy.context.scene.render.tile_x = 256
         bpy.context.scene.render.tile_y = 256
-        bpy.context.scene.render.use_persistent_data = True
     except TypeError:
-        return
-        bpy.context.scene.render.tile_x = 64
-        bpy.context.scene.render.tile_y = 64
+        bpy.context.scene.render.tile_x = 32
+        bpy.context.scene.render.tile_y = 32
         pass
     # bpy.context.user_preferences.addons['cycles'].preferences.devices[1].use = True
     prefs = bpy.context.user_preferences.addons['cycles'].preferences
     # bpy.ops.wm.addon_enable(module='materials_utils')
     print(prefs.compute_device_type)
     generator = SceneGenerator()
-    filename = generator.place_random_object()
+    filename = generator.place_random_object(prefix)
     filename = os.path.dirname(filename).split('/')[-1]
 
-    for i in range(prefix, prefix + 10):
+    for i in range(prefix, prefix + 1):
         generator.random_render(str(i))
-        generator.render_envmap(str(i))
+        #generator.render_envmap(str(i))
     generator.clear_objects(generator.car)
 
 
 if __name__ == "__main__":
-    prefix = 0
-    for arg in sys.argv:
-        if 'prefix' in arg:
-            prefix = int(arg.split('=')[1])
-        main(prefix)
+    main()

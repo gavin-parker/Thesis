@@ -6,7 +6,9 @@ import glob
 import os
 import cv2
 import numpy as np
+import math
 from skimage.measure import compare_ssim as ssim
+
 """Train the model with the settings provided in FLAGS"""
 
 
@@ -76,11 +78,12 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
     train_writer.close()
     sess.close()
 
+
 def collect_results(model=None):
     assert model
 
     config = tf.ConfigProto(allow_soft_placement=True)
-    config.gpu_options.per_process_gpu_memory_fraction = 0.95
+    config.gpu_options.per_process_gpu_memory_fraction = 0.8
 
     sess = tf.Session(config=config)
     sess.run(tf.local_variables_initializer())
@@ -98,33 +101,43 @@ def collect_results(model=None):
     total_ssim = 0.0
     if not os.path.exists("{}/results".format(FLAGS.val_dir)):
         os.makedirs("{}/results".format(FLAGS.val_dir))
-    for (l,r,gt) in zip(left_samples, right_samples, gt_samples):
-        left,right,envmap = prep_images(l,r,gt)
-        t0 = time.time()
-        prediction = sess.run(model.converted_prediction,
-                              feed_dict={model.left_image: left, model.right_image: right})[0]
-        t1 = time.time()
-        mse = mean_squared_error(envmap, prediction)
-        ss = ssim(envmap, prediction, multichannel=True)
-        total_ssim += ss
-        total_mse += mse
-        print("time: {}, mse: {}, ssim: {}".format(t1-t0, mse, ss))
-        total_time += (t1-t0)
-        name = os.path.splitext(os.path.basename(l))[0]
-        print("writing to {}/results/{}.hdr".format(FLAGS.val_dir, name))
-        cv2.imwrite('{}/results/{}.hdr'.format(FLAGS.val_dir, name), prediction)
-    print("Avg inference time: {}".format( total_time / len(left_samples)))
-    print("Total MSE: {}".format( total_mse/ len(left_samples)))
-    print("Total SSIM: {}".format( total_ssim/ len(left_samples)))
+    with open('{}/results/meta.csv'.format(FLAGS.val_dir), 'w+') as f:
+        for (l, r, gt) in zip(left_samples, right_samples, gt_samples):
+            left, right, envmap = prep_images(l, r, gt)
+            t0 = time.time()
+            prediction = sess.run(model.converted_prediction,
+                                  feed_dict={model.left_image: left, model.right_image: right})[0]
+            t1 = time.time()
+            mse = mean_squared_error(envmap, prediction)
+            ss = ssim(envmap, prediction, multichannel=True)
+            total_ssim += ss
+            total_mse += mse
+            name = os.path.splitext(os.path.basename(l))[0]
+            gt_mag = np.linalg.norm(envmap, axis=-1)
+            pred_mag = np.linalg.norm(prediction, axis=-1)
+            gt_sun = np.unravel_index(gt_mag.argmax(), gt_mag.shape)
+            pred_sun = np.unravel_index(pred_mag.argmax(), pred_mag.shape)
+            x_diff = min(math.fabs(gt_sun[0] - pred_sun[0]), math.fabs(gt_sun[0]+64-pred_sun[0]))
+            y_diff = min(math.fabs(gt_sun[1] - pred_sun[1]), math.fabs(gt_sun[1]+64-pred_sun[1]))
+            sun_dist = math.sqrt(x_diff*x_diff + y_diff*y_diff)
+            f.write("{},{},{},{}\n".format(name,mse, ss, sun_dist))
+            print("inference time: {}".format(t1-t0))
+            total_time += (t1 - t0)
+            cv2.imwrite('{}/results/{}.hdr'.format(FLAGS.val_dir, name), prediction)
+    print("Avg inference time: {}".format(total_time / len(left_samples)))
+    print("Total MSE: {}".format(total_mse / len(left_samples)))
+    print("Total SSIM: {}".format(total_ssim / len(left_samples)))
 
     sess.close()
 
-def mean_squared_error(a,b):
+
+def mean_squared_error(a, b):
     error = a - b
     squared_error = error * error
     return np.mean(squared_error, axis=(0, 1, 2))
 
-def prep_images(l,r,gt):
+
+def prep_images(l, r, gt):
     left = cv2.imread(l)
     right = cv2.imread(r)
     envmap = cv2.imread(gt, cv2.IMREAD_UNCHANGED)
@@ -136,4 +149,5 @@ def prep_images(l,r,gt):
     right = cv2.normalize(right.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
     left = np.expand_dims(left, axis=0)
     right = np.expand_dims(right, axis=0)
-    return (left,right,envmap)
+    return left, right, envmap
+

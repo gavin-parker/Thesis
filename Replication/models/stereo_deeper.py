@@ -99,9 +99,6 @@ class Model:
         decode_1 = layers.decode_layer(encoded, 512, (3, 3), (2, 2), 3)
         decode_2 = layers.decode_layer(decode_1, 512, (3, 3), (2, 2), 3)
         decode_3 = layers.decode_layer(decode_2, 256, (3, 3), (2, 2), 3)
-        #decode_4 = layers.decode_layer(decode_3, 128, (3, 3), (2, 2), 2)
-        #decode_5 = layers.decode_layer(decode_4, 64, (3, 3), (2, 2), 2)
-        #decode_6 = layers.decode_layer(decode_5, 32, (3, 3), (2, 2), 2)
         return layers.encode_layer(decode_3, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
 
     """Create tensorboard summaries of images and loss"""
