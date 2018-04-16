@@ -67,13 +67,12 @@
 \RequirePackage{lipsum}
 % http://www.ctan.org/tex-archive/usergrps/dante/dtk
 %\RequirePackage{dtk-logos}
-\RequirePackage{biblatex}
+%\RequirePackage{biblatex}
 \usepackage{todonotes}
 \usepackage{wrapfig}
-\usepackage{biblatex}
+\usepackage[utf8]{inputenc}
 
 % =============================================================================
-\bibliography{dissertation}
 
 \makeatletter
 
@@ -100,8 +99,7 @@
 
 % configure style of bibliography
 
-%\bibliographystyle{}
-
+%\bibliographystyle{unsrt}
 % configure style of pages
 
 \geometry{a4paper,lmargin=2.5cm,rmargin=2.5cm,tmargin=2.5cm,bmargin=2.5cm}

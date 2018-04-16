@@ -5,14 +5,21 @@ from os.path import isdir, join
 import sys
 import random
 import mathutils
+import time
 from fuzzywuzzy import fuzz, process
 from contextlib import contextmanager
 import addon_utils
+import cv2
 import math
+import numpy as np
 
 scene_dir = os.environ['SCENE_DIR']
 model_dir = os.environ['MODEL_DIR']
 sub_dir = os.environ['SUB_DIR']
+
+frame_count = 8
+
+
 class SceneGenerator:
     scene = bpy.context.scene
     envmap_camera = bpy.data.objects["Envmap_Camera"]
@@ -30,27 +37,29 @@ class SceneGenerator:
         self.material = bpy.data.materials['Mix']
         self.normal_material = bpy.data.materials['Normals']
         self.scene.use_nodes = False
+        bpy.ops.object.add(type='EMPTY')
+        self.empty = bpy.context.active_object
+        self.render_camera.parent = self.empty
 
-    def random_material(self, objects):
+    def random_material(self, obj):
         mat_prop(self.material, 'Base Color', random_colour())
         mat_prop(self.material, 'Subsurface', random.uniform(0, 0.2))
         mat_prop(self.material, 'Subsurface Color', random_colour())
         mat_prop(self.material, 'Metallic', random.uniform(0, 1))
         mat_prop(self.material, 'Specular', random.uniform(0.3, 1))
         mat_prop(self.material, 'Roughness', random.uniform(0, 0.6))
-        for obj in objects:
-            if obj.type != 'CAMERA' and obj.type != 'LAMP':
-                if obj.data.materials:
-                    obj.data.materials[0] = self.material
-                else:
-                    obj.data.materials.append(self.material)
+        if obj.type != 'CAMERA' and obj.type != 'LAMP':
+            if obj.data.materials:
+                obj.data.materials[0] = self.material
+            else:
+                obj.data.materials.append(self.material)
 
-                obj.active_material = self.material
-                bpy.context.scene.objects.active = obj
-                bpy.ops.object.mode_set(mode='EDIT')
-                bpy.ops.object.material_slot_assign()
-                bpy.ops.object.mode_set(mode='OBJECT')
-                obj.select = True
+            obj.active_material = self.material
+            bpy.context.scene.objects.active = obj
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.object.material_slot_assign()
+            bpy.ops.object.mode_set(mode='OBJECT')
+            obj.select = True
 
     def surface_normals(self):
         for obj in self.scene.objects:
@@ -62,14 +71,7 @@ class SceneGenerator:
                 obj.data.materials.append(self.normal_material)
                 bpy.context.object.active_material_index = 0
                 bpy.ops.object.material_slot_assign()
-                # obj.active_material = self.normal_material
                 bpy.ops.object.mode_set(mode='OBJECT')
-                # bpy.context.scene.objects.active = obj
-                # bpy.ops.object.mode_set(mode='EDIT')
-                # bpy.context.object.active_material_index = 1
-                # bpy.ops.object.material_slot_assign()
-                # bpy.context.object.active_material_index = 0
-                # bpy.ops.object.mode_set(mode='OBJECT')
                 obj.select = True
 
     def place_random_object(self, name):
@@ -79,14 +81,13 @@ class SceneGenerator:
             if material != self.material and material != self.normal_material:
                 bpy.data.materials.remove(material)
         objects = bpy.context.selected_objects[:]
+        bpy.context.scene.objects.active = objects[0]
+        bpy.ops.object.join()
         bpy.ops.transform.resize(value=(0.1, 0.1, 0.1), constraint_axis=(False, False, False),
                                  constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED',
                                  proportional_edit_falloff='SMOOTH', proportional_size=1)
-        #text_file = open("{}/meta/{}.txt".format(scene_dir, name), "w+")
-        #text_file.write("Model: {}".format(path))
-        #text_file.close()
-        # bpy.ops.mesh.uv_texture_remove()
-        self.car = objects
+        bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS')
+        self.car = bpy.context.selected_objects[0]
         return path
 
     def clear_objects(self, objects):
@@ -99,38 +100,33 @@ class SceneGenerator:
     def random_render(self, name='test'):
         self.scene.camera = self.render_camera
         bpy.data.cameras[self.scene.camera.name].clip_start = 0.0001
-        bpy.data.cameras[self.scene.camera.name].clip_end = 1000
+        bpy.data.cameras[self.scene.camera.name].clip_end = 10000
         bpy.data.cameras[self.scene.camera.name].angle = 1.05
         random_rotation(self.scene.camera, self.camera_limits)
-        bpy.context.scene.world.cycles_visibility.camera = False
         self.random_material(self.car)
-        bpy.ops.view3d.camera_to_view_selected()
         envmap_id = self.light_scene()
+        self.empty.rotation_euler = (0, 0, 0)
+        self.empty.location = self.car.location
+        bpy.ops.view3d.camera_to_view_selected()
+        bpy.context.scene.render.layers["RenderLayer"].use_sky = True
+        traj = random_trajectory()
+        for i in range(0, frame_count):
+            self.render_envmap("{}_{}".format(name, i))
+            self.render_frame("{}_{}".format(name, i))
+            move_object(self.scene.camera, traj)
+            prev = self.empty.rotation_euler
+            self.empty.rotation_euler = (prev[0] + traj[0], prev[1] + traj[1], prev[2] + traj[2])
+
+    def render_frame(self, name):
+        self.scene.camera = self.render_camera
         self.scene.view_settings.view_transform = 'Default'
         self.scene.render.image_settings.file_format = 'PNG'
         self.scene.render.resolution_percentage = 100
         self.scene.render.resolution_x = 256
         self.scene.render.resolution_y = 256
-        move_object(self.scene.camera, (-1, 0.0, 0.0))
-        self.nodes["File Output"].base_path = "{}/{}/normals/".format(scene_dir, sub_dir)
-        self.nodes["File Output"].file_slots[0].path = name + '_'
         bpy.data.scenes['Scene'].render.filepath = "{}/{}/left/{}".format(scene_dir, sub_dir,
-                                                                               '{}.png'.format(name))
+                                                                          '{}.png'.format(name))
         bpy.ops.render.render(write_still=True)
-        move_object(self.scene.camera, (2, 0.0, 0.0))
-        bpy.data.scenes['Scene'].render.filepath = "{}/{}/right/{}".format(scene_dir, sub_dir,
-                                                                                '{}.png'.format(name))
-
-
-        #self.scene.use_nodes = True
-        bpy.ops.render.render(write_still=True)
-        #self.scene.use_nodes = False
-        self.surface_normals()
-        bpy.context.scene.render.layers["RenderLayer"].use_sky = False
-        bpy.data.scenes['Scene'].render.filepath = "{}/{}/norms/{}".format(scene_dir, sub_dir,
-                                                                         '{}.png'.format(name))
-        bpy.ops.render.render(write_still=True)
-        bpy.context.scene.render.layers["RenderLayer"].use_sky = True
 
     def light_scene(self):
         envmap = random.choice(self.envmaps)
@@ -140,8 +136,7 @@ class SceneGenerator:
         return os.path.basename(envmap).split('.')[0]
 
     def render_envmap(self, name='test'):
-        for obj in self.car:
-            obj.hide_render = True
+        self.car.hide_render = True
         self.scene.render.resolution_x = 64
         self.scene.render.resolution_y = 64
         self.scene.render.resolution_percentage = 100
@@ -149,10 +144,14 @@ class SceneGenerator:
         self.scene.camera = self.envmap_camera
         self.scene.view_settings.view_transform = 'Raw'
         self.scene.render.image_settings.file_format = 'HDR'
-        bpy.data.scenes['Scene'].render.filepath = "{}/{}/envmaps/{}".format(scene_dir,sub_dir, '{}.hdr'.format(name))
+        bpy.data.scenes['Scene'].render.filepath = "{}/{}/envmaps/{}".format(scene_dir, sub_dir, '{}.hdr'.format(name))
         bpy.ops.render.render(write_still=True)
-        for obj in self.car:
-            obj.hide_render = False
+        self.car.hide_render = False
+
+
+def random_trajectory():
+    return (
+    math.radians(np.random.normal(0, 2)), math.radians(np.random.normal(0, 4)), math.radians(np.random.uniform(0, 30)))
 
 
 def mat_prop(mat, property, val):
@@ -185,6 +184,17 @@ def find_scene_data():
 
 def extract_material(category, materials, limit=4):
     return [i[0] for i in process.extract(category, materials, limit=limit)]
+
+
+def look_at(obj_camera, point):
+    loc_camera = obj_camera.matrix_world.to_translation()
+
+    direction = point - loc_camera
+    # point the cameras '-Z' and use its 'Y' as up
+    rot_quat = direction.to_track_quat('-Z', 'Y')
+
+    # assume we're using euler rotation
+    obj_camera.rotation_euler = rot_quat.to_euler()
 
 
 def main():

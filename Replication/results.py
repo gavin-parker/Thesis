@@ -15,7 +15,7 @@ sun = data[:,3]
 def mse_results():
     n, bins, patches = plt.hist(mse.astype(float), 100, normed=False, log=True)
     percentiles = [np.percentile(mse, 25), np.percentile(mse, 50), np.percentile(mse, 75)]
-    print("AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(mse), percentiles[0], percentiles[1], percentiles[2]))
+    print("MSE AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(mse), percentiles[0], percentiles[1], percentiles[2]))
     print(mse.min())
     plt.savefig('mse.png')
     example_img(percentiles[0], mse, "25p_mse")
@@ -25,7 +25,7 @@ def mse_results():
 def ssim_results():
     n, bins, patches = plt.hist(ssim.astype(float), 100, normed=False, log=True)
     percentiles = [np.percentile(ssim, 25), np.percentile(ssim, 50), np.percentile(ssim, 75)]
-    print("AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(ssim), percentiles[0], percentiles[1],
+    print("SSIM AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(ssim), percentiles[0], percentiles[1],
                                                 percentiles[2]))
     print(ssim.min())
     plt.savefig('ssim.png')
@@ -36,7 +36,7 @@ def ssim_results():
 def sun_results():
     n, bins, patches = plt.hist(sun.astype(float), 100, normed=False, log=True)
     percentiles = [np.percentile(ssim, 25), np.percentile(sun, 50), np.percentile(sun, 75)]
-    print("AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(sun), percentiles[0], percentiles[1],
+    print("SUN AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(sun), percentiles[0], percentiles[1],
                                                 percentiles[2]))
     print(sun.min())
     plt.savefig('sun.png')

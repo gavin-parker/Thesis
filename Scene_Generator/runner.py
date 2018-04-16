@@ -4,7 +4,7 @@ import sys
 
 
 def render(prefix):
-    os.system('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender canvas2.blend --background -E CYCLES --python {}/random_object.py prefix={}'.format(os.getcwd(), prefix))
+    os.system('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender canvas2.blend --background -E CYCLES --python {}/random_sequence.py prefix={}'.format(os.getcwd(), prefix))
 
 def test():
     os.system('/home/gavin/blender-2.79-linux-glibc219-x86_64/blender /home/gavin/scene_data/mix_material.blend --background -E CYCLES --python {}/test.py'.format(os.getcwd()))
