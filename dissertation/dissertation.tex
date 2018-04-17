@@ -374,29 +374,6 @@ The original work consisted of two models, one that used single material objects
 It is important to note that while these results were promising, they were based on reflectance maps obtained using perfect surface normals, limiting their use in practical applications. 
 \section{Stereo}
 It was apparent from the results of the previous work that the sparse reflectance map and background combination was not enough data to construct a robust model for both indoor and outdoor scenes. By explicitly calculating the reflectance, ignoring shadow information and assuming point-like objects, much of the appearance data is removed. Furthermore the surface normal calculation required is impractical from a single image, due to the unconstrained nature of an object's appearance. Instead of relying on explicit reflectance maps, we took a new approach to design models that could exploit the additional spatial information of stereo images to infer surface normals, allowing the network to learn it's own model of reflectance. While this approach requires more information (multiple images), this information is available in use cases such as AR and film editing. One consideration was to simply use a stereo matching technique to calculate a relative depth map from the stereo images and find the surface normals. These estimated normals could then be used in the previous network to estimate the environment lighting. However stereo matching is a difficult task that often involves human intervention, and does in fact rely on extracting identical convolutional features from the two images and finding their spatial differences. Most stereo matching techniques are slow, and while they can produce a good estimate of the depth of objects in a scene, they cannot produce surface normals to the degree of accuracy we require. Instead we construct a model based on learned stereo matching, providing the model with two views of an object, allowing it to learn an internal representation of geometry and lighting. By using two views, provided to two sets of convolutional layers, before being combined in intermediate layers, the network can extract similar features and exploit consistencies between views.
-\section{Model Architecture}
-\subsection{Siamese Layers}
-To construct a model that produces good results, while minimising network size for performance and training times, it is important to carefully consider the problem being solved and the features and patterns that are being learned. By using stereo views we aim to find correspondance between similar features and an understanding of geometry due to the parallax effect. To this end we present results from a 'siamese' network, where the weights in the convolutional layers are shared, such that the same features are extracted from each view. The two inputs are fed into two identical 'Encode' blocks, consisting of a number of convolutional layers with batch normalization and max pooling. However, during the training process, only the weights for the first path are trained. These weights are duplicated in the second path to ensure that the same convolutions are being performed on each image of the pair. The output of these two paths is then concatenated before being passed into the deconvolutional steps.
-\subsection{Feature Dot Product}
-We can further encourage the network to perform stereo matching by using the dot product technique as suggested in \cite{7780983}. After using shared weights to extract the same features from each image, we then perform a dot product operation on the output to find the correlation. Similarly to how in the reflectance map step, we use the dot product to find the closest matching normals, we use the dot product here to find the closest points between each feature map. The correlation can then be concatenated with the original features before being passed as input to further convolutional layers. This technique is more similar to traditional stereo matching methods in that it produces a set of feature disparity images.
-\subsection{Other Features}
-We experimented with different techniques for feature extraction that would benefit geometry and lighting understanding. Multi-scale features are also used, passing features for the second path into the deconvolutional layers. The model was trained with similar parameters to the previous network, using a L1 loss function on the predicted and ground truth environment map. For training we used a momentum optimizer with learning rate 1.7e-8
-\newline
-\todo{Dot product}
-For our prediction task we make the following assumptions:
-\begin{itemize}
-\item Provided objects consist of a single material with constant albedo. Materials can contain Diffuse, Specular and Subsurface properties.
-\item Geometry and lighting remain static between both stereo views.
-\item Stereo view distance is kept constant, though object size can vary. Views are also parallel.
-\item Subjects are modelled as floating objects. In the use-case where lighting on a surface is required, the surface lighting can be composited onto the light probe trivially.
-\item Camera intrinsics are kept constant.
-\end{itemize}
-
-\begin{figure}
-\centering
-\includegraphics[height=8cm]{images/Stereo}
-\caption The stereo image architecture. Weights are shared in the first 3 encode blocks.
-\end{figure}
 \section{Dataset Creation}
 The most difficult part of many deep learning tasks, including this one, is the creation of an unbiased and generalised dataset. For the purposes of this task we needed a large dataset of stereo image pairs accompanied by an HDR environment map. Capturing this data in the wild is a very laborious process, and requires expensive camera equipment. Instead I took the more practical approach of generating and utilizing synthetic data, which presents its own set of unique problems. For this task we make use of the open source 3D modelling program 'Blender' and the accompanying raytracer 'Cycles'. This made it possible to create photo-accurate renders with realistic lighting and materials. The data must be accurate in terms of lighting, material and geometry if the model is to be able to generalise to real world scenarios. To ensure accurate geometry we used the IKEA dataset \cite{lpt2013ikea} of 3D models, which includes a large range of furniture accurately modelled. The objects represent a good analogue for real geometry one might find in scenes, with some objects self-occluding and self shadowing. The models contained a mix of flat surfaces, edges and curves although being furniture the dataset contained a bias towards flat surfaces. We believe this is reasonable however, as most scenes in AR applications and films will be dominated by flat surfaces such as floors and walls.
 \newline
@@ -422,8 +399,44 @@ To generate our ground truth environments, and to light the objects we use HDRI 
 \caption{Generated data examples - Left, Right, Surface Normals, Environment Map (Tonemapped to RGB)}
 \label{data_examples}
 \end{figure}
+\section{Model Architecture}
+\subsection{Siamese Layers}
+To construct a model that produces good results, while minimising network size for performance and training times, it is important to carefully consider the problem being solved and the features and patterns that are being learned. By using stereo views we aim to find correspondance between similar features and an understanding of geometry due to the parallax effect. To this end we present results from a 'siamese' network, where the weights in the convolutional layers are shared, such that the same features are extracted from each view. The two inputs are fed into two identical 'Encode' blocks, consisting of a number of convolutional layers with batch normalization and max pooling. However, during the training process, only the weights for the first path are trained. These weights are duplicated in the second path to ensure that the same convolutions are being performed on each image of the pair. The output of these two paths is then concatenated before being passed into the deconvolutional steps.
+\subsection{Feature Dot Product}
+We can further encourage the network to perform stereo matching by using the dot product technique as suggested in \cite{7780983}. After using shared weights to extract the same features from each image, we then perform a dot product operation on the output to find the correlation. Similarly to how in the reflectance map step, we use the dot product to find the closest matching normals, we use the dot product here to find the closest points between each feature map. The correlation can then be concatenated with the original features before being passed as input to further convolutional layers. This technique is more similar to traditional stereo matching methods in that it produces a set of feature disparity images.
+\subsection{Other Features}
+We experimented with different techniques for feature extraction that would benefit geometry and lighting understanding. Multi-scale features are also used, passing features for the second path into the deconvolutional layers. The model was trained with similar parameters to the previous network, using a L1 loss function on the predicted and ground truth environment map. For training we used a momentum optimizer with learning rate 1.7e-8
+\newline
+\todo{Dot product}
+For our prediction task we make the following assumptions:
+\begin{itemize}
+\item Provided objects consist of a single material with constant albedo. Materials can contain Diffuse, Specular and Subsurface properties.
+\item Geometry and lighting remain static between both stereo views.
+\item Stereo view distance is kept constant, though object size can vary. Views are also parallel.
+\item Subjects are modelled as floating objects. In the use-case where lighting on a surface is required, the surface lighting can be composited onto the light probe trivially.
+\item Camera intrinsics are kept constant.
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[height=8cm]{images/Stereo}
+\caption The stereo image architecture. Weights are shared in the first 3 encode blocks.
+\end{figure}
+
 \section{Experiments}
 To assess the accuracy and performance of the models, I set up a series of experiments on the same training and test data set. I trained the Siamese Stereo model for 100 epochs, with a learning rate of 1.7e-9, and evaulated predictions on 1000 test samples. I repeated this step for the same model without the siamese shared weights, and for the original 'What is around the Camera?' work.
+
+\begin{figure}
+\newlength\figureheight
+\newlength\figurewidth
+\setlength\figureheight{8cm}
+\setlength\figurewidth{12cm}
+\centering
+\input{training}
+\input{val}
+
+\caption{Training Loss with and without dot product step}
+\end{figure}
 
 \chapter{Critical Evaluation}
 \label{chap:evaluation}

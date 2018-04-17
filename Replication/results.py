@@ -3,14 +3,15 @@ import numpy as np
 import sys
 import cv2
 import os
+from matplotlib2tikz import save as tikz_save
 
 val_dir = sys.argv[-1]
 print(val_dir)
-data = np.genfromtxt("{}/results/meta.csv".format(val_dir), delimiter=',')
-names = data[:, 0].astype(np.int32)
-mse = data[:, 1]
-ssim = data[:, 2]
-sun = data[:,3]
+#data = np.genfromtxt("{}/results/meta.csv".format(val_dir), delimiter=',')
+#names = data[:, 0].astype(np.int32)
+#mse = data[:, 1]
+#ssim = data[:, 2]
+#sun = data[:,3]
 
 def mse_results():
     n, bins, patches = plt.hist(mse.astype(float), 100, normed=False, log=True)
@@ -66,10 +67,41 @@ def conv_and_save_hdr(subject, newname):
     res_debvec_8bit = np.clip(res_debvec * 255, 0, 255).astype('uint8')
     cv2.imwrite(newname, res_debvec_8bit)
 
+def load_tf_log(name):
+    norm = np.genfromtxt("./train_logs/{}".format(name), delimiter=',')
+    times = norm[1:,0].astype(int)
+    steps = norm[1:,1].astype(int)
+    value = norm[1:,2].astype(np.float32)
+    return times, steps, value
+
+def train_log_results():
+    norm_training = load_tf_log("deep_stereo_normal.csv")
+    dotprod_training = load_tf_log("deep_stereo_dotprod.csv")
+    plt.style.use('ggplot')
+    train_loss_a, = plt.plot(norm_training[1], norm_training[2], label='Concatenated Stereo')
+    train_loss_b, =plt.plot(dotprod_training[1], dotprod_training[2], label='Dot Product Stereo')
+    plt.xlabel('Steps')
+    plt.ylabel('L1 Norm Loss')
+    plt.legend(handles=[train_loss_a, train_loss_b])
+    plt.title('Training Loss')
+    tikz_save('../dissertation/training.tex',figureheight='8cm', figurewidth='12cm')
+    plt.clf()
+    norm_training = load_tf_log("deep_stereo_normal_val.csv")
+    dotprod_training = load_tf_log("deep_stereo_dotprod_val.csv")
+    print(dotprod_training)
+    plt.style.use('ggplot')
+    test_loss_a, = plt.plot(norm_training[1], norm_training[2], label='Concatenated Stereo')
+    test_loss_b, = plt.plot(dotprod_training[1], dotprod_training[2], label='Dot Product Stereo')
+    plt.xlabel('Steps')
+    plt.ylabel('L1 Norm Loss')
+    plt.legend(handles=[test_loss_a, test_loss_b])
+    plt.title('Validation Training Loss')
+    tikz_save('../dissertation/val.tex',figureheight='8cm', figurewidth='12cm')
 
 if __name__ == "__main__":
     if not os.path.exists("{}/results/images".format(val_dir)):
         os.makedirs("{}/results/images".format(val_dir))
-    mse_results()
-    ssim_results()
-    sun_results()
+    train_log_results()
+    #mse_results()
+    #ssim_results()
+    #sun_results()

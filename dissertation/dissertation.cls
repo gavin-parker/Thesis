@@ -71,6 +71,8 @@
 \usepackage{todonotes}
 \usepackage{wrapfig}
 \usepackage[utf8]{inputenc}
+%\usepackage{fontspec} % This line only for XeLaTeX and LuaLaTeX
+\usepackage{pgfplots}
 
 % =============================================================================
 
