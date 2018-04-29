@@ -8,15 +8,18 @@
 \BOOKMARK [1][-]{section.2.3}{Machine Learning for scene understanding}{chapter.2}% 8
 \BOOKMARK [1][-]{section.2.4}{Machine Learning for Illumination Estimation}{chapter.2}% 9
 \BOOKMARK [1][-]{section.2.5}{Predicting Light Probes}{chapter.2}% 10
-\BOOKMARK [0][-]{chapter.3}{Project Execution}{}% 11
-\BOOKMARK [1][-]{section.3.1}{Reproducing Prior Art in Tensorflow}{chapter.3}% 12
-\BOOKMARK [1][-]{section.3.2}{Stereo Model Architecture}{chapter.3}% 13
-\BOOKMARK [1][-]{section.3.3}{Dataset Creation}{chapter.3}% 14
-\BOOKMARK [1][-]{section.3.4}{Experiments}{chapter.3}% 15
-\BOOKMARK [0][-]{chapter.4}{Critical Evaluation}{}% 16
-\BOOKMARK [1][-]{section.4.1}{Model Accuracy}{chapter.4}% 17
-\BOOKMARK [1][-]{section.4.2}{Model Performance}{chapter.4}% 18
-\BOOKMARK [0][-]{chapter.5}{Conclusion}{}% 19
-\BOOKMARK [1][-]{section.5.1}{Achievements}{chapter.5}% 20
-\BOOKMARK [1][-]{section.5.2}{Future Work}{chapter.5}% 21
-\BOOKMARK [0][-]{appendix.A}{An Example Appendix}{}% 22
+\BOOKMARK [1][-]{section.2.6}{Depth Imagery}{chapter.2}% 11
+\BOOKMARK [0][-]{chapter.3}{Project Execution}{}% 12
+\BOOKMARK [1][-]{section.3.1}{Reproducing Prior Art in Tensorflow}{chapter.3}% 13
+\BOOKMARK [1][-]{section.3.2}{New Stereo Model}{chapter.3}% 14
+\BOOKMARK [1][-]{section.3.3}{Dataset Creation}{chapter.3}% 15
+\BOOKMARK [1][-]{section.3.4}{Model Architecture}{chapter.3}% 16
+\BOOKMARK [1][-]{section.3.5}{Experiments}{chapter.3}% 17
+\BOOKMARK [0][-]{chapter.4}{Critical Evaluation}{}% 18
+\BOOKMARK [1][-]{section.4.1}{Model Accuracy}{chapter.4}% 19
+\BOOKMARK [1][-]{section.4.2}{Model Performance}{chapter.4}% 20
+\BOOKMARK [1][-]{section.4.3}{Limitations}{chapter.4}% 21
+\BOOKMARK [0][-]{chapter.5}{Conclusion}{}% 22
+\BOOKMARK [1][-]{section.5.1}{Achievements}{chapter.5}% 23
+\BOOKMARK [1][-]{section.5.2}{Future Work}{chapter.5}% 24
+\BOOKMARK [0][-]{appendix.A}{Demo Application}{}% 25

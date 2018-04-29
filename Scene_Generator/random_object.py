@@ -142,6 +142,7 @@ class SceneGenerator:
     def render_envmap(self, name='test'):
         for obj in self.car:
             obj.hide_render = True
+        bpy.context.scene.world.cycles_visibility.camera = True
         self.scene.render.resolution_x = 64
         self.scene.render.resolution_y = 64
         self.scene.render.resolution_percentage = 100

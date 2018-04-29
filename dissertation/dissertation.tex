@@ -556,6 +556,8 @@ As with the prior work, our system's ability to predict scene lighting depends h
 As with previous works our system uses some assumptions about the input data to predict lighting, mainly that the given object is of uniform albedo. While this is a fair assumption, as many real world objects can be approximated with uniform colour, it does in fact limit the models ability to predict surfaces. Disparity mapping and stereo matching rely of finding salient points, features and blocks in multiple views. Under uniform albedo it can be hard to find these features. Furthermore, the light reflected into the camera from an object can change depending on the view direction, breaking the assumption that two image points of similar appearance map to the same geometric point.
 \newline
 Our model is somewhat limited in the features it can extract, and is restricted to a single 3d object. For example we make no attempt to identify cast shadow directions which could make for more robust estimations. While shadows are not available in every scene, their presence on a flat surface is a strong indication of shadow direction.
+\newline
+A valid criticism of our model as well as the previous models is that the model may simply be fitting to the background image, rather than performing any reflectance mapping. We have attempted to avoid this by using a larger set of environment maps and blurring them to give a depth-of-field effect. To further demonstrate that we are not overfitting to the background, we have also trained a model without any background provided, and found that \todo{this}.
 \chapter{Conclusion}
 \label{chap:conclusion}
 \section{Achievements}
@@ -621,9 +623,11 @@ Talk about light fields!
 
 \appendix
 
-\chapter{An Example Appendix}
+\chapter{Demo Application}
+To demonstrate the practical capability of the model, we have produced a piece of software with an accompanying GUI that represents a suggested use case. In the application, a user is able to load and view a video file of their choice and attempt to find an environment map of the scene. This is achieved by selecting an object in the video to use as a light probe. Provided the object is sufficiently clear, and meets all of the requirement for good results mentioned in the work, the frames will be fed into the trained neural network and an output written to a file. The output is in a standard format to be loaded into 3D rendering software so that the user can then use it in combination with camera tracking to superimpose new objects.
+\newline
+The application is built in python and relies on the OpenCV image processing framework as well as Tensorflow. Image selection is performed with a single click, which triggers a flood fill algorithm at the selected pixel in LAB colour space. The chosen region is then converted to a bounding box, and a snapshot at that frame is stored. The object in the bounding box is tracked with a standard 'Kernalised Correlation Filter', provided as part of OpenCV. When it is detected that the object has moved far enough in the x dimension, another snapshot is taken. Both snapshots are shown to the user for confirmation that they are suitable, before being fed into the trained model. We believe this example gives a good indication of how we imagine a system like ours could be deployed.
 \label{appx:example}
-\todo{Mention the app and maybe an ethics bit - forgeries!}
 %Content which is not central to, but may enhance the dissertation can be 
 %included in one or more appendices; examples include, but are not limited
 %to

@@ -76,3 +76,7 @@ dissertation/logo/
 
 Replication/application/test_video\.mp4
 Replication/name
+
+*.mp4
+
+*.meta

@@ -4,11 +4,11 @@
   <bcf:options component="biber" type="global">
     <bcf:option type="singlevalued">
       <bcf:key>output_encoding</bcf:key>
-      <bcf:value>ascii</bcf:value>
+      <bcf:value>utf8</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>input_encoding</bcf:key>
-      <bcf:value>ascii</bcf:value>
+      <bcf:value>utf8</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>debug</bcf:key>
@@ -81,7 +81,7 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxbibnames</bcf:key>
-      <bcf:value>3</bcf:value>
+      <bcf:value>999</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>maxcitenames</bcf:key>
@@ -97,11 +97,11 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minbibnames</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>3</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>mincitenames</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>3</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>minitems</bcf:key>
@@ -121,7 +121,7 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>sortscheme</bcf:key>
-      <bcf:value>nty</bcf:value>
+      <bcf:value>none</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniquelist</bcf:key>
@@ -680,30 +680,7 @@
   <bcf:sorting>
     <bcf:presort>mm</bcf:presort>
     <bcf:sort order="1">
-      <bcf:sortitem order="1">presort</bcf:sortitem>
-    </bcf:sort>
-    <bcf:sort order="2" final="1">
-      <bcf:sortitem order="1">sortkey</bcf:sortitem>
-    </bcf:sort>
-    <bcf:sort order="3">
-      <bcf:sortitem order="1">sortname</bcf:sortitem>
-      <bcf:sortitem order="2">author</bcf:sortitem>
-      <bcf:sortitem order="3">editor</bcf:sortitem>
-      <bcf:sortitem order="4">translator</bcf:sortitem>
-      <bcf:sortitem order="5">sorttitle</bcf:sortitem>
-      <bcf:sortitem order="6">title</bcf:sortitem>
-    </bcf:sort>
-    <bcf:sort order="4">
-      <bcf:sortitem order="1">sorttitle</bcf:sortitem>
-      <bcf:sortitem order="2">title</bcf:sortitem>
-    </bcf:sort>
-    <bcf:sort order="5">
-      <bcf:sortitem order="1">sortyear</bcf:sortitem>
-      <bcf:sortitem order="2">year</bcf:sortitem>
-    </bcf:sort>
-    <bcf:sort order="6">
-      <bcf:sortitem order="1" pad_side="left" pad_width="4" pad_char="0">volume</bcf:sortitem>
-      <bcf:sortitem order="2">0000</bcf:sortitem>
+      <bcf:sortitem order="1">citeorder</bcf:sortitem>
     </bcf:sort>
   </bcf:sorting>
   <!-- DATA MODEL -->
@@ -2049,27 +2026,44 @@
     <bcf:datasource type="file" datatype="bibtex">dissertation.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">https://www.digitaldomain.com/work/i-robot/</bcf:citekey>
-    <bcf:citekey order="2">https://developer.apple.com/documentation/arkit/arlightestimate</bcf:citekey>
-    <bcf:citekey order="3">https://developers.google.com/ar/reference/unity/prefab/Environmental_Light</bcf:citekey>
-    <bcf:citekey order="4">https://developer.apple.com/documentation/arkit/ardirectionallightestimate</bcf:citekey>
-    <bcf:citekey order="5">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=990650</bcf:citekey>
-    <bcf:citekey order="6">Lalonde-2009-10350</bcf:citekey>
-    <bcf:citekey order="7">http://www.cs.cornell.edu/projects/shadows/files/wehrwein_3dv15_shadows.pdf</bcf:citekey>
-    <bcf:citekey order="8">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=1315013</bcf:citekey>
-    <bcf:citekey order="9">http://www.cs.wm.edu/\nobreakspace {}ppeers/showPublication.php?id=Xia:2016:RSS</bcf:citekey>
-    <bcf:citekey order="10">http://hazirbas.com/datasets/ddff12scene/</bcf:citekey>
-    <bcf:citekey order="11">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=790313</bcf:citekey>
-    <bcf:citekey order="12">https://arxiv.org/pdf/1411.4734.pdf</bcf:citekey>
-    <bcf:citekey order="13">https://link.springer.com/content/pdf/10.1007/s00371-010-0501-7.pdf</bcf:citekey>
-    <bcf:citekey order="14">https://arxiv.org/pdf/1611.06403.pdf</bcf:citekey>
-    <bcf:citekey order="15">https://arxiv.org/pdf/1704.00090.pdf</bcf:citekey>
-    <bcf:citekey order="16">https://arxiv.org/pdf/1511.04384.pdf</bcf:citekey>
-    <bcf:citekey order="17">https://github.com/affinelayer/pix2pix-tensorflow/blob/master/pix2pix.py</bcf:citekey>
-    <bcf:citekey order="18">http://ikea.csail.mit.edu/</bcf:citekey>
-    <bcf:citekey order="19">https://docs.blender.org/manual/en/dev/render/cycles/nodes/types/shaders/principled.html</bcf:citekey>
-    <bcf:citekey order="20">https://hdrihaven.com/</bcf:citekey>
-    <bcf:citekey order="21">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=1284395</bcf:citekey>
-    <bcf:citekey order="22">http://www.cs.wm.edu/\nobreakspace {}ppeers/showPublication.php?id=Xia:2016:RSS</bcf:citekey>
+    <bcf:citekey order="1">Blinn:1976:TRC:360349.360353</bcf:citekey>
+    <bcf:citekey order="2">Debevec:1998:RSO:280814.280864</bcf:citekey>
+    <bcf:citekey order="3">navigator</bcf:citekey>
+    <bcf:citekey order="4">arkit1</bcf:citekey>
+    <bcf:citekey order="5">Debevec:1998:RSO:280814.280864</bcf:citekey>
+    <bcf:citekey order="6">990650</bcf:citekey>
+    <bcf:citekey order="7">1315030</bcf:citekey>
+    <bcf:citekey order="8">Lalonde-2009-10350</bcf:citekey>
+    <bcf:citekey order="9">7335515</bcf:citekey>
+    <bcf:citekey order="10">Aittala2010</bcf:citekey>
+    <bcf:citekey order="11">1315013</bcf:citekey>
+    <bcf:citekey order="12">Xia:2016:RSS</bcf:citekey>
+    <bcf:citekey order="13">hazirbas17ddff</bcf:citekey>
+    <bcf:citekey order="14">790313</bcf:citekey>
+    <bcf:citekey order="15">7410661</bcf:citekey>
+    <bcf:citekey order="16">7780983</bcf:citekey>
+    <bcf:citekey order="17">song2015sun</bcf:citekey>
+    <bcf:citekey order="18">DBLP:journals/corr/abs-1709-00849</bcf:citekey>
+    <bcf:citekey order="19">holdgeoffroy-cvpr-17</bcf:citekey>
+    <bcf:citekey order="20">Gardner:2017:LPI:3130800.3130891</bcf:citekey>
+    <bcf:citekey order="21">RematasCVPR2016</bcf:citekey>
+    <bcf:citekey order="22">Khoshelham_accuracyand</bcf:citekey>
+    <bcf:citekey order="23">7780983</bcf:citekey>
+    <bcf:citekey order="24">https://github.com/affinelayer/pix2pix-tensorflow/blob/master/pix2pix.py</bcf:citekey>
+    <bcf:citekey order="25">lpt2013ikea</bcf:citekey>
+    <bcf:citekey order="26">principled_BSDF</bcf:citekey>
+    <bcf:citekey order="27">https://hdrihaven.com/</bcf:citekey>
+    <bcf:citekey order="28">7780983</bcf:citekey>
+    <bcf:citekey order="29">1284395</bcf:citekey>
+    <bcf:citekey order="30">Reference our app</bcf:citekey>
+    <bcf:citekey order="31">zhang2017learning</bcf:citekey>
+    <bcf:citekey order="32">Xia:2016:RSS</bcf:citekey>
   </bcf:section>
+  <bcf:sortlist section="0" name="none/global" type="entry" sortscheme="none" sortnamekeyscheme="global">
+  <bcf:sorting>
+    <bcf:sort order="1">
+      <bcf:sortitem order="1">citeorder</bcf:sortitem>
+    </bcf:sort>
+  </bcf:sorting>
+  </bcf:sortlist>
 </bcf:controlfile>

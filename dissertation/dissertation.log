@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.3.23)  14 APR 2018 17:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.3.23)  29 APR 2018 10:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -482,209 +482,6 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 Package: lipsum 2014/07/27 v1.3 150 paragraphs of Lorem Ipsum dummy text
 \c@lips@count=\count157
 )
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
-Package: biblatex 2016/03/03 v3.3 programmable bibliographies (PK/JW/AB)
-
-
-Package biblatex Warning: No "backend" specified, using Biber backend.
-(biblatex)                To use BibTeX, load biblatex with 
-(biblatex)                the "backend=bibtex" option.
-
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex_.sty
-Package: biblatex_ 2016/03/03 v3.3 programmable bibliographies (biber) (PK/JW/A
-B)
-
-(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
-Package: logreq 2010/08/04 v1.0 xml request logger
-\lrq@indent=\count158
-
-(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.def
-File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
-))
-\c@tabx@nest=\count159
-\c@listtotal=\count160
-\c@listcount=\count161
-\c@liststart=\count162
-\c@liststop=\count163
-\c@citecount=\count164
-\c@citetotal=\count165
-\c@multicitecount=\count166
-\c@multicitetotal=\count167
-\c@instcount=\count168
-\c@maxnames=\count169
-\c@minnames=\count170
-\c@maxitems=\count171
-\c@minitems=\count172
-\c@citecounter=\count173
-\c@savedcitecounter=\count174
-\c@uniquelist=\count175
-\c@uniquename=\count176
-\c@refsection=\count177
-\c@refsegment=\count178
-\c@maxextratitle=\count179
-\c@maxextratitleyear=\count180
-\c@maxextrayear=\count181
-\c@maxextraalpha=\count182
-\c@abbrvpenalty=\count183
-\c@highnamepenalty=\count184
-\c@lownamepenalty=\count185
-\c@maxparens=\count186
-\c@parenlevel=\count187
-\blx@tempcnta=\count188
-\blx@tempcntb=\count189
-\blx@tempcntc=\count190
-\blx@maxsection=\count191
-\blx@maxsegment@0=\count192
-\blx@notetype=\count193
-\blx@parenlevel@text=\count194
-\blx@parenlevel@foot=\count195
-\blx@sectionciteorder@0=\count196
-\labelnumberwidth=\skip74
-\labelalphawidth=\skip75
-\biblabelsep=\skip76
-\bibitemsep=\skip77
-\bibnamesep=\skip78
-\bibinitsep=\skip79
-\bibparsep=\skip80
-\bibhang=\skip81
-\blx@bcfin=\read1
-\blx@bcfout=\write4
-\c@mincomprange=\count197
-\c@maxcomprange=\count198
-\c@mincompwidth=\count199
-Package biblatex Info: Trying to load biblatex default data model...
-Package biblatex Info: ... file 'blx-dm.def' found.
-
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-dm.def)
-Package biblatex Info: Trying to load biblatex custom data model...
-Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
-\c@afterword=\count266
-\c@savedafterword=\count267
-\c@annotator=\count268
-\c@savedannotator=\count269
-\c@author=\count270
-\c@savedauthor=\count271
-\c@bookauthor=\count272
-\c@savedbookauthor=\count273
-\c@commentator=\count274
-\c@savedcommentator=\count275
-\c@editor=\count276
-\c@savededitor=\count277
-\c@editora=\count278
-\c@savededitora=\count279
-\c@editorb=\count280
-\c@savededitorb=\count281
-\c@editorc=\count282
-\c@savededitorc=\count283
-\c@foreword=\count284
-\c@savedforeword=\count285
-\c@holder=\count286
-\c@savedholder=\count287
-\c@introduction=\count288
-\c@savedintroduction=\count289
-\c@namea=\count290
-\c@savednamea=\count291
-\c@nameb=\count292
-\c@savednameb=\count293
-\c@namec=\count294
-\c@savednamec=\count295
-\c@translator=\count296
-\c@savedtranslator=\count297
-\c@shortauthor=\count298
-\c@savedshortauthor=\count299
-\c@shorteditor=\count300
-\c@savedshorteditor=\count301
-\c@labelname=\count302
-\c@savedlabelname=\count303
-\c@institution=\count304
-\c@savedinstitution=\count305
-\c@lista=\count306
-\c@savedlista=\count307
-\c@listb=\count308
-\c@savedlistb=\count309
-\c@listc=\count310
-\c@savedlistc=\count311
-\c@listd=\count312
-\c@savedlistd=\count313
-\c@liste=\count314
-\c@savedliste=\count315
-\c@listf=\count316
-\c@savedlistf=\count317
-\c@location=\count318
-\c@savedlocation=\count319
-\c@organization=\count320
-\c@savedorganization=\count321
-\c@origlocation=\count322
-\c@savedoriglocation=\count323
-\c@origpublisher=\count324
-\c@savedorigpublisher=\count325
-\c@publisher=\count326
-\c@savedpublisher=\count327
-\c@language=\count328
-\c@savedlanguage=\count329
-\c@pageref=\count330
-\c@savedpageref=\count331
-\shorthandwidth=\skip82
-\shortjournalwidth=\skip83
-\shortserieswidth=\skip84
-\shorttitlewidth=\skip85
-\shortauthorwidth=\skip86
-\shorteditorwidth=\skip87
-Package biblatex Info: Trying to load compatibility code...
-Package biblatex Info: ... file 'blx-compat.def' found.
-
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def
-File: blx-compat.def 2016/03/03 v3.3 biblatex compatibility (PK/JW/AB)
-)
-Package biblatex Info: Trying to load generic definitions...
-Package biblatex Info: ... file 'biblatex_.def' found.
-
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex_.def
-File: biblatex_.def 
-\c@textcitecount=\count332
-\c@textcitetotal=\count333
-\c@textcitemaxnames=\count334
-\c@biburlnumpenalty=\count335
-\c@biburlucpenalty=\count336
-\c@biburllcpenalty=\count337
-\c@smartand=\count338
-)
-Package biblatex Info: Trying to load bibliography style 'numeric'...
-Package biblatex Info: ... file 'numeric.bbx' found.
-
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/numeric.bbx
-File: numeric.bbx 2016/03/03 v3.3 biblatex bibliography style (PK/JW/AB)
-Package biblatex Info: Trying to load bibliography style 'standard'...
-Package biblatex Info: ... file 'standard.bbx' found.
-
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
-File: standard.bbx 2016/03/03 v3.3 biblatex bibliography style (PK/JW/AB)
-\c@bbx:relatedcount=\count339
-\c@bbx:relatedtotal=\count340
-))
-Package biblatex Info: Trying to load citation style 'numeric'...
-Package biblatex Info: ... file 'numeric.cbx' found.
-
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/cbx/numeric.cbx
-File: numeric.cbx 2016/03/03 v3.3 biblatex citation style (PK/JW/AB)
-Package biblatex Info: Redefining '\cite'.
-Package biblatex Info: Redefining '\parencite'.
-Package biblatex Info: Redefining '\footcite'.
-Package biblatex Info: Redefining '\footcitetext'.
-Package biblatex Info: Redefining '\smartcite'.
-Package biblatex Info: Redefining '\supercite'.
-Package biblatex Info: Redefining '\textcite'.
-Package biblatex Info: Redefining '\textcites'.
-Package biblatex Info: Redefining '\cites'.
-Package biblatex Info: Redefining '\parencites'.
-Package biblatex Info: Redefining '\smartcites'.
-)
-Package biblatex Info: Trying to load configuration file...
-Package biblatex Info: ... file 'biblatex.cfg' found.
-
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.cfg
-File: biblatex.cfg 
-)))
 (/usr/share/texlive/texmf-dist/tex/latex/todonotes/todonotes.sty
 Package: todonotes 2015/07/09 .dtx Todonotes source and documentation.
 Package: todonotes 2012/07/25
@@ -739,12 +536,12 @@ Package: pgfsys 2014/07/09 v3.0.1a (rcs-revision 1.48)
 \pgf@yb=\dimen153
 \pgf@xc=\dimen154
 \pgf@yc=\dimen155
-\w@pgf@writea=\write5
-\r@pgf@reada=\read2
-\c@pgf@counta=\count341
-\c@pgf@countb=\count342
-\c@pgf@countc=\count343
-\c@pgf@countd=\count344
+\w@pgf@writea=\write4
+\r@pgf@reada=\read1
+\c@pgf@counta=\count158
+\c@pgf@countb=\count159
+\c@pgf@countc=\count160
+\c@pgf@countd=\count161
 \t@pgf@toka=\toks32
 \t@pgf@tokb=\toks33
 \t@pgf@tokc=\toks34
@@ -764,8 +561,8 @@ File: pgfsys-common-pdf.def 2013/10/10  (rcs-revision 1.13)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.
 tex
 File: pgfsyssoftpath.code.tex 2013/09/09  (rcs-revision 1.9)
-\pgfsyssoftpath@smallbuffer@items=\count345
-\pgfsyssoftpath@bigbuffer@items=\count346
+\pgfsyssoftpath@smallbuffer@items=\count162
+\pgfsyssoftpath@bigbuffer@items=\count163
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.
 tex
@@ -779,7 +576,7 @@ Package: pgfcore 2010/04/11 v3.0.1a (rcs-revision 1.7)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen156
-\pgfmath@count=\count347
+\pgfmath@count=\count164
 \pgfmath@box=\box41
 \pgfmath@toks=\toks35
 \pgfmath@stack@operand=\toks36
@@ -803,7 +600,7 @@ tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerari
 thmetics.code.tex)))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count348
+\c@pgfmathroundto@lastzeros=\count165
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.te
 x
@@ -841,7 +638,7 @@ File: pgfcorescopes.code.tex 2015/05/08  (rcs-revision 1.46)
 \pgfpic=\box42
 \pgf@hbox=\box43
 \pgf@layerbox@main=\box44
-\pgf@picture@serial@count=\count349
+\pgf@picture@serial@count=\count166
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.c
 ode.tex
@@ -874,7 +671,7 @@ File: pgfcorearrows.code.tex 2015/05/14  (rcs-revision 1.43)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
 File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
 \pgf@max=\dimen180
-\pgf@sys@shading@range@num=\count350
+\pgf@sys@shading@range@num=\count167
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
 File: pgfcoreimage.code.tex 2013/07/15  (rcs-revision 1.18)
@@ -929,7 +726,7 @@ Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers
 .code.tex
 File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
-\pgf@plot@mark@count=\count351
+\pgf@plot@mark@count=\count168
 \pgfplotmarksize=\dimen185
 )
 \tikz@lastx=\dimen186
@@ -942,18 +739,18 @@ File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
 \tikz@figbox@bg=\box48
 \tikz@tempbox=\box49
 \tikz@tempbox@bg=\box50
-\tikztreelevel=\count352
-\tikznumberofchildren=\count353
-\tikznumberofcurrentchild=\count354
-\tikz@fig@count=\count355
+\tikztreelevel=\count169
+\tikznumberofchildren=\count170
+\tikznumberofcurrentchild=\count171
+\tikz@fig@count=\count172
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
-\pgfmatrixcurrentrow=\count356
-\pgfmatrixcurrentcolumn=\count357
-\pgf@matrix@numberofcolumns=\count358
+\pgfmatrixcurrentrow=\count173
+\pgfmatrixcurrentcolumn=\count174
+\pgf@matrix@numberofcolumns=\count175
 )
-\tikz@expandcount=\count359
+\tikz@expandcount=\count176
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
 zlibrarytopaths.code.tex
@@ -965,73 +762,729 @@ File: tikzlibrarypositioning.code.tex 2008/10/06 v3.0.1a (rcs-revision 1.7)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count360
-\calc@Bcount=\count361
+\calc@Acount=\count177
+\calc@Bcount=\count178
 \calc@Adimen=\dimen192
 \calc@Bdimen=\dimen193
-\calc@Askip=\skip88
-\calc@Bskip=\skip89
+\calc@Askip=\skip74
+\calc@Bskip=\skip75
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count362
-\calc@Cskip=\skip90
+\calc@Ccount=\count179
+\calc@Cskip=\skip76
 )
-\c@@todonotes@numberoftodonotes=\count363
+\c@@todonotes@numberoftodonotes=\count180
 )
 (/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty
 \wrapoverhang=\dimen194
 \WF@size=\dimen195
-\c@WF@wrappedlines=\count364
+\c@WF@wrappedlines=\count181
 \WF@box=\box51
 \WF@everypar=\toks40
 Package: wrapfig 2003/01/31  v 3.6
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 84.
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2015/03/17 v1.2c Input encoding file
+\inpenc@prehook=\toks41
+\inpenc@posthook=\toks42
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+File: utf8.def 2015/12/03 v1.1r UTF-8 support for inputenc
+Now handling font encoding OML ...
+... no UTF-8 mapping file for font encoding OML
+Now handling font encoding T1 ...
+... processing UTF-8 mapping file for font encoding T1
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu
+File: t1enc.dfu 2015/12/03 v1.1r UTF-8 support for inputenc
+   defining Unicode char U+00A0 (decimal 160)
+   defining Unicode char U+00A1 (decimal 161)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00AB (decimal 171)
+   defining Unicode char U+00AD (decimal 173)
+   defining Unicode char U+00BB (decimal 187)
+   defining Unicode char U+00BF (decimal 191)
+   defining Unicode char U+00C0 (decimal 192)
+   defining Unicode char U+00C1 (decimal 193)
+   defining Unicode char U+00C2 (decimal 194)
+   defining Unicode char U+00C3 (decimal 195)
+   defining Unicode char U+00C4 (decimal 196)
+   defining Unicode char U+00C5 (decimal 197)
+   defining Unicode char U+00C6 (decimal 198)
+   defining Unicode char U+00C7 (decimal 199)
+   defining Unicode char U+00C8 (decimal 200)
+   defining Unicode char U+00C9 (decimal 201)
+   defining Unicode char U+00CA (decimal 202)
+   defining Unicode char U+00CB (decimal 203)
+   defining Unicode char U+00CC (decimal 204)
+   defining Unicode char U+00CD (decimal 205)
+   defining Unicode char U+00CE (decimal 206)
+   defining Unicode char U+00CF (decimal 207)
+   defining Unicode char U+00D0 (decimal 208)
+   defining Unicode char U+00D1 (decimal 209)
+   defining Unicode char U+00D2 (decimal 210)
+   defining Unicode char U+00D3 (decimal 211)
+   defining Unicode char U+00D4 (decimal 212)
+   defining Unicode char U+00D5 (decimal 213)
+   defining Unicode char U+00D6 (decimal 214)
+   defining Unicode char U+00D8 (decimal 216)
+   defining Unicode char U+00D9 (decimal 217)
+   defining Unicode char U+00DA (decimal 218)
+   defining Unicode char U+00DB (decimal 219)
+   defining Unicode char U+00DC (decimal 220)
+   defining Unicode char U+00DD (decimal 221)
+   defining Unicode char U+00DE (decimal 222)
+   defining Unicode char U+00DF (decimal 223)
+   defining Unicode char U+00E0 (decimal 224)
+   defining Unicode char U+00E1 (decimal 225)
+   defining Unicode char U+00E2 (decimal 226)
+   defining Unicode char U+00E3 (decimal 227)
+   defining Unicode char U+00E4 (decimal 228)
+   defining Unicode char U+00E5 (decimal 229)
+   defining Unicode char U+00E6 (decimal 230)
+   defining Unicode char U+00E7 (decimal 231)
+   defining Unicode char U+00E8 (decimal 232)
+   defining Unicode char U+00E9 (decimal 233)
+   defining Unicode char U+00EA (decimal 234)
+   defining Unicode char U+00EB (decimal 235)
+   defining Unicode char U+00EC (decimal 236)
+   defining Unicode char U+00ED (decimal 237)
+   defining Unicode char U+00EE (decimal 238)
+   defining Unicode char U+00EF (decimal 239)
+   defining Unicode char U+00F0 (decimal 240)
+   defining Unicode char U+00F1 (decimal 241)
+   defining Unicode char U+00F2 (decimal 242)
+   defining Unicode char U+00F3 (decimal 243)
+   defining Unicode char U+00F4 (decimal 244)
+   defining Unicode char U+00F5 (decimal 245)
+   defining Unicode char U+00F6 (decimal 246)
+   defining Unicode char U+00F8 (decimal 248)
+   defining Unicode char U+00F9 (decimal 249)
+   defining Unicode char U+00FA (decimal 250)
+   defining Unicode char U+00FB (decimal 251)
+   defining Unicode char U+00FC (decimal 252)
+   defining Unicode char U+00FD (decimal 253)
+   defining Unicode char U+00FE (decimal 254)
+   defining Unicode char U+00FF (decimal 255)
+   defining Unicode char U+0100 (decimal 256)
+   defining Unicode char U+0101 (decimal 257)
+   defining Unicode char U+0102 (decimal 258)
+   defining Unicode char U+0103 (decimal 259)
+   defining Unicode char U+0104 (decimal 260)
+   defining Unicode char U+0105 (decimal 261)
+   defining Unicode char U+0106 (decimal 262)
+   defining Unicode char U+0107 (decimal 263)
+   defining Unicode char U+0108 (decimal 264)
+   defining Unicode char U+0109 (decimal 265)
+   defining Unicode char U+010A (decimal 266)
+   defining Unicode char U+010B (decimal 267)
+   defining Unicode char U+010C (decimal 268)
+   defining Unicode char U+010D (decimal 269)
+   defining Unicode char U+010E (decimal 270)
+   defining Unicode char U+010F (decimal 271)
+   defining Unicode char U+0110 (decimal 272)
+   defining Unicode char U+0111 (decimal 273)
+   defining Unicode char U+0112 (decimal 274)
+   defining Unicode char U+0113 (decimal 275)
+   defining Unicode char U+0114 (decimal 276)
+   defining Unicode char U+0115 (decimal 277)
+   defining Unicode char U+0116 (decimal 278)
+   defining Unicode char U+0117 (decimal 279)
+   defining Unicode char U+0118 (decimal 280)
+   defining Unicode char U+0119 (decimal 281)
+   defining Unicode char U+011A (decimal 282)
+   defining Unicode char U+011B (decimal 283)
+   defining Unicode char U+011C (decimal 284)
+   defining Unicode char U+011D (decimal 285)
+   defining Unicode char U+011E (decimal 286)
+   defining Unicode char U+011F (decimal 287)
+   defining Unicode char U+0120 (decimal 288)
+   defining Unicode char U+0121 (decimal 289)
+   defining Unicode char U+0122 (decimal 290)
+   defining Unicode char U+0123 (decimal 291)
+   defining Unicode char U+0124 (decimal 292)
+   defining Unicode char U+0125 (decimal 293)
+   defining Unicode char U+0128 (decimal 296)
+   defining Unicode char U+0129 (decimal 297)
+   defining Unicode char U+012A (decimal 298)
+   defining Unicode char U+012B (decimal 299)
+   defining Unicode char U+012C (decimal 300)
+   defining Unicode char U+012D (decimal 301)
+   defining Unicode char U+012E (decimal 302)
+   defining Unicode char U+012F (decimal 303)
+   defining Unicode char U+0130 (decimal 304)
+   defining Unicode char U+0131 (decimal 305)
+   defining Unicode char U+0132 (decimal 306)
+   defining Unicode char U+0133 (decimal 307)
+   defining Unicode char U+0134 (decimal 308)
+   defining Unicode char U+0135 (decimal 309)
+   defining Unicode char U+0136 (decimal 310)
+   defining Unicode char U+0137 (decimal 311)
+   defining Unicode char U+0139 (decimal 313)
+   defining Unicode char U+013A (decimal 314)
+   defining Unicode char U+013B (decimal 315)
+   defining Unicode char U+013C (decimal 316)
+   defining Unicode char U+013D (decimal 317)
+   defining Unicode char U+013E (decimal 318)
+   defining Unicode char U+0141 (decimal 321)
+   defining Unicode char U+0142 (decimal 322)
+   defining Unicode char U+0143 (decimal 323)
+   defining Unicode char U+0144 (decimal 324)
+   defining Unicode char U+0145 (decimal 325)
+   defining Unicode char U+0146 (decimal 326)
+   defining Unicode char U+0147 (decimal 327)
+   defining Unicode char U+0148 (decimal 328)
+   defining Unicode char U+014A (decimal 330)
+   defining Unicode char U+014B (decimal 331)
+   defining Unicode char U+014C (decimal 332)
+   defining Unicode char U+014D (decimal 333)
+   defining Unicode char U+014E (decimal 334)
+   defining Unicode char U+014F (decimal 335)
+   defining Unicode char U+0150 (decimal 336)
+   defining Unicode char U+0151 (decimal 337)
+   defining Unicode char U+0152 (decimal 338)
+   defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+0154 (decimal 340)
+   defining Unicode char U+0155 (decimal 341)
+   defining Unicode char U+0156 (decimal 342)
+   defining Unicode char U+0157 (decimal 343)
+   defining Unicode char U+0158 (decimal 344)
+   defining Unicode char U+0159 (decimal 345)
+   defining Unicode char U+015A (decimal 346)
+   defining Unicode char U+015B (decimal 347)
+   defining Unicode char U+015C (decimal 348)
+   defining Unicode char U+015D (decimal 349)
+   defining Unicode char U+015E (decimal 350)
+   defining Unicode char U+015F (decimal 351)
+   defining Unicode char U+0160 (decimal 352)
+   defining Unicode char U+0161 (decimal 353)
+   defining Unicode char U+0162 (decimal 354)
+   defining Unicode char U+0163 (decimal 355)
+   defining Unicode char U+0164 (decimal 356)
+   defining Unicode char U+0165 (decimal 357)
+   defining Unicode char U+0168 (decimal 360)
+   defining Unicode char U+0169 (decimal 361)
+   defining Unicode char U+016A (decimal 362)
+   defining Unicode char U+016B (decimal 363)
+   defining Unicode char U+016C (decimal 364)
+   defining Unicode char U+016D (decimal 365)
+   defining Unicode char U+016E (decimal 366)
+   defining Unicode char U+016F (decimal 367)
+   defining Unicode char U+0170 (decimal 368)
+   defining Unicode char U+0171 (decimal 369)
+   defining Unicode char U+0172 (decimal 370)
+   defining Unicode char U+0173 (decimal 371)
+   defining Unicode char U+0174 (decimal 372)
+   defining Unicode char U+0175 (decimal 373)
+   defining Unicode char U+0176 (decimal 374)
+   defining Unicode char U+0177 (decimal 375)
+   defining Unicode char U+0178 (decimal 376)
+   defining Unicode char U+0179 (decimal 377)
+   defining Unicode char U+017A (decimal 378)
+   defining Unicode char U+017B (decimal 379)
+   defining Unicode char U+017C (decimal 380)
+   defining Unicode char U+017D (decimal 381)
+   defining Unicode char U+017E (decimal 382)
+   defining Unicode char U+01CD (decimal 461)
+   defining Unicode char U+01CE (decimal 462)
+   defining Unicode char U+01CF (decimal 463)
+   defining Unicode char U+01D0 (decimal 464)
+   defining Unicode char U+01D1 (decimal 465)
+   defining Unicode char U+01D2 (decimal 466)
+   defining Unicode char U+01D3 (decimal 467)
+   defining Unicode char U+01D4 (decimal 468)
+   defining Unicode char U+01E2 (decimal 482)
+   defining Unicode char U+01E3 (decimal 483)
+   defining Unicode char U+01E6 (decimal 486)
+   defining Unicode char U+01E7 (decimal 487)
+   defining Unicode char U+01E8 (decimal 488)
+   defining Unicode char U+01E9 (decimal 489)
+   defining Unicode char U+01EA (decimal 490)
+   defining Unicode char U+01EB (decimal 491)
+   defining Unicode char U+01F0 (decimal 496)
+   defining Unicode char U+01F4 (decimal 500)
+   defining Unicode char U+01F5 (decimal 501)
+   defining Unicode char U+0218 (decimal 536)
+   defining Unicode char U+0219 (decimal 537)
+   defining Unicode char U+021A (decimal 538)
+   defining Unicode char U+021B (decimal 539)
+   defining Unicode char U+01E02 (decimal 7682)
+   defining Unicode char U+01E03 (decimal 7683)
+   defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2013 (decimal 8211)
+   defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2018 (decimal 8216)
+   defining Unicode char U+2019 (decimal 8217)
+   defining Unicode char U+201A (decimal 8218)
+   defining Unicode char U+201C (decimal 8220)
+   defining Unicode char U+201D (decimal 8221)
+   defining Unicode char U+201E (decimal 8222)
+   defining Unicode char U+2030 (decimal 8240)
+   defining Unicode char U+2031 (decimal 8241)
+   defining Unicode char U+2039 (decimal 8249)
+   defining Unicode char U+203A (decimal 8250)
+   defining Unicode char U+2423 (decimal 9251)
+)
+Now handling font encoding OT1 ...
+... processing UTF-8 mapping file for font encoding OT1
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu
+File: ot1enc.dfu 2015/12/03 v1.1r UTF-8 support for inputenc
+   defining Unicode char U+00A0 (decimal 160)
+   defining Unicode char U+00A1 (decimal 161)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00AD (decimal 173)
+   defining Unicode char U+00B8 (decimal 184)
+   defining Unicode char U+00BF (decimal 191)
+   defining Unicode char U+00C5 (decimal 197)
+   defining Unicode char U+00C6 (decimal 198)
+   defining Unicode char U+00D8 (decimal 216)
+   defining Unicode char U+00DF (decimal 223)
+   defining Unicode char U+00E6 (decimal 230)
+   defining Unicode char U+00EC (decimal 236)
+   defining Unicode char U+00ED (decimal 237)
+   defining Unicode char U+00EE (decimal 238)
+   defining Unicode char U+00EF (decimal 239)
+   defining Unicode char U+00F8 (decimal 248)
+   defining Unicode char U+0131 (decimal 305)
+   defining Unicode char U+0141 (decimal 321)
+   defining Unicode char U+0142 (decimal 322)
+   defining Unicode char U+0152 (decimal 338)
+   defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+0174 (decimal 372)
+   defining Unicode char U+0175 (decimal 373)
+   defining Unicode char U+0176 (decimal 374)
+   defining Unicode char U+0177 (decimal 375)
+   defining Unicode char U+0218 (decimal 536)
+   defining Unicode char U+0219 (decimal 537)
+   defining Unicode char U+021A (decimal 538)
+   defining Unicode char U+021B (decimal 539)
+   defining Unicode char U+2013 (decimal 8211)
+   defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2018 (decimal 8216)
+   defining Unicode char U+2019 (decimal 8217)
+   defining Unicode char U+201C (decimal 8220)
+   defining Unicode char U+201D (decimal 8221)
+)
+Now handling font encoding OMS ...
+... processing UTF-8 mapping file for font encoding OMS
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu
+File: omsenc.dfu 2015/12/03 v1.1r UTF-8 support for inputenc
+   defining Unicode char U+00A7 (decimal 167)
+   defining Unicode char U+00B6 (decimal 182)
+   defining Unicode char U+00B7 (decimal 183)
+   defining Unicode char U+2020 (decimal 8224)
+   defining Unicode char U+2021 (decimal 8225)
+   defining Unicode char U+2022 (decimal 8226)
+)
+Now handling font encoding OMX ...
+... no UTF-8 mapping file for font encoding OMX
+Now handling font encoding U ...
+... no UTF-8 mapping file for font encoding U
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+   defining Unicode char U+00A9 (decimal 169)
+   defining Unicode char U+00AA (decimal 170)
+   defining Unicode char U+00AE (decimal 174)
+   defining Unicode char U+00BA (decimal 186)
+   defining Unicode char U+02C6 (decimal 710)
+   defining Unicode char U+02DC (decimal 732)
+   defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2026 (decimal 8230)
+   defining Unicode char U+2122 (decimal 8482)
+   defining Unicode char U+2423 (decimal 9251)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/pgfplots/pgfplots.sty
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplots.revision.tex)
+Package: pgfplots 2016/01/06 v1.13 Data Visualization (1.13)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplots.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplotscore.code.tex
+\t@pgfplots@toka=\toks43
+\t@pgfplots@tokb=\toks44
+\t@pgfplots@tokc=\toks45
+\pgfplots@tmpa=\dimen196
+\c@pgfplots@coordindex=\count182
+\c@pgfplots@scanlineindex=\count183
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/sys/pgfplotssysgeneric.code
+.tex))
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/libs/pgfplotslibrary.code.t
+ex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/oldpgfcompatib/pgfplotsoldp
+gfsupp_loader.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryfpu.code.tex
+)
+Package pgfplots: loading complementary arithmetics for your pgf version...
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/oldpgfcompatib/pgfplotsoldp
+gfsupp_pgflibraryfpu.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/oldpgfcompatib/pgfplotsoldp
+gfsupp_pgfmathfloat.code.tex
+\c@pgfmathroundto@lastzeros=\count184
+))
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/util/pgfplotsutil.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotslists
+tructure.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotslists
+tructureext.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsarray
+.code.tex
+\c@pgfplotsarray@tmp=\count185
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsmatri
+x.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/numtable/pgfplotstableshare
+d.code.tex
+\c@pgfplotstable@counta=\count186
+\t@pgfplotstable@a=\toks46
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsdeque
+.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/util/pgfplotsbinary.code.te
+x
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/util/pgfplotsbinary.data.co
+de.tex))
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/util/pgfplotsutil.verb.code
+.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/libs/pgflibrarypgfplots.sur
+fshading.code.tex
+\c@pgfplotslibrarysurf@no=\count187
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/sys/pgflibrarypgfplots.surf
+shading.pgfsys-pdftex.def)))
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/util/pgfplotscolormap.code.
+tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/util/pgfplotscolor.code.tex
+))
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplotsstackedplots.code.t
+ex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplotsplothandlers.code.t
+ex
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplotsmeshplothandler.cod
+e.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplotsmeshplotimage.code.
+tex)))
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplots.scaling.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplotscoordprocessing.cod
+e.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplots.errorbars.code.tex
+) (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplots.markers.code.tex
+) (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplotsticks.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplots.paths.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarydecorations.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduledecorations.cod
+e.tex
+\pgfdecoratedcompleteddistance=\dimen197
+\pgfdecoratedremainingdistance=\dimen198
+\pgfdecoratedinputsegmentcompleteddistance=\dimen199
+\pgfdecoratedinputsegmentremainingdistance=\dimen256
+\pgf@decorate@distancetomove=\dimen257
+\pgf@decorate@repeatstate=\count188
+\pgfdecorationsegmentamplitude=\dimen258
+\pgfdecorationsegmentlength=\dimen259
+)
+\tikz@lib@dec@box=\box52
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarydecorations.pathmorphing.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrary
+decorations.pathmorphing.code.tex))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarydecorations.pathreplacing.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrary
+decorations.pathreplacing.code.tex))
+\pgfplots@numplots=\count189
+\pgfplots@xmin@reg=\dimen260
+\pgfplots@xmax@reg=\dimen261
+\pgfplots@ymin@reg=\dimen262
+\pgfplots@ymax@reg=\dimen263
+\pgfplots@zmin@reg=\dimen264
+\pgfplots@zmax@reg=\dimen265
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibraryplotmarks.code.tex
+File: tikzlibraryplotmarks.code.tex 2008/01/09 v3.0.1a (rcs-revision 1.1)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplotmarks.co
+de.tex
+File: pgflibraryplotmarks.code.tex 2015/08/03 v3.0.1a (rcs-revision 1.14)
+)))
+Package hyperref Info: Option `colorlinks' set `true' on input line 85.
 
 
 Package hyperref Warning: Option `bookmarks' has already been used,
-(hyperref)                setting the option has no effect on input line 84.
+(hyperref)                setting the option has no effect on input line 85.
+
+) (/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
+Package: biblatex 2016/03/03 v3.3 programmable bibliographies (PK/JW/AB)
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex_.sty
+Package: biblatex_ 2016/03/03 v3.3 programmable bibliographies (biber) (PK/JW/A
+B)
+
+(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
+Package: logreq 2010/08/04 v1.0 xml request logger
+\lrq@indent=\count190
+
+(/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.def
+File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
+))
+\c@tabx@nest=\count191
+\c@listtotal=\count192
+\c@listcount=\count193
+\c@liststart=\count194
+\c@liststop=\count195
+\c@citecount=\count196
+\c@citetotal=\count197
+\c@multicitecount=\count198
+\c@multicitetotal=\count199
+\c@instcount=\count266
+\c@maxnames=\count267
+\c@minnames=\count268
+\c@maxitems=\count269
+\c@minitems=\count270
+\c@citecounter=\count271
+\c@savedcitecounter=\count272
+\c@uniquelist=\count273
+\c@uniquename=\count274
+\c@refsection=\count275
+\c@refsegment=\count276
+\c@maxextratitle=\count277
+\c@maxextratitleyear=\count278
+\c@maxextrayear=\count279
+\c@maxextraalpha=\count280
+\c@abbrvpenalty=\count281
+\c@highnamepenalty=\count282
+\c@lownamepenalty=\count283
+\c@maxparens=\count284
+\c@parenlevel=\count285
+\blx@tempcnta=\count286
+\blx@tempcntb=\count287
+\blx@tempcntc=\count288
+\blx@maxsection=\count289
+\blx@maxsegment@0=\count290
+\blx@notetype=\count291
+\blx@parenlevel@text=\count292
+\blx@parenlevel@foot=\count293
+\blx@sectionciteorder@0=\count294
+\labelnumberwidth=\skip77
+\labelalphawidth=\skip78
+\biblabelsep=\skip79
+\bibitemsep=\skip80
+\bibnamesep=\skip81
+\bibinitsep=\skip82
+\bibparsep=\skip83
+\bibhang=\skip84
+\blx@bcfin=\read2
+\blx@bcfout=\write5
+\c@mincomprange=\count295
+\c@maxcomprange=\count296
+\c@mincompwidth=\count297
+Package biblatex Info: Trying to load biblatex default data model...
+Package biblatex Info: ... file 'blx-dm.def' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-dm.def)
+Package biblatex Info: Trying to load biblatex style data model...
+Package biblatex Info: ... file 'ieee.dbx' not found.
+Package biblatex Info: Trying to load biblatex custom data model...
+Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
+\c@afterword=\count298
+\c@savedafterword=\count299
+\c@annotator=\count300
+\c@savedannotator=\count301
+\c@author=\count302
+\c@savedauthor=\count303
+\c@bookauthor=\count304
+\c@savedbookauthor=\count305
+\c@commentator=\count306
+\c@savedcommentator=\count307
+\c@editor=\count308
+\c@savededitor=\count309
+\c@editora=\count310
+\c@savededitora=\count311
+\c@editorb=\count312
+\c@savededitorb=\count313
+\c@editorc=\count314
+\c@savededitorc=\count315
+\c@foreword=\count316
+\c@savedforeword=\count317
+\c@holder=\count318
+\c@savedholder=\count319
+\c@introduction=\count320
+\c@savedintroduction=\count321
+\c@namea=\count322
+\c@savednamea=\count323
+\c@nameb=\count324
+\c@savednameb=\count325
+\c@namec=\count326
+\c@savednamec=\count327
+\c@translator=\count328
+\c@savedtranslator=\count329
+\c@shortauthor=\count330
+\c@savedshortauthor=\count331
+\c@shorteditor=\count332
+\c@savedshorteditor=\count333
+\c@labelname=\count334
+\c@savedlabelname=\count335
+\c@institution=\count336
+\c@savedinstitution=\count337
+\c@lista=\count338
+\c@savedlista=\count339
+\c@listb=\count340
+\c@savedlistb=\count341
+\c@listc=\count342
+\c@savedlistc=\count343
+\c@listd=\count344
+\c@savedlistd=\count345
+\c@liste=\count346
+\c@savedliste=\count347
+\c@listf=\count348
+\c@savedlistf=\count349
+\c@location=\count350
+\c@savedlocation=\count351
+\c@organization=\count352
+\c@savedorganization=\count353
+\c@origlocation=\count354
+\c@savedoriglocation=\count355
+\c@origpublisher=\count356
+\c@savedorigpublisher=\count357
+\c@publisher=\count358
+\c@savedpublisher=\count359
+\c@language=\count360
+\c@savedlanguage=\count361
+\c@pageref=\count362
+\c@savedpageref=\count363
+\shorthandwidth=\skip85
+\shortjournalwidth=\skip86
+\shortserieswidth=\skip87
+\shorttitlewidth=\skip88
+\shortauthorwidth=\skip89
+\shorteditorwidth=\skip90
+Package biblatex Info: Trying to load compatibility code...
+Package biblatex Info: ... file 'blx-compat.def' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def
+File: blx-compat.def 2016/03/03 v3.3 biblatex compatibility (PK/JW/AB)
+)
+Package biblatex Info: Trying to load generic definitions...
+Package biblatex Info: ... file 'biblatex_.def' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex_.def
+File: biblatex_.def 
+\c@textcitecount=\count364
+\c@textcitetotal=\count365
+\c@textcitemaxnames=\count366
+\c@biburlnumpenalty=\count367
+\c@biburlucpenalty=\count368
+\c@biburllcpenalty=\count369
+\c@smartand=\count370
+)
+Package biblatex Info: Trying to load bibliography style 'ieee'...
+Package biblatex Info: ... file 'ieee.bbx' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex-ieee/ieee.bbx
+File: ieee.bbx 2015/03/12 v1.1k biblatex bibliography style
+Package biblatex Info: Trying to load bibliography style 'numeric-comp'...
+Package biblatex Info: ... file 'numeric-comp.bbx' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/numeric-comp.bbx
+File: numeric-comp.bbx 2016/03/03 v3.3 biblatex bibliography style (PK/JW/AB)
+Package biblatex Info: Trying to load bibliography style 'numeric'...
+Package biblatex Info: ... file 'numeric.bbx' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/numeric.bbx
+File: numeric.bbx 2016/03/03 v3.3 biblatex bibliography style (PK/JW/AB)
+Package biblatex Info: Trying to load bibliography style 'standard'...
+Package biblatex Info: ... file 'standard.bbx' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
+File: standard.bbx 2016/03/03 v3.3 biblatex bibliography style (PK/JW/AB)
+\c@bbx:relatedcount=\count371
+\c@bbx:relatedtotal=\count372
+)))
+
+Package biblatex Warning: 'firstinits' option is deprecated, use 'giveninits' i
+nstead.
 
 )
+Package biblatex Info: Trying to load citation style 'ieee'...
+Package biblatex Info: ... file 'ieee.cbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex-ieee/ieee.cbx
+File: ieee.cbx 2015/03/12 v1.1k biblatex citation style
+Package biblatex Info: Trying to load citation style 'numeric-comp'...
+Package biblatex Info: ... file 'numeric-comp.cbx' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/cbx/numeric-comp.cbx
+File: numeric-comp.cbx 2016/03/03 v3.3 biblatex citation style (PK/JW/AB)
+\c@cbx@tempcnta=\count373
+\c@cbx@tempcntb=\count374
+Package biblatex Info: Redefining '\cite'.
+Package biblatex Info: Redefining '\parencite'.
+Package biblatex Info: Redefining '\footcite'.
+Package biblatex Info: Redefining '\footcitetext'.
+Package biblatex Info: Redefining '\smartcite'.
+Package biblatex Info: Redefining '\supercite'.
+Package biblatex Info: Redefining '\textcite'.
+Package biblatex Info: Redefining '\textcites'.
+Package biblatex Info: Redefining '\cites'.
+Package biblatex Info: Redefining '\parencites'.
+Package biblatex Info: Redefining '\smartcites'.
+)
+Package biblatex Info: Redefining '\cite'.
+Package biblatex Info: Redefining '\cites'.
+)
+Package biblatex Info: Trying to load configuration file...
+Package biblatex Info: ... file 'biblatex.cfg' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.cfg
+File: biblatex.cfg 
+)))
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
- (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
 File: english.lbx 2016/03/03 v3.3 biblatex localization (PK/JW/AB)
 )
-\@quotelevel=\count365
-\@quotereset=\count366
+\@quotelevel=\count375
+\@quotereset=\count376
 
-(./dissertation.aux)
+(./dissertation.aux
+
+LaTeX Warning: Label `mse_results' multiply defined.
+
+)
 \openout1 = `dissertation.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+ (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count367
-\scratchdimen=\dimen196
-\scratchbox=\box52
-\nofMPsegments=\count368
-\nofMParguments=\count369
-\everyMPshowfont=\toks41
-\MPscratchCnt=\count370
-\MPscratchDim=\dimen197
-\MPnumerator=\count371
-\makeMPintoPDFobject=\count372
-\everyMPtoPDFconversion=\toks42
+\scratchcounter=\count377
+\scratchdimen=\dimen266
+\scratchbox=\box53
+\nofMPsegments=\count378
+\nofMParguments=\count379
+\everyMPshowfont=\toks47
+\MPscratchCnt=\count380
+\MPscratchDim=\dimen267
+\MPnumerator=\count381
+\makeMPintoPDFobject=\count382
+\everyMPtoPDFconversion=\toks48
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
@@ -1081,63 +1534,97 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c@lstlisting=\count373
-\AtBeginShipoutBox=\box53
-Package hyperref Info: Link coloring ON on input line 37.
+\c@lstlisting=\count383
+\AtBeginShipoutBox=\box54
+Package hyperref Info: Link coloring ON on input line 38.
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count374
+\c@section@level=\count384
 )
-LaTeX Info: Redefining \ref on input line 37.
-LaTeX Info: Redefining \pageref on input line 37.
-LaTeX Info: Redefining \nameref on input line 37.
+LaTeX Info: Redefining \ref on input line 38.
+LaTeX Info: Redefining \pageref on input line 38.
+LaTeX Info: Redefining \nameref on input line 38.
 
 (./dissertation.out) (./dissertation.out)
 \@outlinefile=\write6
 \openout6 = `dissertation.out'.
 
-Package biblatex Info: No input encoding detected.
-(biblatex)             Assuming 'ascii'.
+
+ABD: EveryShipout initializing macros
+
+Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
+ick labels; missing features). Consider writing \pgfplotsset{compat=1.13} into 
+your preamble.
+ on input line 38.
+
+Package biblatex Info: Input encoding 'utf8' detected.
 Package biblatex Info: Automatic encoding selection.
-(biblatex)             Assuming data encoding 'ascii'.
-\openout4 = `dissertation.bcf'.
+(biblatex)             Assuming data encoding 'utf8'.
+\openout5 = `dissertation.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'dissertation.bbl' not found.
+Package biblatex Info: ... file 'dissertation.bbl' found.
+(./dissertation.bbl
 
-No file dissertation.bbl.
-Package biblatex Info: Reference section=0 on input line 37.
-Package biblatex Info: Reference segment=0 on input line 37.
-ABD: EveryShipout initializing macros
-Overfull \hbox (15.0pt too wide) in paragraph at lines 44--44
+Package biblatex Warning: Biber reported the following issues
+(biblatex)                with '990650':
+(biblatex)                - Range field 'pages' in entry '990650' is malformed,
+ skipping.
+
+
+Package biblatex Warning: Biber reported the following issues
+(biblatex)                with '1315013':
+(biblatex)                - Range field 'pages' in entry '1315013' is malformed
+, skipping.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                https://hdrihaven.com/
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                https://github.com/affinelayer/pix2pix-tensorflow/blo
+b/master/pix2pix.py
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+)
+Package biblatex Info: Reference section=0 on input line 38.
+Package biblatex Info: Reference segment=0 on input line 38.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 45--45
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 44--44
+Underfull \hbox (badness 10000) in paragraph at lines 45--45
 
  []
 
-<logo/logo_uob_color.pdf, id=95, 546.04pt x 158.5925pt>
+<logo/logo_uob_color.pdf, id=107, 546.04pt x 158.5925pt>
 File: logo/logo_uob_color.pdf Graphic file (type pdf)
 
 <use logo/logo_uob_color.pdf>
-Package pdftex.def Info: logo/logo_uob_color.pdf used on input line 44.
+Package pdftex.def Info: logo/logo_uob_color.pdf used on input line 45.
 (pdftex.def)             Requested size: 163.81326pt x 47.57811pt.
 
-Overfull \hbox (43.35896pt too wide) in paragraph at lines 44--44
+Overfull \hbox (43.35896pt too wide) in paragraph at lines 45--45
  [][] 
  []
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 44.
+LaTeX Font Info:    Try loading font information for U+msa on input line 45.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 44.
+LaTeX Font Info:    Try loading font information for U+msb on input line 45.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -1146,48 +1633,42 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./logo/logo_uob_color.pdf>
 ] [2
 
-] [1
-
-] [2
+] [1] [2
 
 ]
-(./dissertation.toc)
+[3] [4
+
+] (./dissertation.toc)
 \tf@toc=\write7
 \openout7 = `dissertation.toc'.
 
- [3] [4
+ [5] [6
 
 ]
 Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
-ine 80.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 90.
+ine 81.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 91.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 90.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 91.
 
-<images/examples/gt.png, id=153, 963.6pt x 542.025pt>
-File: images/examples/gt.png Graphic file (type png)
+<images/examples/example_25p.png, id=178, 963.6pt x 542.025pt>
+File: images/examples/example_25p.png Graphic file (type png)
 
-<use images/examples/gt.png>
-Package pdftex.def Info: images/examples/gt.png used on input line 101.
-(pdftex.def)             Requested size: 252.91203pt x 142.26378pt.
+<use images/examples/example_25p.png>
+Package pdftex.def Info: images/examples/example_25p.png used on input line 103
+.
+(pdftex.def)             Requested size: 404.66513pt x 227.62204pt.
+ [7] [8 <./images/examples/example_25p.png>] [9
 
-<images/examples/basic.png, id=155, 963.6pt x 542.025pt>
-File: images/examples/basic.png Graphic file (type png)
-
-<use images/examples/basic.png>
-Package pdftex.def Info: images/examples/basic.png used on input line 103.
-(pdftex.def)             Requested size: 252.91203pt x 142.26378pt.
- [5] [6 <./images/examples/gt.png> <./images/examples/basic.png>] [7
-
-] [8
-
-] [9] [10
+] [10
 
 ] [11] [12
+
+] [13] [14
 
 ]
 Chapter 1.
@@ -1202,282 +1683,617 @@ l.195 \begin{center}
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.215 \begin{center}
+l.216 \begin{center}
                      [2] [3] [4] [5] [6]
 Chapter 2.
-
-LaTeX Warning: Citation 'https://www.digitaldomain.com/work/i-robot/' on page 7
- undefined on input line 269.
-
-
-LaTeX Warning: Citation 'https://developer.apple.com/documentation/arkit/arligh
-testimate' on page 7 undefined on input line 271.
-
-
-LaTeX Warning: Citation 'https://developers.google.com/ar/reference/unity/prefa
-b/Environmental_Light' on page 7 undefined on input line 271.
-
-
-LaTeX Warning: Citation 'https://developer.apple.com/documentation/arkit/ardire
-ctionallightestimate' on page 7 undefined on input line 271.
-
 [7
 
 ]
 
-LaTeX Warning: Citation 'http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
-r=990650' on page 8 undefined on input line 275.
-
-
-LaTeX Warning: Citation 'Lalonde-2009-10350' on page 8 undefined on input line 
-277.
-
-
-LaTeX Warning: Citation 'http://www.cs.cornell.edu/projects/shadows/files/wehrw
-ein_3dv15_shadows.pdf' on page 8 undefined on input line 278.
-
-
-LaTeX Warning: Citation 'http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
-r=1315013' on page 8 undefined on input line 280.
-
-
-LaTeX Warning: Citation 'http://www.cs.wm.edu/\nobreakspace {}ppeers/showPublic
-ation.php?id=Xia:2016:RSS' on page 8 undefined on input line 282.
-
-
-LaTeX Warning: Citation 'http://hazirbas.com/datasets/ddff12scene/' on page 8 u
-ndefined on input line 284.
-
-
-LaTeX Warning: Citation 'http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
-r=790313' on page 8 undefined on input line 285.
+LaTeX Warning: Citation '1315030' on page 8 undefined on input line 276.
 
 [8]
 
-LaTeX Warning: Citation 'https://arxiv.org/pdf/1411.4734.pdf' on page 9 undefin
-ed on input line 288.
+LaTeX Warning: Citation 'song2015sun' on page 9 undefined on input line 293.
 
 
-LaTeX Warning: Citation 'https://link.springer.com/content/pdf/10.1007/s00371-0
-10-0501-7.pdf' on page 9 undefined on input line 290.
+LaTeX Warning: Citation 'DBLP:journals/corr/abs-1709-00849' on page 9 undefined
+ on input line 293.
 
 
-LaTeX Warning: Citation 'https://arxiv.org/pdf/1611.06403.pdf' on page 9 undefi
-ned on input line 292.
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
+ [9]
+[10] [11] [12
 
-LaTeX Warning: Citation 'https://arxiv.org/pdf/1704.00090.pdf' on page 9 undefi
-ned on input line 294.
-
-[9]
-
-LaTeX Warning: Citation 'https://arxiv.org/pdf/1511.04384.pdf' on page 10 undef
-ined on input line 296.
-
-[10]
+]
 Chapter 3.
-<images/Dematerial.png, id=292, 1080.035pt x 580.1675pt>
+
+Package wrapfig Warning: Stationary wrapfigure forced to float on input line 35
+0.
+
+<images/Dematerial.png, id=327, 1080.035pt x 580.1675pt>
 File: images/Dematerial.png Graphic file (type png)
 
 <use images/Dematerial.png>
-Package pdftex.def Info: images/Dematerial.png used on input line 342.
+Package pdftex.def Info: images/Dematerial.png used on input line 353.
 (pdftex.def)             Requested size: 423.7334pt x 227.62204pt.
 
+Underfull \hbox (badness 10000) in paragraph at lines 357--372
 
-LaTeX Warning: Citation 'https://github.com/affinelayer/pix2pix-tensorflow/blob
-/master/pix2pix.py' on page 11 undefined on input line 363.
+ []
 
-[11
+[13]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-] [12 <./images/Dematerial.png>] [13]
-<images/Stereo.png, id=316, 693.59125pt x 618.31pt>
-File: images/Stereo.png Graphic file (type png)
- <use images/Stereo.png>
-Package pdftex.def Info: images/Stereo.png used on input line 381.
-(pdftex.def)             Requested size: 255.33357pt x 227.62204pt.
-
-
-LaTeX Warning: Citation 'http://ikea.csail.mit.edu/' on page 14 undefined on in
-put line 385.
-
-
-LaTeX Warning: Citation 'https://docs.blender.org/manual/en/dev/render/cycles/n
-odes/types/shaders/principled.html' on page 14 undefined on input line 387.
-
-
-LaTeX Warning: Citation 'https://hdrihaven.com/' on page 14 undefined on input 
-line 389.
-
-[14 <./images/Stereo.png>] <images/left/0.png, id=326, 256.96pt x 256.96pt>
+ [14 <./images/Dematerial.png>] [15] <images/left/0.png, id=359, 256.96pt x 256
+.96pt>
 File: images/left/0.png Graphic file (type png)
 
 <use images/left/0.png>
-Package pdftex.def Info: images/left/0.png used on input line 394.
+Package pdftex.def Info: images/left/0.png used on input line 392.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/right/0.png, id=327, 256.96pt x 256.96pt>
+ <images/right/0.png, id=360, 256.96pt x 256.96pt>
 File: images/right/0.png Graphic file (type png)
 
 <use images/right/0.png>
-Package pdftex.def Info: images/right/0.png used on input line 395.
+Package pdftex.def Info: images/right/0.png used on input line 393.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/normals/0.png, id=328, 256.96pt x 256.96pt>
+ <images/normals/0.png, id=361, 256.96pt x 256.96pt>
 File: images/normals/0.png Graphic file (type png)
 
 <use images/normals/0.png>
-Package pdftex.def Info: images/normals/0.png used on input line 396.
+Package pdftex.def Info: images/normals/0.png used on input line 394.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/hdri/0.png, id=329, 256.96pt x 256.96pt>
+ <images/hdri/0.png, id=362, 256.96pt x 256.96pt>
 File: images/hdri/0.png Graphic file (type png)
 
 <use images/hdri/0.png>
-Package pdftex.def Info: images/hdri/0.png used on input line 397.
+Package pdftex.def Info: images/hdri/0.png used on input line 395.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/left/11.png, id=330, 513.92pt x 513.92pt>
+ <images/left/11.png, id=363, 513.92pt x 513.92pt>
 File: images/left/11.png Graphic file (type png)
 
 <use images/left/11.png>
-Package pdftex.def Info: images/left/11.png used on input line 398.
+Package pdftex.def Info: images/left/11.png used on input line 396.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/right/11.png, id=331, 513.92pt x 513.92pt>
+ <images/right/11.png, id=364, 513.92pt x 513.92pt>
 File: images/right/11.png Graphic file (type png)
 
 <use images/right/11.png>
-Package pdftex.def Info: images/right/11.png used on input line 399.
+Package pdftex.def Info: images/right/11.png used on input line 397.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/normals/11.png, id=332, 513.92pt x 513.92pt>
+ <images/normals/11.png, id=365, 513.92pt x 513.92pt>
 File: images/normals/11.png Graphic file (type png)
 
 <use images/normals/11.png>
-Package pdftex.def Info: images/normals/11.png used on input line 400.
+Package pdftex.def Info: images/normals/11.png used on input line 398.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/hdri/11.png, id=333, 401.5pt x 401.5pt>
+ <images/hdri/11.png, id=366, 401.5pt x 401.5pt>
 File: images/hdri/11.png Graphic file (type png)
 
 <use images/hdri/11.png>
-Package pdftex.def Info: images/hdri/11.png used on input line 401.
+Package pdftex.def Info: images/hdri/11.png used on input line 399.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
- <images/left/22.png, id=334, 513.92pt x 513.92pt>
+ <images/left/22.png, id=367, 513.92pt x 513.92pt>
 File: images/left/22.png Graphic file (type png)
 
 <use images/left/22.png>
-Package pdftex.def Info: images/left/22.png used on input line 402.
+Package pdftex.def Info: images/left/22.png used on input line 400.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/right/22.png, id=335, 513.92pt x 513.92pt>
+ <images/right/22.png, id=368, 513.92pt x 513.92pt>
 File: images/right/22.png Graphic file (type png)
 
 <use images/right/22.png>
-Package pdftex.def Info: images/right/22.png used on input line 403.
+Package pdftex.def Info: images/right/22.png used on input line 401.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/normals/22.png, id=336, 513.92pt x 513.92pt>
+ <images/normals/22.png, id=369, 513.92pt x 513.92pt>
 File: images/normals/22.png Graphic file (type png)
 
 <use images/normals/22.png>
-Package pdftex.def Info: images/normals/22.png used on input line 404.
+Package pdftex.def Info: images/normals/22.png used on input line 402.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/hdri/22.png, id=337, 401.5pt x 401.5pt>
+ <images/hdri/22.png, id=370, 401.5pt x 401.5pt>
 File: images/hdri/22.png Graphic file (type png)
 
 <use images/hdri/22.png>
-Package pdftex.def Info: images/hdri/22.png used on input line 405.
+Package pdftex.def Info: images/hdri/22.png used on input line 403.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[15] [16 <./images/left/0.png> <./images/right/0.png> <./images/normals/0.png> 
+[16] [17 <./images/left/0.png> <./images/right/0.png> <./images/normals/0.png> 
 <./images/hdri/0.png> <./images/left/11.png (PNG copy)> <./images/right/11.png 
 (PNG copy)> <./images/normals/11.png (PNG copy)> <./images/hdri/11.png> <./imag
 es/left/22.png (PNG copy)> <./images/right/22.png (PNG copy)> <./images/normals
 /22.png (PNG copy)> <./images/hdri/22.png>]
+
+LaTeX Warning: Marginpar on page 18 moved.
+
+<images/Stereo.png, id=389, 693.59125pt x 618.31pt>
+File: images/Stereo.png Graphic file (type png)
+ <use images/Stereo.png>
+Package pdftex.def Info: images/Stereo.png used on input line 428.
+(pdftex.def)             Requested size: 255.33357pt x 227.62204pt.
+\figureheight=\skip91
+\figurewidth=\skip92
+
+(./training.tex) (./val.tex) [18 <./images/Stereo.png>] [19] [20
+
+]
 Chapter 4.
 
-LaTeX Warning: Citation 'http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumbe
-r=1284395' on page 17 undefined on input line 422.
+Underfull \hbox (badness 10000) in paragraph at lines 472--472
+[]\OT1/cmr/m/n/10 25th Per-
+ []
 
-<images/validation/516.png, id=353, 256.96pt x 256.96pt>
-File: images/validation/516.png Graphic file (type png)
+<images/deep_stereo/25p_ssim_input.png, id=409, 256.96pt x 256.96pt>
+File: images/deep_stereo/25p_ssim_input.png Graphic file (type png)
 
-<use images/validation/516.png>
-Package pdftex.def Info: images/validation/516.png used on input line 430.
-(pdftex.def)             Requested size: 56.9055pt x 56.90385pt.
+<use images/deep_stereo/25p_ssim_input.png>
+Package pdftex.def Info: images/deep_stereo/25p_ssim_input.png used on input li
+ne 473.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
 
-<images/validation/516_gt.jpg, id=354, 401.5pt x 401.5pt>
-File: images/validation/516_gt.jpg Graphic file (type jpg)
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 473--473
+[][] 
+ []
 
-<use images/validation/516_gt.jpg>
-Package pdftex.def Info: images/validation/516_gt.jpg used on input line 431.
-(pdftex.def)             Requested size: 56.9055pt x 56.90189pt.
+<images/deep_stereo/25p_ssim_gt_tm.png, id=410, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_ssim_gt_tm.png Graphic file (type png)
 
-<images/validation/516_pred.jpg, id=355, 401.5pt x 401.5pt>
-File: images/validation/516_pred.jpg Graphic file (type jpg)
+<use images/deep_stereo/25p_ssim_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_ssim_gt_tm.png used on input li
+ne 473.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
 
-<use images/validation/516_pred.jpg>
-Package pdftex.def Info: images/validation/516_pred.jpg used on input line 432.
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 473--473
+[][] 
+ []
 
-(pdftex.def)             Requested size: 56.9055pt x 56.90189pt.
+<images/deep_stereo/25p_ssim_pred_tm.png, id=411, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_ssim_pred_tm.png Graphic file (type png)
 
-<images/validation/332.png, id=356, 256.96pt x 256.96pt>
-File: images/validation/332.png Graphic file (type png)
+<use images/deep_stereo/25p_ssim_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_ssim_pred_tm.png used on input 
+line 474.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
 
-<use images/validation/332.png>
-Package pdftex.def Info: images/validation/332.png used on input line 434.
-(pdftex.def)             Requested size: 56.9055pt x 56.90385pt.
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 474--474
+[][] 
+ []
 
-<images/validation/332_gt.jpg, id=357, 401.5pt x 401.5pt>
-File: images/validation/332_gt.jpg Graphic file (type jpg)
 
-<use images/validation/332_gt.jpg>
-Package pdftex.def Info: images/validation/332_gt.jpg used on input line 435.
-(pdftex.def)             Requested size: 56.9055pt x 56.90189pt.
+Underfull \hbox (badness 10000) in paragraph at lines 475--475
+[]\OT1/cmr/m/n/10 50th Per-
+ []
 
-<images/validation/332_pred.jpg, id=358, 401.5pt x 401.5pt>
-File: images/validation/332_pred.jpg Graphic file (type jpg)
+<images/deep_stereo/50p_ssim_input.png, id=412, 256.96pt x 256.96pt>
+File: images/deep_stereo/50p_ssim_input.png Graphic file (type png)
 
-<use images/validation/332_pred.jpg>
-Package pdftex.def Info: images/validation/332_pred.jpg used on input line 436.
+<use images/deep_stereo/50p_ssim_input.png>
+Package pdftex.def Info: images/deep_stereo/50p_ssim_input.png used on input li
+ne 476.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
 
-(pdftex.def)             Requested size: 56.9055pt x 56.90189pt.
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 476--476
+[][] 
+ []
 
-<exposure_example.jpg, id=359, 2959.055pt x 2573.615pt>
+<images/deep_stereo/50p_ssim_gt_tm.png, id=413, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_ssim_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_ssim_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_ssim_gt_tm.png used on input li
+ne 476.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 476--476
+[][] 
+ []
+
+<images/deep_stereo/50p_ssim_pred_tm.png, id=414, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_ssim_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_ssim_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_ssim_pred_tm.png used on input 
+line 477.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 477--477
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 478--478
+[]\OT1/cmr/m/n/10 75th Per-
+ []
+
+<images/deep_stereo/75p_ssim_input.png, id=415, 256.96pt x 256.96pt>
+File: images/deep_stereo/75p_ssim_input.png Graphic file (type png)
+
+<use images/deep_stereo/75p_ssim_input.png>
+Package pdftex.def Info: images/deep_stereo/75p_ssim_input.png used on input li
+ne 479.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 479--479
+[][] 
+ []
+
+<images/deep_stereo/75p_ssim_gt_tm.png, id=416, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_ssim_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_ssim_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_ssim_gt_tm.png used on input li
+ne 479.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 479--479
+[][] 
+ []
+
+<images/deep_stereo/75p_ssim_pred_tm.png, id=417, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_ssim_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_ssim_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_ssim_pred_tm.png used on input 
+line 480.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 480--480
+[][] 
+ []
+
+
+Overfull \hbox (33.5472pt too wide) in paragraph at lines 466--484
+ [][] 
+ []
+
+[21]
+Underfull \hbox (badness 10000) in paragraph at lines 498--498
+[]\OT1/cmr/m/n/10 25th Per-
+ []
+
+<images/deep_stereo/25p_mse_input.png, id=427, 256.96pt x 256.96pt>
+File: images/deep_stereo/25p_mse_input.png Graphic file (type png)
+
+<use images/deep_stereo/25p_mse_input.png>
+Package pdftex.def Info: images/deep_stereo/25p_mse_input.png used on input lin
+e 499.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 499--499
+[][] 
+ []
+
+<images/deep_stereo/25p_mse_gt_tm.png, id=428, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_mse_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/25p_mse_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_mse_gt_tm.png used on input lin
+e 499.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 499--499
+[][] 
+ []
+
+<images/deep_stereo/25p_mse_pred_tm.png, id=429, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_mse_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/25p_mse_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_mse_pred_tm.png used on input l
+ine 500.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 500--500
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 501--501
+[]\OT1/cmr/m/n/10 50th Per-
+ []
+
+<images/deep_stereo/50p_mse_input.png, id=430, 256.96pt x 256.96pt>
+File: images/deep_stereo/50p_mse_input.png Graphic file (type png)
+
+<use images/deep_stereo/50p_mse_input.png>
+Package pdftex.def Info: images/deep_stereo/50p_mse_input.png used on input lin
+e 502.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 502--502
+[][] 
+ []
+
+<images/deep_stereo/50p_mse_gt_tm.png, id=431, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_mse_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_mse_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_mse_gt_tm.png used on input lin
+e 502.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 502--502
+[][] 
+ []
+
+<images/deep_stereo/50p_mse_pred_tm.png, id=432, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_mse_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_mse_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_mse_pred_tm.png used on input l
+ine 503.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 503--503
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 504--504
+[]\OT1/cmr/m/n/10 75th Per-
+ []
+
+<images/deep_stereo/75p_mse_input.png, id=433, 256.96pt x 256.96pt>
+File: images/deep_stereo/75p_mse_input.png Graphic file (type png)
+
+<use images/deep_stereo/75p_mse_input.png>
+Package pdftex.def Info: images/deep_stereo/75p_mse_input.png used on input lin
+e 505.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 505--505
+[][] 
+ []
+
+<images/deep_stereo/75p_mse_gt_tm.png, id=434, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_mse_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_mse_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_mse_gt_tm.png used on input lin
+e 505.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 505--505
+[][] 
+ []
+
+<images/deep_stereo/75p_mse_pred_tm.png, id=435, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_mse_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_mse_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_mse_pred_tm.png used on input l
+ine 506.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 506--506
+[][] 
+ []
+
+
+Overfull \hbox (33.5472pt too wide) in paragraph at lines 492--509
+ [][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 521--522
+[]\OT1/cmr/m/n/10 Average Dis-tance
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 521--522
+\OT1/cmr/m/n/10 be-tween bright-est
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 523--523
+[]\OT1/cmr/m/n/10 25th Per-
+ []
+
+<images/deep_stereo/25p_sun_input.png, id=436, 256.96pt x 256.96pt>
+File: images/deep_stereo/25p_sun_input.png Graphic file (type png)
+
+<use images/deep_stereo/25p_sun_input.png>
+Package pdftex.def Info: images/deep_stereo/25p_sun_input.png used on input lin
+e 524.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 524--524
+[][] 
+ []
+
+<images/deep_stereo/25p_sun_gt_tm.png, id=437, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_sun_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/25p_sun_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_sun_gt_tm.png used on input lin
+e 524.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 524--524
+[][] 
+ []
+
+<images/deep_stereo/25p_sun_pred_tm.png, id=438, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_sun_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/25p_sun_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_sun_pred_tm.png used on input l
+ine 525.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 525--525
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 526--526
+[]\OT1/cmr/m/n/10 50th Per-
+ []
+
+<images/deep_stereo/50p_sun_input.png, id=439, 256.96pt x 256.96pt>
+File: images/deep_stereo/50p_sun_input.png Graphic file (type png)
+
+<use images/deep_stereo/50p_sun_input.png>
+Package pdftex.def Info: images/deep_stereo/50p_sun_input.png used on input lin
+e 527.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 527--527
+[][] 
+ []
+
+<images/deep_stereo/50p_sun_gt_tm.png, id=440, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_sun_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_sun_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_sun_gt_tm.png used on input lin
+e 527.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 527--527
+[][] 
+ []
+
+<images/deep_stereo/50p_sun_pred_tm.png, id=441, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_sun_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_sun_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_sun_pred_tm.png used on input l
+ine 528.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 528--528
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 529--529
+[]\OT1/cmr/m/n/10 75th Per-
+ []
+
+<images/deep_stereo/75p_sun_input.png, id=442, 256.96pt x 256.96pt>
+File: images/deep_stereo/75p_sun_input.png Graphic file (type png)
+
+<use images/deep_stereo/75p_sun_input.png>
+Package pdftex.def Info: images/deep_stereo/75p_sun_input.png used on input lin
+e 530.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 530--530
+[][] 
+ []
+
+<images/deep_stereo/75p_sun_gt_tm.png, id=443, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_sun_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_sun_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_sun_gt_tm.png used on input lin
+e 530.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 530--530
+[][] 
+ []
+
+<images/deep_stereo/75p_sun_pred_tm.png, id=444, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_sun_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_sun_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_sun_pred_tm.png used on input l
+ine 531.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 531--531
+[][] 
+ []
+
+
+Overfull \hbox (33.5472pt too wide) in paragraph at lines 517--534
+ [][] 
+ []
+
+<exposure_example.jpg, id=445, 2959.055pt x 2573.615pt>
 File: exposure_example.jpg Graphic file (type jpg)
 
 <use exposure_example.jpg>
-Package pdftex.def Info: exposure_example.jpg used on input line 446.
+Package pdftex.def Info: exposure_example.jpg used on input line 542.
 (pdftex.def)             Requested size: 227.62206pt x 197.96083pt.
+
+
+LaTeX Warning: Marginpar on page 22 moved.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[17
+[22 <./images/deep_stereo/25p_ssim_input.png (PNG copy)> <./images/deep_stereo/
+25p_ssim_gt_tm.png (PNG copy)> <./images/deep_stereo/25p_ssim_pred_tm.png (PNG 
+copy)> <./images/deep_stereo/50p_ssim_input.png (PNG copy)> <./images/deep_ster
+eo/50p_ssim_gt_tm.png (PNG copy)> <./images/deep_stereo/50p_ssim_pred_tm.png (P
+NG copy)> <./images/deep_stereo/75p_ssim_input.png (PNG copy)> <./images/deep_s
+tereo/75p_ssim_gt_tm.png (PNG copy)> <./images/deep_stereo/75p_ssim_pred_tm.png
+ (PNG copy)> <./images/deep_stereo/25p_mse_input.png (PNG copy)> <./images/deep
+_stereo/25p_mse_gt_tm.png (PNG copy)> <./images/deep_stereo/25p_mse_pred_tm.png
+ (PNG copy)> <./images/deep_stereo/50p_mse_input.png (PNG copy)> <./images/deep
+_stereo/50p_mse_gt_tm.png (PNG copy)> <./images/deep_stereo/50p_mse_pred_tm.png
+ (PNG copy)> <./images/deep_stereo/75p_mse_input.png (PNG copy)> <./images/deep
+_stereo/75p_mse_gt_tm.png (PNG copy)> <./images/deep_stereo/75p_mse_pred_tm.png
+ (PNG copy)>]
 
-] [18 <./images/validation/516.png (PNG copy)> <./images/validation/516_gt.jpg>
- <./images/validation/516_pred.jpg> <./images/validation/332.png (PNG copy)> <.
-/images/validation/332_gt.jpg> <./images/validation/332_pred.jpg> <./exposure_e
-xample.jpg>]
+LaTeX Warning: Citation 'Reference our app' on page 23 undefined on input line 
+554.
+
+
+LaTeX Warning: Citation 'zhang2017learning' on page 23 undefined on input line 
+554.
+
+[23 <./images/deep_stereo/25p_sun_input.png (PNG copy)> <./images/deep_stereo/2
+5p_sun_gt_tm.png (PNG copy)> <./images/deep_stereo/25p_sun_pred_tm.png (PNG cop
+y)> <./images/deep_stereo/50p_sun_input.png (PNG copy)> <./images/deep_stereo/5
+0p_sun_gt_tm.png (PNG copy)> <./images/deep_stereo/50p_sun_pred_tm.png (PNG cop
+y)> <./images/deep_stereo/75p_sun_input.png (PNG copy)> <./images/deep_stereo/7
+5p_sun_gt_tm.png (PNG copy)> <./images/deep_stereo/75p_sun_pred_tm.png (PNG cop
+y)> <./exposure_example.jpg>] [24]
 Chapter 5.
-[19
 
-]
+Underfull \hbox (badness 10000) in paragraph at lines 564--568
 
-LaTeX Warning: Citation 'http://www.cs.wm.edu/\nobreakspace {}ppeers/showPublic
-ation.php?id=Xia:2016:RSS' on page 20 undefined on input line 471.
+ []
 
-[20]
+[25
+
+] [26]
+Overfull \hbox (20.18108pt too wide) in paragraph at lines 623--623
+[]\OT1/cmr/m/n/10 C. Hazir-bas, L. Leal-Taix, and D. Cre-mers, ``Deep depth fro
+m fo-cus,'' in \OT1/cmr/m/it/10 Arxiv preprint arXiv:1704.01085\OT1/cmr/m/n/10 
+,
+ []
+
+[27
+
+
+] [28]
 Appendix A.
-[21
-
+[29
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 543.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 543.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 649.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 649.
  (./dissertation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 543.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 543.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 649.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 649.
 Package rerunfilecheck Info: File `dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: F9107452594AD106AD9A922ED8602BEF;1462.
+(rerunfilecheck)             Checksum: 369AF1EA3481ECFF8BFF87C97923BDDB;1633.
 
 
 LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
 
 
 Package biblatex Warning: Please (re)run Biber on the file:
@@ -1489,33 +2305,35 @@ Package logreq Info: Writing requests to 'dissertation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 26753 strings out of 494910
- 482665 string characters out of 6179836
- 1027427 words of memory out of 5000000
- 29467 multiletter control sequences out of 15000+600000
- 12476 words of font info for 47 fonts, out of 8000000 for 9000
+ 37232 strings out of 494910
+ 823977 string characters out of 6179836
+ 1749743 words of memory out of 5000000
+ 39727 multiletter control sequences out of 15000+600000
+ 12945 words of font info for 49 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 68i,13n,76p,2823b,875s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 68i,20n,100p,3191b,2202s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on dissertation.pdf (35 pages, 10106497 bytes).
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmtt10.pfb>
+Output written on dissertation.pdf (45 pages, 9205214 bytes).
 PDF statistics:
- 473 PDF objects out of 1000 (max. 8388607)
- 387 compressed objects within 4 object streams
- 113 named destinations out of 1000 (max. 500000)
- 309 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 614 PDF objects out of 1000 (max. 8388607)
+ 496 compressed objects within 5 object streams
+ 141 named destinations out of 1000 (max. 500000)
+ 433 words of extra memory for PDF output out of 10000 (max. 10000000)
 
