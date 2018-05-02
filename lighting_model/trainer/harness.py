@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 import math
 from skimage.measure import compare_ssim as ssim
-
+from tensorflow.python.lib.io import file_io
 """Train the model with the settings provided in FLAGS"""
 
 
@@ -37,9 +37,9 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
     saver = tf.train.Saver()
     if FLAGS.fine_tune:
         saver.restore(sess, FLAGS.test_model_dir)
-    epoch_size = len(glob.glob("{}/left/*.png".format(FLAGS.train_dir)))
+    epoch_size = len(file_io.get_matching_files("{}/left/*.png".format(FLAGS.train_dir)))
     epoch_size /= FLAGS.batch_size
-    validation_size = len(glob.glob("{}/left/*.png".format(FLAGS.val_dir)))
+    validation_size = len(file_io.get_matching_files("{}/left/*.png".format(FLAGS.val_dir)))
     validation_size /= FLAGS.batch_size
     print("beginning training with learning rate: {}".format(FLAGS.learning_rate))
     print("Epoch size: {}".format(epoch_size))
@@ -57,7 +57,7 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
                     run_metadata=run_metadata)
                 t1 = time.time()
                 [train_writer.add_summary(s, epoch * epoch_size + i) for s in summaries]
-                saver.save(sess, os.path.join(name, 'model'))
+                saver.save(sess, "{}/{}/model".format(FLAGS.train_dir, name))
                 if FLAGS.debug:
                     train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
                                                   global_step=None)
@@ -93,9 +93,11 @@ def collect_results(model=None):
     tf.train.start_queue_runners(sess=sess)
     saver = tf.train.Saver()
     saver.restore(sess, FLAGS.test_model_dir)
-    left_samples = glob.glob("{}/left/*.png".format(FLAGS.val_dir))
-    right_samples = glob.glob("{}/right/*.png".format(FLAGS.val_dir))
-    gt_samples = glob.glob("{}/envmaps/*.hdr".format(FLAGS.val_dir))
+    weights = [v for v in tf.trainable_variables()]
+    print(weights)
+    left_samples = file_io.get_matching_files("{}/left/*.png".format(FLAGS.val_dir))
+    right_samples = file_io.get_matching_files("{}/right/*.png".format(FLAGS.val_dir))
+    gt_samples = file_io.get_matching_files("{}/envmaps/*.hdr".format(FLAGS.val_dir))
     total_time = 0.0
     total_mse = 0.0
     total_ssim = 0.0

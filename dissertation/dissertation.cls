@@ -73,7 +73,11 @@
 \usepackage[utf8]{inputenc}
 %\usepackage{fontspec} % This line only for XeLaTeX and LuaLaTeX
 \usepackage{pgfplots}
+\usepackage{float}
+\usepackage{bm}
+\usepackage{amsmath}
 
+\newcommand{\source}[1]{\caption*{Source: {#1}} }
 % =============================================================================
 
 \makeatletter

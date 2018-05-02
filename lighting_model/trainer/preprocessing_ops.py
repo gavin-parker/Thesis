@@ -1,9 +1,9 @@
 import tensorflow as tf
-import glob
 import cv2
 import numpy as np
-import os
 import math
+from StringIO import StringIO
+from tensorflow.python.lib.io import file_io
 
 HDR_MIN = 0.0
 HDR_MAX = 1.0
@@ -25,7 +25,10 @@ convmap = np.ones([128,128,2])
 #cartMap = tf.convert_to_tensor(convmap)
 
 def get_input_size(file):
-    image_file = cv2.imread(file, cv2.IMREAD_UNCHANGED)
+    """Horrific opencv bodge for google bucket storage"""
+    f = file_io.read_file_to_string(file)
+    data = np.asarray(bytearray(f), dtype='uint8')
+    image_file = cv2.imdecode(data, cv2.IMREAD_UNCHANGED)
     return image_file.shape
 
 
@@ -58,7 +61,7 @@ def get_stereo_dataset(dir, batch_size):
         lambda x: preprocess_color(x, right_files[1], double_precision=True),
         num_parallel_calls=4)
     dataset = tf.data.Dataset.zip((left, right, envmap, norms)).repeat().batch(batch_size).prefetch(
-        buffer_size=2 * batch_size)
+        buffer_size=2* batch_size)
     return dataset
 
 
@@ -171,7 +174,9 @@ def preprocess_hdr(filename, input_shape=[32, 32, 3], output_size=64):
 
 
 def parse_hdr(filename):
-    img = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
+    f = file_io.read_file_to_string(filename)
+    data = np.asarray(bytearray(f), dtype='uint8')
+    img = cv2.imdecode(data, cv2.IMREAD_UNCHANGED)
     # img = cv2.resize(image, (256, 256))
     return img.astype(np.float32)
 
@@ -195,7 +200,7 @@ def preprocess_gt(filename, double_precision=False):
 
 
 def image_stream(path):
-    files = sorted(glob.glob(path))
+    files = sorted(file_io.get_matching_files(path))
     train_count = int(len(files) * 0.9)
     training = files[0:train_count]
     validation = files[train_count + 1:-1]
@@ -205,9 +210,9 @@ def image_stream(path):
 
 
 def dematerial_stream(dir):
-    right_files = sorted(glob.glob("{}/right/*.png".format(dir)))
-    norm_files = sorted(glob.glob("{}/norms/*.png".format(dir)))
-    envmap_files = sorted(glob.glob("{}/envmaps/*.hdr".format(dir)))
+    right_files = sorted(file_io.get_matching_files("{}/right/*.png".format(dir)))
+    norm_files = sorted(file_io.get_matching_files("{}/norms/*.png".format(dir)))
+    envmap_files = sorted(file_io.get_matching_files("{}/envmaps/*.hdr".format(dir)))
     right_shape = get_input_size(right_files[0])
     norm_shape = get_input_size(norm_files[0])
     envmap_shape = get_input_size(envmap_files[0])
@@ -223,10 +228,12 @@ def dematerial_stream(dir):
 
 
 def stereo_stream(dir):
-    left_files = sorted(glob.glob("{}/left/*.png".format(dir)))
-    right_files = sorted(glob.glob("{}/right/*.png".format(dir)))
-    norm_files = sorted(glob.glob("{}/norms/*.png".format(dir)))
-    envmap_files = sorted(glob.glob("{}/envmaps/*.hdr".format(dir)))
+    print("loading files...")
+    left_files = sorted(file_io.get_matching_files("{}/left/*.png".format(dir)))
+    right_files = sorted(file_io.get_matching_files("{}/right/*.png".format(dir)))
+    norm_files = sorted(file_io.get_matching_files("{}/norms/*.png".format(dir)))
+    envmap_files = sorted(file_io.get_matching_files("{}/envmaps/*.hdr".format(dir)))
+    print("loaded files")
     left_shape = get_input_size(left_files[0])
     right_shape = get_input_size(right_files[0])
     norms_shape = get_input_size(norm_files[0])
@@ -241,6 +248,7 @@ def stereo_stream(dir):
         tf.convert_to_tensor(envmap_files, dtype=tf.string))
     norms = tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(norm_files, dtype=tf.string))
+    print("prepared data size: {}".format(len(left_files)))
     return (left, left_shape), (right, right_shape), (envmaps, envmap_shape), (norms, norms_shape)
 
 

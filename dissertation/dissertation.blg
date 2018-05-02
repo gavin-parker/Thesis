@@ -1,0 +1,35 @@
+[0] Config.pm:340> INFO - This is Biber 2.4
+[0] Config.pm:343> INFO - Logfile is 'dissertation.blg'
+[33] biber:287> INFO - === Tue May  1, 2018, 10:52:07
+[105] Biber.pm:348> INFO - Reading 'dissertation.bcf'
+[216] Biber.pm:739> INFO - Using all citekeys in bib section 0
+[220] Biber.pm:3151> INFO - Processing section 0
+[250] Biber.pm:3308> INFO - Looking for bibtex format file 'dissertation.bib' for section 0
+[309] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
+[361] bibtex.pm:974> INFO - Found BibTeX data source 'dissertation.bib'
+[370] Utils.pm:147> WARN - Range field 'pages' in entry '1315030' is malformed, skipping
+[571] Utils.pm:147> WARN - The field 'issn' in entry '7335515' cannot be null, deleting it
+[571] Utils.pm:147> WARN - The field 'number' in entry '7335515' cannot be null, deleting it
+[571] Utils.pm:147> WARN - The field 'volume' in entry '7335515' cannot be null, deleting it
+[572] Utils.pm:147> WARN - The field 'issn' in entry '790313' cannot be null, deleting it
+[572] Utils.pm:147> WARN - The field 'month' in entry '790313' cannot be null, deleting it
+[572] Utils.pm:147> WARN - The field 'number' in entry '790313' cannot be null, deleting it
+[572] Utils.pm:147> WARN - The field 'issn' in entry '7780983' cannot be null, deleting it
+[572] Utils.pm:147> WARN - The field 'number' in entry '7780983' cannot be null, deleting it
+[572] Utils.pm:147> WARN - The field 'volume' in entry '7780983' cannot be null, deleting it
+[572] Utils.pm:147> WARN - The field 'month' in entry '990650' cannot be null, deleting it
+[572] Utils.pm:147> WARN - The field 'number' in entry '990650' cannot be null, deleting it
+[572] Utils.pm:147> WARN - The field 'number' in entry '1315013' cannot be null, deleting it
+[572] Utils.pm:147> WARN - The field 'issn' in entry '7410661' cannot be null, deleting it
+[573] Utils.pm:147> WARN - The field 'number' in entry '7410661' cannot be null, deleting it
+[573] Utils.pm:147> WARN - The field 'volume' in entry '7410661' cannot be null, deleting it
+[573] Utils.pm:147> WARN - The field 'year' in entry 'Khoshelham_accuracyand' cannot be null, deleting it
+[573] Utils.pm:147> WARN - The field 'title' in entry 'zhang2017learning' cannot be null, deleting it
+[573] Utils.pm:147> WARN - The field 'number' in entry '1315030' cannot be null, deleting it
+[719] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[719] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[720] Biber.pm:3028> INFO - Sorting list 'none/global' of type 'entry' with scheme 'none' and locale 'en-US'
+[720] Biber.pm:3032> INFO - No sort tailoring available for locale 'en-US'
+[740] bbl.pm:519> INFO - Writing 'dissertation.bbl' with encoding 'UTF-8'
+[829] bbl.pm:615> INFO - Output to dissertation.bbl
+[829] Biber.pm:109> INFO - WARNINGS: 19

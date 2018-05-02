@@ -1,0 +1,45 @@
+% This file was created by matplotlib2tikz v0.6.16.
+\begin{tikzpicture}
+
+\definecolor{color1}{rgb}{0.203921568627451,0.541176470588235,0.741176470588235}
+\definecolor{color0}{rgb}{0.886274509803922,0.290196078431373,0.2}
+
+\begin{axis}[
+title={Performace of Dot Product},
+xlabel={Steps},
+ylabel={L1 Norm},
+xmin=-0.15, xmax=3.15,
+ymin=196667.60703125, ymax=206416.06484375,
+width=12cm,
+height=8cm,
+tick align=outside,
+tick pos=left,
+xmajorgrids,
+x grid style={white},
+ymajorgrids,
+y grid style={white},
+axis line style={white},
+axis background/.style={fill=white!89.80392156862746!black},
+legend entries={{Dot Product Model With Background},{Dot Product Model Without Background}},
+legend style={at={(0.03,0.97)}, anchor=north west, draw=white!80.0!black, fill=white!89.80392156862746!black},
+legend cell align={left}
+]
+\addlegendimage{no markers, color0}
+\addlegendimage{no markers, color1}
+\addplot [semithick, color0]
+table {%
+0 197218.3125
+1 199080.0625
+2 197110.71875
+3 198440.03125
+};
+\addplot [semithick, color1]
+table {%
+0 201396.34375
+1 203622.453125
+2 200947.40625
+3 205972.953125
+};
+\end{axis}
+
+\end{tikzpicture}

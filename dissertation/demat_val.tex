@@ -1,0 +1,67 @@
+% This file was created by matplotlib2tikz v0.6.16.
+\begin{tikzpicture}
+
+\definecolor{color1}{rgb}{0.203921568627451,0.541176470588235,0.741176470588235}
+\definecolor{color0}{rgb}{0.886274509803922,0.290196078431373,0.2}
+
+\begin{axis}[
+title={Performace of Shared Weights},
+xlabel={Steps},
+ylabel={L1 Norm},
+xmin=-0.75, xmax=15.75,
+ymin=195480.29140625, ymax=202083.84921875,
+width=12cm,
+height=8cm,
+tick align=outside,
+tick pos=left,
+xmajorgrids,
+x grid style={white},
+ymajorgrids,
+y grid style={white},
+axis line style={white},
+axis background/.style={fill=white!89.80392156862746!black},
+legend entries={{Shared Weights},{Seperately Trained Weights}},
+legend style={draw=white!80.0!black, fill=white!89.80392156862746!black},
+legend cell align={left}
+]
+\addlegendimage{no markers, color0}
+\addlegendimage{no markers, color1}
+\addplot [semithick, color0]
+table {%
+0 199912.765625
+1 201026.984375
+2 200505.734375
+3 200593.0625
+4 197332.296875
+5 198117.484375
+6 197710.078125
+7 201504.21875
+8 198289.265625
+9 196601.453125
+10 195987.859375
+11 197979.546875
+12 198360.421875
+13 199317.171875
+14 196807.609375
+15 199052.125
+};
+\addplot [semithick, color1]
+table {%
+0 200637.09375
+1 201236.375
+2 200893.953125
+3 200627.1875
+4 197124.421875
+5 198979.375
+6 196008.40625
+7 201783.6875
+8 199429.421875
+9 195853.15625
+10 195780.453125
+11 196305.421875
+12 196999.203125
+13 197688.421875
+};
+\end{axis}
+
+\end{tikzpicture}

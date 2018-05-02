@@ -112,21 +112,26 @@ class SceneGenerator:
         self.scene.render.resolution_x = 256
         self.scene.render.resolution_y = 256
         move_object(self.scene.camera, (-1, 0.0, 0.0))
-        self.nodes["File Output"].base_path = "{}/{}/normals/".format(scene_dir, sub_dir)
-        self.nodes["File Output"].file_slots[0].path = name + '_'
+        bpy.context.scene.world.cycles_visibility.camera = False
         bpy.data.scenes['Scene'].render.filepath = "{}/{}/left/{}".format(scene_dir, sub_dir,
                                                                                '{}.png'.format(name))
         bpy.ops.render.render(write_still=True)
         move_object(self.scene.camera, (2, 0.0, 0.0))
         bpy.data.scenes['Scene'].render.filepath = "{}/{}/right/{}".format(scene_dir, sub_dir,
                                                                                 '{}.png'.format(name))
-
-
-        #self.scene.use_nodes = True
         bpy.ops.render.render(write_still=True)
+        bpy.context.scene.world.cycles_visibility.camera = True
+        for obj in self.car:
+            obj.hide_render = True
+        bpy.data.scenes['Scene'].render.filepath = "{}/{}/bg/{}".format(scene_dir, sub_dir,
+                                                                            '{}.png'.format(name))
+        bpy.ops.render.render(write_still=True)
+        bpy.context.scene.world.cycles_visibility.camera = False
+        for obj in self.car:
+            obj.hide_render = False
+        #self.scene.use_nodes = True
         #self.scene.use_nodes = False
         self.surface_normals()
-        bpy.context.scene.render.layers["RenderLayer"].use_sky = False
         bpy.data.scenes['Scene'].render.filepath = "{}/{}/norms/{}".format(scene_dir, sub_dir,
                                                                          '{}.png'.format(name))
         bpy.ops.render.render(write_still=True)
@@ -142,9 +147,9 @@ class SceneGenerator:
     def render_envmap(self, name='test'):
         for obj in self.car:
             obj.hide_render = True
-        bpy.context.scene.world.cycles_visibility.camera = True
         self.scene.render.resolution_x = 64
         self.scene.render.resolution_y = 64
+        bpy.context.scene.world.cycles_visibility.camera = True
         self.scene.render.resolution_percentage = 100
         self.envmap_camera.rotation_euler = self.render_camera.rotation_euler
         self.scene.camera = self.envmap_camera

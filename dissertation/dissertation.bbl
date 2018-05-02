@@ -19,6 +19,115 @@
 
 \refsection{0}
   \sortlist[entry]{none/global}
+    \entry{Immel:1986:RMN:15886.15901}{article}{}
+      \name{author}{3}{}{%
+        {{hash=ae33a49fa633515c90c63278794593b1}{%
+           family={Immel},
+           family_i={I\bibinitperiod},
+           given={David\bibnamedelima S.},
+           given_i={D\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=0e084d512b42ea954b85cd4115f463b0}{%
+           family={Cohen},
+           family_i={C\bibinitperiod},
+           given={Michael\bibnamedelima F.},
+           given_i={M\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=4edf1f33d2b155b28245d7743bf35e92}{%
+           family={Greenberg},
+           family_i={G\bibinitperiod},
+           given={Donald\bibnamedelima P.},
+           given_i={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{b574551490cfe1d78bf76262ddf41104}
+      \strng{fullhash}{b574551490cfe1d78bf76262ddf41104}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0097-8930}
+      \field{journaltitle}{SIGGRAPH Comput. Graph.}
+      \field{month}{08}
+      \field{number}{4}
+      \field{title}{A Radiosity Method for Non-diffuse Environments}
+      \field{volume}{20}
+      \field{year}{1986}
+      \field{pages}{133\bibrangedash 142}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1145/15886.15901
+      \endverb
+      \verb{url}
+      \verb http://doi.acm.org/10.1145/15886.15901
+      \endverb
+    \endentry
+    \entry{Lalonde-2009-10350}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=5d6d570fc1a9b8e0413812f100dadd3e}{%
+           family={Lalonde},
+           family_i={L\bibinitperiod},
+           given={Jean-Francois},
+           given_i={J\bibinithyphendelim F\bibinitperiod}}}%
+        {{hash=6a42d448523b8d7c72613345041880c5}{%
+           family={Efros},
+           family_i={E\bibinitperiod},
+           given={Alexei\bibnamedelima A.},
+           given_i={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=a673092c59ac4d87222e00d383d19984}{%
+           family={Narasimhan},
+           family_i={N\bibinitperiod},
+           given={Srinivasa\bibnamedelima G.},
+           given_i={S\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \strng{namehash}{5d9dfc8b2cb06bad1dcf9657e9a45148}
+      \strng{fullhash}{5d9dfc8b2cb06bad1dcf9657e9a45148}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{IEEE International Conference on Computer Vision}
+      \field{month}{10}
+      \field{title}{Estimating Natural Illumination from a Single Outdoor Image}
+      \field{year}{2009}
+    \endentry
+    \entry{Debevec:1998:RSO:280814.280864}{inproceedings}{}
+      \name{author}{1}{}{%
+        {{hash=4aae50ca585b8b048183a76ff6e98dd8}{%
+           family={Debevec},
+           family_i={D\bibinitperiod},
+           given={Paul},
+           given_i={P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{4aae50ca585b8b048183a76ff6e98dd8}
+      \strng{fullhash}{4aae50ca585b8b048183a76ff6e98dd8}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 25th Annual Conference on Computer Graphics and Interactive Techniques}
+      \field{isbn}{0-89791-999-8}
+      \field{series}{SIGGRAPH '98}
+      \field{title}{Rendering Synthetic Objects into Real Scenes: Bridging Traditional and Image-based Graphics with Global Illumination and High Dynamic Range Photography}
+      \field{year}{1998}
+      \field{pages}{189\bibrangedash 198}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1145/280814.280864
+      \endverb
+      \verb{url}
+      \verb http://doi.acm.org/10.1145/280814.280864
+      \endverb
+    \endentry
     \entry{Blinn:1976:TRC:360349.360353}{article}{}
       \name{author}{2}{}{%
         {{hash=5e0dd72a120e3f9259e9881169f0a2c2}{%
@@ -61,40 +170,6 @@
       \endverb
       \keyw{computer graphics,graphic display,hidden surface removal,shading}
     \endentry
-    \entry{Debevec:1998:RSO:280814.280864}{inproceedings}{}
-      \name{author}{1}{}{%
-        {{hash=4aae50ca585b8b048183a76ff6e98dd8}{%
-           family={Debevec},
-           family_i={D\bibinitperiod},
-           given={Paul},
-           given_i={P\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {New York, NY, USA}%
-      }
-      \list{publisher}{1}{%
-        {ACM}%
-      }
-      \strng{namehash}{4aae50ca585b8b048183a76ff6e98dd8}
-      \strng{fullhash}{4aae50ca585b8b048183a76ff6e98dd8}
-      \field{sortinit}{0}
-      \field{sortinithash}{990108227b3316c02842d895999a0165}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Proceedings of the 25th Annual Conference on Computer Graphics and Interactive Techniques}
-      \field{isbn}{0-89791-999-8}
-      \field{series}{SIGGRAPH '98}
-      \field{title}{Rendering Synthetic Objects into Real Scenes: Bridging Traditional and Image-based Graphics with Global Illumination and High Dynamic Range Photography}
-      \field{year}{1998}
-      \field{pages}{189\bibrangedash 198}
-      \range{pages}{10}
-      \verb{doi}
-      \verb 10.1145/280814.280864
-      \endverb
-      \verb{url}
-      \verb http://doi.acm.org/10.1145/280814.280864
-      \endverb
-    \endentry
     \entry{navigator}{online}{}
       \name{author}{1}{}{%
         {{hash=c3388da75ff86bc790a7700abbf56d69}{%
@@ -119,12 +194,12 @@
     \endentry
     \entry{arkit1}{online}{}
       \name{author}{1}{}{%
-        {{hash=fb2daffd0ace7e0a9c035fe00501d825}{%
-           family={Appe},
+        {{hash=9f6290f4436e5a2351f12e03b6433c3c}{%
+           family={Apple},
            family_i={A\bibinitperiod}}}%
       }
-      \strng{namehash}{fb2daffd0ace7e0a9c035fe00501d825}
-      \strng{fullhash}{fb2daffd0ace7e0a9c035fe00501d825}
+      \strng{namehash}{9f6290f4436e5a2351f12e03b6433c3c}
+      \strng{fullhash}{9f6290f4436e5a2351f12e03b6433c3c}
       \field{sortinit}{0}
       \field{sortinithash}{990108227b3316c02842d895999a0165}
       \field{labelnamesource}{author}
@@ -134,66 +209,17 @@
       \verb https://developer.apple.com/documentation/arkit/arlightestimate
       \endverb
     \endentry
-    \entry{990650}{inproceedings}{}
-      \name{author}{2}{}{%
-        {{hash=241c6c615ee526623db3e62e0df5af4c}{%
-           family={Nillius},
-           family_i={N\bibinitperiod},
-           given={P.},
-           given_i={P\bibinitperiod}}}%
-        {{hash=6d77c446db3c83c9bcec7d388afa2265}{%
-           family={Eklundh},
-           family_i={E\bibinitperiod},
-           given={J.\bibnamedelimi O.},
-           given_i={J\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
-      }
-      \strng{namehash}{b696a2bf3f54103ddf4beed17077c82b}
-      \strng{fullhash}{b696a2bf3f54103ddf4beed17077c82b}
+    \entry{arcore}{online}{}
       \field{sortinit}{0}
       \field{sortinithash}{990108227b3316c02842d895999a0165}
-      \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{booktitle}{Proceedings of the 2001 IEEE Computer Society Conference on Computer Vision and Pattern Recognition. CVPR 2001}
-      \field{issn}{1063-6919}
-      \field{title}{Automatic estimation of the projected light source direction}
-      \field{volume}{1}
-      \field{year}{2001}
-      \field{pages}{}
-      \range{pages}{-1}
-      \verb{doi}
-      \verb 10.1109/CVPR.2001.990650
+      \field{day}{23}
+      \field{month}{02}
+      \field{title}{Environmental Light}
+      \field{year}{2018}
+      \verb{url}
+      \verb https://developers.google.com/ar/reference/unity/prefab/Environmental_Light
       \endverb
-      \keyw{Wigner distribution;belief networks;computer vision;extrapolation;hidden feature removal;Bayesian network;automatic estimation;fully automatic algorithm;heuristic algorithm;light source direction;locally Lambertian surface reflectance;occluding contour;occluding contours;probabilistic model;projected light source direction;Bayesian methods;Computer vision;Geometry;Image segmentation;Integrated circuit modeling;Laboratories;Light sources;Lighting;Numerical analysis;Shape}
-      \warn{\item Range field 'pages' in entry '990650' is malformed, skipping}
-    \endentry
-    \entry{Lalonde-2009-10350}{inproceedings}{}
-      \name{author}{3}{}{%
-        {{hash=5d6d570fc1a9b8e0413812f100dadd3e}{%
-           family={Lalonde},
-           family_i={L\bibinitperiod},
-           given={Jean-Francois},
-           given_i={J\bibinithyphendelim F\bibinitperiod}}}%
-        {{hash=6a42d448523b8d7c72613345041880c5}{%
-           family={Efros},
-           family_i={E\bibinitperiod},
-           given={Alexei\bibnamedelima A.},
-           given_i={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
-        {{hash=a673092c59ac4d87222e00d383d19984}{%
-           family={Narasimhan},
-           family_i={N\bibinitperiod},
-           given={Srinivasa\bibnamedelima G.},
-           given_i={S\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
-      }
-      \strng{namehash}{5d9dfc8b2cb06bad1dcf9657e9a45148}
-      \strng{fullhash}{5d9dfc8b2cb06bad1dcf9657e9a45148}
-      \field{sortinit}{0}
-      \field{sortinithash}{990108227b3316c02842d895999a0165}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{IEEE International Conference on Computer Vision}
-      \field{month}{10}
-      \field{title}{Estimating Natural Illumination from a Single Outdoor Image}
-      \field{year}{2009}
     \endentry
     \entry{7335515}{inproceedings}{}
       \name{author}{3}{}{%
@@ -230,45 +256,7 @@
       \endverb
       \keyw{Internet;cameras;image reconstruction;lighting;natural scenes;rendering (computer graphics);3D point;Internet photo collections;appearance variation;camera effects;illumination properties;illumination ratio;lighting;outdoor intrinsic images;outdoor scene appearance modeling applications;pixel space;realistic 3D scene rendering;shadow detection method;sun direction;temporally varying reconstruction;Cameras;Estimation;Image reconstruction;Internet;Lighting;Sun;Three-dimensional displays}
     \endentry
-    \entry{1315013}{inproceedings}{}
-      \name{author}{3}{}{%
-        {{hash=c2105df332522f0021b6db73ab8db214}{%
-           family={Okabe},
-           family_i={O\bibinitperiod},
-           given={T.},
-           given_i={T\bibinitperiod}}}%
-        {{hash=45d934cf159432775340d5e898bd780e}{%
-           family={Sato},
-           family_i={S\bibinitperiod},
-           given={I.},
-           given_i={I\bibinitperiod}}}%
-        {{hash=d4627c98bcbe0f4847d52dc870282744}{%
-           family={Sato},
-           family_i={S\bibinitperiod},
-           given={Y.},
-           given_i={Y\bibinitperiod}}}%
-      }
-      \strng{namehash}{45ece13c89cca2de58b69e9e0b474420}
-      \strng{fullhash}{45ece13c89cca2de58b69e9e0b474420}
-      \field{sortinit}{0}
-      \field{sortinithash}{990108227b3316c02842d895999a0165}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Proceedings of the 2004 IEEE Computer Society Conference on Computer Vision and Pattern Recognition, 2004. CVPR 2004.}
-      \field{issn}{1063-6919}
-      \field{month}{06}
-      \field{title}{Spherical harmonics vs. Haar wavelets: basis for recovering illumination from cast shadows}
-      \field{volume}{1}
-      \field{year}{2004}
-      \field{pages}{}
-      \range{pages}{-1}
-      \verb{doi}
-      \verb 10.1109/CVPR.2004.1315013
-      \endverb
-      \keyw{Haar transforms;frequency-domain analysis;harmonic analysis;image processing;wavelet transforms;Haar wavelets;cast shadows;diffuse reflection components;frequency domain analysis;illumination distribution;inverse lighting;specular reflection components;spherical harmonics;Face recognition;Frequency domain analysis;Frequency estimation;Harmonic analysis;Layout;Light sources;Lighting;Optical reflection;Reliability theory;Wavelet domain}
-      \warn{\item Range field 'pages' in entry '1315013' is malformed, skipping}
-    \endentry
-    \entry{Xia:2016:RSS}{article}{}
+    \entry{xia}{article}{}
       \name{author}{4}{}{%
         {{hash=81d13b72793e9de4d52426ac2166a308}{%
            family={Xia},
@@ -365,36 +353,6 @@
       \verb 10.1109/ICCV.1999.790313
       \endverb
       \keyw{image reconstruction;estimation of lighting direction;initial light position;iterative process;least-squares estimate;shape estimates;shape from shading;Analytical models;Computational modeling;Computer simulation;Deformable models;Fitting;Information analysis;Laboratories;Light sources;Optical coupling;Shape}
-    \endentry
-    \entry{7410661}{inproceedings}{}
-      \name{author}{2}{}{%
-        {{hash=21160cdc5541d0202b5718457f7a24a0}{%
-           family={Eigen},
-           family_i={E\bibinitperiod},
-           given={D.},
-           given_i={D\bibinitperiod}}}%
-        {{hash=ac4bd5986f36ae13a2618527b8e941c8}{%
-           family={Fergus},
-           family_i={F\bibinitperiod},
-           given={R.},
-           given_i={R\bibinitperiod}}}%
-      }
-      \strng{namehash}{d860b81801618e8f8139854e88454dbc}
-      \strng{fullhash}{d860b81801618e8f8139854e88454dbc}
-      \field{sortinit}{0}
-      \field{sortinithash}{990108227b3316c02842d895999a0165}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{2015 IEEE International Conference on Computer Vision (ICCV)}
-      \field{month}{12}
-      \field{title}{Predicting Depth, Surface Normals and Semantic Labels with a Common Multi-scale Convolutional Architecture}
-      \field{year}{2015}
-      \field{pages}{2650\bibrangedash 2658}
-      \range{pages}{9}
-      \verb{doi}
-      \verb 10.1109/ICCV.2015.304
-      \endverb
-      \keyw{computer vision;convolution;prediction theory;computer vision tasks;depth prediction;multiscale convolutional architecture;multiscale convolutional network;semantic labeling;surface normal estimation;Adaptation models;Estimation;Image segmentation;Labeling;Semantics;Spatial resolution}
     \endentry
     \entry{Aittala2010}{article}{}
       \name{author}{1}{}{%
@@ -532,6 +490,163 @@
       \endverb
       \keyw{deep learning,indoor illumination}
     \endentry
+    \entry{7780983}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=20db15bef88d907afe5816a9139237a1}{%
+           family={Luo},
+           family_i={L\bibinitperiod},
+           given={W.},
+           given_i={W\bibinitperiod}}}%
+        {{hash=304365b606fa0ccd932a3c9330f42971}{%
+           family={Schwing},
+           family_i={S\bibinitperiod},
+           given={A.\bibnamedelimi G.},
+           given_i={A\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=3452689822899ab2b6267e662e9fec4e}{%
+           family={Urtasun},
+           family_i={U\bibinitperiod},
+           given={R.},
+           given_i={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{9068d30b838b58ee18042ad7a6b69de4}
+      \strng{fullhash}{9068d30b838b58ee18042ad7a6b69de4}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}
+      \field{month}{06}
+      \field{title}{Efficient Deep Learning for Stereo Matching}
+      \field{year}{2016}
+      \field{pages}{5695\bibrangedash 5703}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1109/CVPR.2016.614
+      \endverb
+      \keyw{image classification;image matching;learning (artificial intelligence);neural nets;stereo image processing;convolutional neural networks;deep learning;multiclass classification;product layer;siamese architecture;stereo estimation;stereo matching network;Computer architecture;Graphics processing units;Markov processes;Neural networks;Smoothing methods;Three-dimensional displays;Training}
+    \endentry
+    \entry{lpt2013ikea}{article}{}
+      \name{author}{3}{}{%
+        {{hash=bf84649d61fc930f2d39afc19b54f5d2}{%
+           family={Lim},
+           family_i={L\bibinitperiod},
+           given={Joseph\bibnamedelima J.},
+           given_i={J\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=3243eb7133d2c0f3de1d3d53cace9afd}{%
+           family={Pirsiavash},
+           family_i={P\bibinitperiod},
+           given={Hamed},
+           given_i={H\bibinitperiod}}}%
+        {{hash=2a80dd1cae02059e95bfed2f2715fd0a}{%
+           family={Torralba},
+           family_i={T\bibinitperiod},
+           given={Antonio},
+           given_i={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{42128d2489d87b29a77288e19f0d4feb}
+      \strng{fullhash}{42128d2489d87b29a77288e19f0d4feb}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{ICCV}
+      \field{title}{{Parsing IKEA Objects: Fine Pose Estimation}}
+      \field{year}{2013}
+    \endentry
+    \entry{990650}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=241c6c615ee526623db3e62e0df5af4c}{%
+           family={Nillius},
+           family_i={N\bibinitperiod},
+           given={P.},
+           given_i={P\bibinitperiod}}}%
+        {{hash=6d77c446db3c83c9bcec7d388afa2265}{%
+           family={Eklundh},
+           family_i={E\bibinitperiod},
+           given={J.\bibnamedelimi O.},
+           given_i={J\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+      }
+      \strng{namehash}{b696a2bf3f54103ddf4beed17077c82b}
+      \strng{fullhash}{b696a2bf3f54103ddf4beed17077c82b}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 2001 IEEE Computer Society Conference on Computer Vision and Pattern Recognition. CVPR 2001}
+      \field{issn}{1063-6919}
+      \field{title}{Automatic estimation of the projected light source direction}
+      \field{volume}{1}
+      \field{year}{2001}
+      \verb{doi}
+      \verb 10.1109/CVPR.2001.990650
+      \endverb
+      \keyw{Wigner distribution;belief networks;computer vision;extrapolation;hidden feature removal;Bayesian network;automatic estimation;fully automatic algorithm;heuristic algorithm;light source direction;locally Lambertian surface reflectance;occluding contour;occluding contours;probabilistic model;projected light source direction;Bayesian methods;Computer vision;Geometry;Image segmentation;Integrated circuit modeling;Laboratories;Light sources;Lighting;Numerical analysis;Shape}
+    \endentry
+    \entry{1315013}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=c2105df332522f0021b6db73ab8db214}{%
+           family={Okabe},
+           family_i={O\bibinitperiod},
+           given={T.},
+           given_i={T\bibinitperiod}}}%
+        {{hash=45d934cf159432775340d5e898bd780e}{%
+           family={Sato},
+           family_i={S\bibinitperiod},
+           given={I.},
+           given_i={I\bibinitperiod}}}%
+        {{hash=d4627c98bcbe0f4847d52dc870282744}{%
+           family={Sato},
+           family_i={S\bibinitperiod},
+           given={Y.},
+           given_i={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{45ece13c89cca2de58b69e9e0b474420}
+      \strng{fullhash}{45ece13c89cca2de58b69e9e0b474420}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 2004 IEEE Computer Society Conference on Computer Vision and Pattern Recognition, 2004. CVPR 2004.}
+      \field{issn}{1063-6919}
+      \field{month}{06}
+      \field{title}{Spherical harmonics vs. Haar wavelets: basis for recovering illumination from cast shadows}
+      \field{volume}{1}
+      \field{year}{2004}
+      \verb{doi}
+      \verb 10.1109/CVPR.2004.1315013
+      \endverb
+      \keyw{Haar transforms;frequency-domain analysis;harmonic analysis;image processing;wavelet transforms;Haar wavelets;cast shadows;diffuse reflection components;frequency domain analysis;illumination distribution;inverse lighting;specular reflection components;spherical harmonics;Face recognition;Frequency domain analysis;Frequency estimation;Harmonic analysis;Layout;Light sources;Lighting;Optical reflection;Reliability theory;Wavelet domain}
+    \endentry
+    \entry{7410661}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=21160cdc5541d0202b5718457f7a24a0}{%
+           family={Eigen},
+           family_i={E\bibinitperiod},
+           given={D.},
+           given_i={D\bibinitperiod}}}%
+        {{hash=ac4bd5986f36ae13a2618527b8e941c8}{%
+           family={Fergus},
+           family_i={F\bibinitperiod},
+           given={R.},
+           given_i={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{d860b81801618e8f8139854e88454dbc}
+      \strng{fullhash}{d860b81801618e8f8139854e88454dbc}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2015 IEEE International Conference on Computer Vision (ICCV)}
+      \field{month}{12}
+      \field{title}{Predicting Depth, Surface Normals and Semantic Labels with a Common Multi-scale Convolutional Architecture}
+      \field{year}{2015}
+      \field{pages}{2650\bibrangedash 2658}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1109/ICCV.2015.304
+      \endverb
+      \keyw{computer vision;convolution;prediction theory;computer vision tasks;depth prediction;multiscale convolutional architecture;multiscale convolutional network;semantic labeling;surface normal estimation;Adaptation models;Estimation;Image segmentation;Labeling;Semantics;Spatial resolution}
+    \endentry
     \entry{RematasCVPR2016}{inproceedings}{}
       \name{author}{5}{}{%
         {{hash=d9e6e9312e09503431367190c77fa9b0}{%
@@ -597,78 +712,6 @@
       \field{pages}{8238}
       \range{pages}{1}
     \endentry
-    \entry{7780983}{inproceedings}{}
-      \name{author}{3}{}{%
-        {{hash=20db15bef88d907afe5816a9139237a1}{%
-           family={Luo},
-           family_i={L\bibinitperiod},
-           given={W.},
-           given_i={W\bibinitperiod}}}%
-        {{hash=304365b606fa0ccd932a3c9330f42971}{%
-           family={Schwing},
-           family_i={S\bibinitperiod},
-           given={A.\bibnamedelimi G.},
-           given_i={A\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
-        {{hash=3452689822899ab2b6267e662e9fec4e}{%
-           family={Urtasun},
-           family_i={U\bibinitperiod},
-           given={R.},
-           given_i={R\bibinitperiod}}}%
-      }
-      \strng{namehash}{9068d30b838b58ee18042ad7a6b69de4}
-      \strng{fullhash}{9068d30b838b58ee18042ad7a6b69de4}
-      \field{sortinit}{0}
-      \field{sortinithash}{990108227b3316c02842d895999a0165}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}
-      \field{month}{06}
-      \field{title}{Efficient Deep Learning for Stereo Matching}
-      \field{year}{2016}
-      \field{pages}{5695\bibrangedash 5703}
-      \range{pages}{9}
-      \verb{doi}
-      \verb 10.1109/CVPR.2016.614
-      \endverb
-      \keyw{image classification;image matching;learning (artificial intelligence);neural nets;stereo image processing;convolutional neural networks;deep learning;multiclass classification;product layer;siamese architecture;stereo estimation;stereo matching network;Computer architecture;Graphics processing units;Markov processes;Neural networks;Smoothing methods;Three-dimensional displays;Training}
-    \endentry
-    \entry{lpt2013ikea}{article}{}
-      \name{author}{3}{}{%
-        {{hash=bf84649d61fc930f2d39afc19b54f5d2}{%
-           family={Lim},
-           family_i={L\bibinitperiod},
-           given={Joseph\bibnamedelima J.},
-           given_i={J\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
-        {{hash=3243eb7133d2c0f3de1d3d53cace9afd}{%
-           family={Pirsiavash},
-           family_i={P\bibinitperiod},
-           given={Hamed},
-           given_i={H\bibinitperiod}}}%
-        {{hash=2a80dd1cae02059e95bfed2f2715fd0a}{%
-           family={Torralba},
-           family_i={T\bibinitperiod},
-           given={Antonio},
-           given_i={A\bibinitperiod}}}%
-      }
-      \strng{namehash}{42128d2489d87b29a77288e19f0d4feb}
-      \strng{fullhash}{42128d2489d87b29a77288e19f0d4feb}
-      \field{sortinit}{0}
-      \field{sortinithash}{990108227b3316c02842d895999a0165}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{ICCV}
-      \field{title}{{Parsing IKEA Objects: Fine Pose Estimation}}
-      \field{year}{2013}
-    \endentry
-    \entry{principled_BSDF}{online}{}
-      \field{sortinit}{0}
-      \field{sortinithash}{990108227b3316c02842d895999a0165}
-      \field{labeltitlesource}{title}
-      \field{title}{Principled BSDF Shader}
-      \verb{url}
-      \verb https://docs.blender.org/manual/en/dev/render/cycles/nodes/types/shaders/principled.html
-      \endverb
-    \endentry
     \entry{1284395}{article}{}
       \name{author}{4}{}{%
         {{hash=f244e8ae5eff7776cf2b4b5b84ad8c4a}{%
@@ -712,9 +755,261 @@
       \endverb
       \keyw{data compression;image coding;visual perception;JPEG;JPEG2000;distorted image;error sensitivity;error visibility;human visual perception;human visual system;image compression;image database;perceptual image quality assessment;reference image;structural information;structural similarity index;Data mining;Degradation;Humans;Image quality;Indexes;Layout;Quality assessment;Transform coding;Visual perception;Visual system;Algorithms;Data Interpretation,Statistical;Hypermedia;Image Enhancement;Image Interpretation,Computer-Assisted;Information Storage and Retrieval;Models,Statistical;Pattern Recognition,Automated;Quality Control;Reproducibility of Results;Sensitivity and Specificity;Signal Processing,Computer-Assisted;Subtraction Technique}
     \endentry
+    \entry{principled_BSDF}{online}{}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labeltitlesource}{title}
+      \field{title}{Principled BSDF Shader}
+      \verb{url}
+      \verb https://docs.blender.org/manual/en/dev/render/cycles/nodes/types/shaders/principled.html
+      \endverb
+    \endentry
+    \entry{zhang2017learning}{article}{}
+      \name{author}{2}{}{%
+        {{hash=74f3067f20603e85bac325f904c6b552}{%
+           family={Zhang},
+           family_i={Z\bibinitperiod},
+           given={Jinsong},
+           given_i={J\bibinitperiod}}}%
+        {{hash=48e8790ffa6c3802f13cef1d0d0307fa}{%
+           family={Lalonde},
+           family_i={L\bibinitperiod},
+           given={Jean-François},
+           given_i={J\bibinithyphendelim F\bibinitperiod}}}%
+      }
+      \strng{namehash}{65ce088cb248290acb8bef664c606aa2}
+      \strng{fullhash}{65ce088cb248290acb8bef664c606aa2}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{journaltitle}{arXiv preprint arXiv:1703.10200}
+      \field{year}{2017}
+    \endentry
+    \entry{1315030}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=8011df53506d2c28e4ee7d62b0c17b0e}{%
+           family={Varma},
+           family_i={V\bibinitperiod},
+           given={M.},
+           given_i={M\bibinitperiod}}}%
+        {{hash=97369408412c30098d093b32665c772e}{%
+           family={Zisserman},
+           family_i={Z\bibinitperiod},
+           given={A.},
+           given_i={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{6c631d21b126a44afb17182e3c7c59d2}
+      \strng{fullhash}{6c631d21b126a44afb17182e3c7c59d2}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 2004 IEEE Computer Society Conference on Computer Vision and Pattern Recognition, 2004. CVPR 2004.}
+      \field{issn}{1063-6919}
+      \field{month}{06}
+      \field{title}{Estimating illumination direction from textured images}
+      \field{volume}{1}
+      \field{year}{2004}
+      \field{pages}{}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1109/CVPR.2004.1315030
+      \endverb
+      \keyw{Gaussian processes;image texture;lighting;random processes;tensors;visual databases;Columbia-Utrecht texture database;Gaussian random surface;Heriot-Watt texturelab databases;Lambertian model;arbitrarily varying albedo;constant albedo;illuminant azimuthal angle;illumination direction estimation;nonconstant albedo;spatially varying albedo;tensors;textured images;Azimuthal angle;Coherence;Image databases;Light sources;Lighting;Rough surfaces;Shape;Spatial databases;Surface texture;Tensile stress}
+      \warn{\item Range field 'pages' in entry '1315030' is malformed, skipping}
+    \endentry
+    \entry{song2015sun}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=5abaf8ffacdb02cbfe12fca8f3d327cb}{%
+           family={Song},
+           family_i={S\bibinitperiod},
+           given={Shuran},
+           given_i={S\bibinitperiod}}}%
+        {{hash=0068b6c51299c7ba9b93319ac232ab60}{%
+           family={Lichtenberg},
+           family_i={L\bibinitperiod},
+           given={Samuel\bibnamedelima P},
+           given_i={S\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=2bbe6a54045fb885f5d23a8bdd1ebb0d}{%
+           family={Xiao},
+           family_i={X\bibinitperiod},
+           given={Jianxiong},
+           given_i={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{dff1c94a44532df278bdda6acc24280d}
+      \strng{fullhash}{dff1c94a44532df278bdda6acc24280d}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{CVPR}
+      \field{title}{SUN RGB-D: A RGB-D scene understanding benchmark suite.}
+      \field{volume}{5}
+      \field{year}{2015}
+      \field{pages}{6}
+      \range{pages}{1}
+    \endentry
+    \entry{badrinarayanan2017segnet}{article}{}
+      \name{author}{3}{}{%
+        {{hash=2b517df4f81c42dc3c5b32aede012cf9}{%
+           family={Badrinarayanan},
+           family_i={B\bibinitperiod},
+           given={Vijay},
+           given_i={V\bibinitperiod}}}%
+        {{hash=4b1053f4ffb69cd61c1f122cc435c884}{%
+           family={Kendall},
+           family_i={K\bibinitperiod},
+           given={Alex},
+           given_i={A\bibinitperiod}}}%
+        {{hash=95c5bd0a1d6e6649ed56043a63268bfa}{%
+           family={Cipolla},
+           family_i={C\bibinitperiod},
+           given={Roberto},
+           given_i={R\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{fb26318591964ff2e23ee05578819393}
+      \strng{fullhash}{fb26318591964ff2e23ee05578819393}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE transactions on pattern analysis and machine intelligence}
+      \field{number}{12}
+      \field{title}{Segnet: A deep convolutional encoder-decoder architecture for image segmentation}
+      \field{volume}{39}
+      \field{year}{2017}
+      \field{pages}{2481\bibrangedash 2495}
+      \range{pages}{15}
+    \endentry
+    \entry{DBLP:journals/corr/abs-1709-00849}{article}{}
+      \name{author}{4}{}{%
+        {{hash=b810c1b272e778bcdbd73653c9cb6dc3}{%
+           family={Rajpura},
+           family_i={R\bibinitperiod},
+           given={Param\bibnamedelima S.},
+           given_i={P\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=b98f6650e3aa56d2c4e0e56127f88af6}{%
+           family={Goyal},
+           family_i={G\bibinitperiod},
+           given={Manik},
+           given_i={M\bibinitperiod}}}%
+        {{hash=29fed085edc7e2f86574f04cb3f8be39}{%
+           family={Bojinov},
+           family_i={B\bibinitperiod},
+           given={Hristo},
+           given_i={H\bibinitperiod}}}%
+        {{hash=465c5632e5c758529ad317427f420494}{%
+           family={Hegde},
+           family_i={H\bibinitperiod},
+           given={Ravi\bibnamedelima S.},
+           given_i={R\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{779270a0463568b3d1d72d1c075d0171}
+      \strng{fullhash}{833442da432821ba23a2a4bf3e0dc897}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{Dataset Augmentation with Synthetic Images Improves Semantic Segmentation}
+      \field{volume}{abs/1709.00849}
+      \field{year}{2017}
+      \verb{eprint}
+      \verb 1709.00849
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1709.00849
+      \endverb
+    \endentry
+    \entry{DBLP:journals/corr/NarihiraMY15}{article}{}
+      \name{author}{3}{}{%
+        {{hash=da0c6fb5243d1ca735ec9c0bd828c9b8}{%
+           family={Narihira},
+           family_i={N\bibinitperiod},
+           given={Takuya},
+           given_i={T\bibinitperiod}}}%
+        {{hash=d980bc6930f008a0fb5fa667785f2309}{%
+           family={Maire},
+           family_i={M\bibinitperiod},
+           given={Michael},
+           given_i={M\bibinitperiod}}}%
+        {{hash=d858880b7ff7de571fa4c484d6cd7043}{%
+           family={Yu},
+           family_i={Y\bibinitperiod},
+           given={Stella\bibnamedelima X.},
+           given_i={S\bibinitperiod\bibinitdelim X\bibinitperiod}}}%
+      }
+      \strng{namehash}{e9c316a91fc7c173fdc3b87b0bcff92f}
+      \strng{fullhash}{e9c316a91fc7c173fdc3b87b0bcff92f}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{Direct Intrinsics: Learning Albedo-Shading Decomposition by Convolutional Regression}
+      \field{volume}{abs/1512.02311}
+      \field{year}{2015}
+      \verb{eprint}
+      \verb 1512.02311
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1512.02311
+      \endverb
+    \endentry
+    \entry{GoogleMaps}{misc}{}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://developers.google.com/maps/documentation/streetview/intro}}
+      \field{note}{Accessed: 30-05-2018}
+      \field{title}{Google Street View API}
+    \endentry
+    \entry{2018arXiv180302266M}{article}{}
+      \name{author}{4}{}{%
+        {{hash=6568d29e268db93ed73850cff0335f43}{%
+           family={{Marnerides}},
+           family_i={M\bibinitperiod},
+           given={D.},
+           given_i={D\bibinitperiod}}}%
+        {{hash=e6a251a80a2d9d0142f66e3e81882aa6}{%
+           family={{Bashford-Rogers}},
+           family_i={B\bibinitperiod},
+           given={T.},
+           given_i={T\bibinitperiod}}}%
+        {{hash=55e9372e9a656eb1fe22710a2120e91d}{%
+           family={{Hatchett}},
+           family_i={H\bibinitperiod},
+           given={J.},
+           given_i={J\bibinitperiod}}}%
+        {{hash=99998dfd32929eaaa30ca2e42cb657ad}{%
+           family={{Debattista}},
+           family_i={D\bibinitperiod},
+           given={K.},
+           given_i={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{72aa681deb5f63104589a8beae8630a1}
+      \strng{fullhash}{187d8f4fc48e9e539274379095c84360}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.CV}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{ArXiv e-prints}
+      \field{month}{03}
+      \field{title}{{ExpandNet: A Deep Convolutional Neural Network for High Dynamic Range Expansion from Low Dynamic Range Content}}
+      \field{year}{2018}
+      \verb{eprint}
+      \verb 1803.02266
+      \endverb
+      \keyw{Computer Science - Computer Vision and Pattern Recognition,Computer Science - Graphics}
+    \endentry
   \endsortlist
-  \missing{https://hdrihaven.com/}
-  \missing{https://github.com/affinelayer/pix2pix-tensorflow/blob/master/pix2pix.py}
 \endrefsection
 \endinput
 
