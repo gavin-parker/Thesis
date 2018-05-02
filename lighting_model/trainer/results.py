@@ -75,19 +75,19 @@ def load_tf_log(name):
     return times, steps, value
 
 def train_log_results():
-    a_val = load_tf_log("Final_results/validation/dotprod.csv")
-    b_val = load_tf_log("Final_results/validation/pyramid.csv")
+    a_val = load_tf_log("Final_results/validation/pyramid.csv")
+    b_val = load_tf_log("Final_results/validation/full.csv")
     plt.style.use('ggplot')
     trim = min(a_val[1].shape[0], b_val[1].shape[0])
     print(b_val[2])
 
-    train_loss_a, = plt.plot(a_val[1][:trim], a_val[2][:trim], label='Single Scale Cosine Similarity')
-    train_loss_b, =plt.plot(b_val[1][:trim], b_val[2][:trim], label='Cosine Similarity Pyramid')
+    train_loss_a, = plt.plot(a_val[1][:trim], a_val[2][:trim], label='Cosine Similarity Pyramid')
+    train_loss_b, =plt.plot(b_val[1][:trim], b_val[2][:trim], label='Cosine Similarity Pyramid with MS Features')
     plt.xlabel('Steps')
     plt.ylabel('L1 Norm')
     plt.legend(handles=[train_loss_a, train_loss_b])
-    plt.title('Performace of Cosine Similarity Pyramid')
-    tikz_save('../dissertation/pyramid_comparison.tex',figureheight='8cm', figurewidth='12cm')
+    plt.title('Performace of Multi-Scale Features')
+    tikz_save('../dissertation/ms_comparison.tex',figureheight='8cm', figurewidth='12cm')
     plt.clf()
     #norm_training = load_tf_log("deep_stereo_normal_val.csv")
     #dotprod_training = load_tf_log("deep_stereo_dotprod_val.csv")

@@ -30,6 +30,7 @@ class Model:
                 self.left_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
                 self.right_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
                 self.norm_image = tf.placeholder(tf.float32, shape=[1, 64, 64, 3])
+                self.bg_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
                 gt = tf.placeholder(tf.float32, shape=[1, 64, 64, 3])
                 pass
             else:
@@ -40,7 +41,20 @@ class Model:
                 self.right_image = train_batch[1]
                 self.norm_image = train_batch[3]
                 self.norm_image = tf.image.resize_images(self.norm_image, (64, 64))
+                self.bg_image = train_batch[4]
                 gt = train_batch[2]
+
+            if FLAGS.use_bg:
+                l_intensity = tf.reduce_sum(self.left_image, axis=3)
+                r_intensity = tf.reduce_sum(self.right_image, axis=3)
+                l_mask = tf.cast(tf.equal(l_intensity, 0), tf.float32)
+                r_mask = tf.cast(tf.equal(r_intensity, 0), tf.float32)
+                l_mask = tf.stack([l_mask, l_mask, l_mask], axis=3)
+                r_mask = tf.stack([r_mask, r_mask, r_mask], axis=3)
+                self.left_image = self.bg_image*l_mask + self.left_image
+                self.right_image = self.bg_image*r_mask + self.right_image
+
+
             gt_norm = preprocessing.normalize_hdr(gt)
             left_lab = tf.map_fn(preprocessing.rgb_to_lab, self.left_image)
             right_lab = tf.map_fn(preprocessing.rgb_to_lab, self.right_image)
@@ -66,6 +80,7 @@ class Model:
 
     def loss_calculation(self, (env_pred, norm_pred), (env_gt, norm_gt)):
         self.env_loss = tf.reduce_sum(tf.abs(env_pred - env_gt))
+        self.l2_norm_env = tf.reduce_sum(tf.square(env_pred - env_gt))
         self.norm_loss = tf.reduce_sum(tf.abs(norm_pred - norm_gt))
         self.loss = self.env_loss + self.norm_loss
 
@@ -100,6 +115,10 @@ class Model:
                 joint = tf.concat([joint, similarity], axis=-1)
         else:
             joint = tf.concat([l_encoding, r_encoding], axis=-1)
+
+        if FLAGS.sep_bg:
+            bg_encoding = layers.basic_encode(self.bg_image)
+            joint = tf.concat([joint, bg_encoding], axis=-1)
         joint_b = layers.encode_layer(joint, 512, (3, 3), (2, 2), 1, maxpool=True)
         joint_c = layers.encode_layer(joint_b, 1024, (3, 3), (2, 2), 1, maxpool=True)
 
@@ -135,7 +154,8 @@ class Model:
                      tf.summary.image('Input_Right_Image', right, max_outputs=1),
                      tf.summary.image('CIELAB_Right', right_lab, max_outputs=1),
                      tf.summary.image('GT_norms', self.norm_image, max_outputs=1),
-                     tf.summary.image('Predicted_norms', preds[1], max_outputs=1)]
+                     tf.summary.image('Predicted_norms', preds[1], max_outputs=1),
+                     tf.summary.image('Background', self.bg_image, max_outputs=1)]
 
         scalar_summary = tf.summary.merge([tf.summary.scalar("Loss", self.loss),
                                            tf.summary.scalar("Lighting_Loss", self.env_loss),
@@ -146,7 +166,7 @@ class Model:
         return img_summary, scalar_summary
 
     def validate(self):
-        validation_loss = self.env_loss
+        validation_loss = self.l2_norm_env
         with tf.variable_scope("validation_mean") as scope:
             self.val_loss, self.val_update = tf.metrics.mean(validation_loss)
             self.validation_summary = tf.summary.merge([tf.summary.scalar("Validation_Loss", self.val_loss)])

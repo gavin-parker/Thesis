@@ -47,7 +47,7 @@ def flip_mask(mask):
 
 
 def get_stereo_dataset(dir, batch_size):
-    left_files, right_files, env_files, norm_files = stereo_stream(dir)
+    left_files, right_files, env_files, norm_files, bg_files = stereo_stream(dir)
     envmap = env_files[0].map(
         lambda x: preprocess_hdr(x, env_files[1], output_size=64),
         num_parallel_calls=4)
@@ -60,13 +60,16 @@ def get_stereo_dataset(dir, batch_size):
     right = right_files[0].map(
         lambda x: preprocess_color(x, right_files[1], double_precision=True),
         num_parallel_calls=4)
-    dataset = tf.data.Dataset.zip((left, right, envmap, norms)).repeat().batch(batch_size).prefetch(
+    bg = bg_files[0].map(
+        lambda x: preprocess_color(x, bg_files[1], double_precision=True),
+        num_parallel_calls=4)
+    dataset = tf.data.Dataset.zip((left, right, envmap, norms, bg)).repeat().batch(batch_size).prefetch(
         buffer_size=2* batch_size)
     return dataset
 
 
 def get_dematerial_dataset(dir, batch_size):
-    right_files, norm_files, env_files = dematerial_stream(dir)
+    right_files, norm_files, env_files, bg_files = dematerial_stream(dir)
     right = right_files[0].map(
         lambda x: preprocess_color(x, right_files[1], output_size=128, double_precision=False),
         num_parallel_calls=4)
@@ -76,8 +79,10 @@ def get_dematerial_dataset(dir, batch_size):
     norms = norm_files[0].map(
         lambda x: preprocess_orientation(x, norm_files[1],output_size=128, double_precision=False),
         num_parallel_calls=4)
-
-    dataset = tf.data.Dataset.zip((right, norms, envmap)).shuffle(128).repeat().batch(
+    bg = bg_files[0].map(
+        lambda x: preprocess_orientation(x, bg_files[1],output_size=128, double_precision=False),
+        num_parallel_calls=4)
+    dataset = tf.data.Dataset.zip((right, norms, envmap, bg)).shuffle(128).repeat().batch(
         batch_size).prefetch(
         buffer_size=2 * batch_size)
     return dataset
@@ -212,10 +217,14 @@ def image_stream(path):
 def dematerial_stream(dir):
     right_files = sorted(file_io.get_matching_files("{}/right/*.png".format(dir)))
     norm_files = sorted(file_io.get_matching_files("{}/norms/*.png".format(dir)))
+    bg_files = sorted(file_io.get_matching_files("{}/bg/*.png".format(dir)))
+
     envmap_files = sorted(file_io.get_matching_files("{}/envmaps/*.hdr".format(dir)))
     right_shape = get_input_size(right_files[0])
     norm_shape = get_input_size(norm_files[0])
     envmap_shape = get_input_size(envmap_files[0])
+    bg_shape = get_input_size(bg_files[0])
+
     assert len(right_files) == len(envmap_files)
     assert right_shape == norm_shape
     norms = tf.data.Dataset.from_tensor_slices(
@@ -224,7 +233,9 @@ def dematerial_stream(dir):
         tf.convert_to_tensor(right_files, dtype=tf.string))
     envmaps = tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(envmap_files, dtype=tf.string))
-    return (right, right_shape), (norms, norm_shape), (envmaps, envmap_shape)
+    bgs = tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(bg_files, dtype=tf.string))
+    return (right, right_shape), (norms, norm_shape), (envmaps, envmap_shape), (bgs, bg_shape)
 
 
 def stereo_stream(dir):
@@ -233,12 +244,14 @@ def stereo_stream(dir):
     right_files = sorted(file_io.get_matching_files("{}/right/*.png".format(dir)))
     norm_files = sorted(file_io.get_matching_files("{}/norms/*.png".format(dir)))
     envmap_files = sorted(file_io.get_matching_files("{}/envmaps/*.hdr".format(dir)))
+    bg_files = sorted(file_io.get_matching_files("{}/bg/*.png".format(dir)))
     print("loaded files")
     left_shape = get_input_size(left_files[0])
     right_shape = get_input_size(right_files[0])
     norms_shape = get_input_size(norm_files[0])
     envmap_shape = get_input_size(envmap_files[0])
-    assert len(left_files) == len(right_files) == len(envmap_files) == len(norm_files)
+    bg_shape = get_input_size(bg_files[0])
+    assert len(left_files) == len(right_files) == len(envmap_files) == len(norm_files) == len(bg_files)
     assert left_shape == right_shape
     left = tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(left_files, dtype=tf.string))
@@ -248,8 +261,10 @@ def stereo_stream(dir):
         tf.convert_to_tensor(envmap_files, dtype=tf.string))
     norms = tf.data.Dataset.from_tensor_slices(
         tf.convert_to_tensor(norm_files, dtype=tf.string))
+    bgs = tf.data.Dataset.from_tensor_slices(
+        tf.convert_to_tensor(bg_files, dtype=tf.string))
     print("prepared data size: {}".format(len(left_files)))
-    return (left, left_shape), (right, right_shape), (envmaps, envmap_shape), (norms, norms_shape)
+    return (left, left_shape), (right, right_shape), (envmaps, envmap_shape), (norms, norms_shape), (bgs, bg_shape)
 
 
 # based on https://github.com/torch/image/blob/9f65c30167b2048ecbe8b7befdc6b2d6d12baee9/generic/image.c

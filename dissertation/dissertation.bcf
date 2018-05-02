@@ -2041,27 +2041,28 @@
     <bcf:citekey order="12">Lalonde-2009-10350</bcf:citekey>
     <bcf:citekey order="13">7335515</bcf:citekey>
     <bcf:citekey order="14">1315013</bcf:citekey>
-    <bcf:citekey order="15">Xia:2016:RSS</bcf:citekey>
+    <bcf:citekey order="15">xia</bcf:citekey>
     <bcf:citekey order="16">hazirbas17ddff</bcf:citekey>
     <bcf:citekey order="17">7410661</bcf:citekey>
     <bcf:citekey order="18">7780983</bcf:citekey>
     <bcf:citekey order="19">song2015sun</bcf:citekey>
-    <bcf:citekey order="20">DBLP:journals/corr/abs-1709-00849</bcf:citekey>
-    <bcf:citekey order="21">holdgeoffroy-cvpr-17</bcf:citekey>
-    <bcf:citekey order="22">Gardner:2017:LPI:3130800.3130891</bcf:citekey>
-    <bcf:citekey order="23">RematasCVPR2016</bcf:citekey>
-    <bcf:citekey order="24">https://www.disneyresearch.com/publication/face2light/</bcf:citekey>
-    <bcf:citekey order="25">https://github.com/affinelayer/pix2pix-tensorflow/blob/master/pix2pix.py</bcf:citekey>
-    <bcf:citekey order="26">lpt2013ikea</bcf:citekey>
-    <bcf:citekey order="27">principled_BSDF</bcf:citekey>
-    <bcf:citekey order="28">https://hdrihaven.com/</bcf:citekey>
-    <bcf:citekey order="29">RematasCVPR2016</bcf:citekey>
-    <bcf:citekey order="30">GoogleMaps</bcf:citekey>
-    <bcf:citekey order="31">2018arXiv180302266M</bcf:citekey>
-    <bcf:citekey order="32">7780983</bcf:citekey>
-    <bcf:citekey order="33">1284395</bcf:citekey>
-    <bcf:citekey order="34">zhang2017learning</bcf:citekey>
-    <bcf:citekey order="35">xia</bcf:citekey>
+    <bcf:citekey order="20">McCormac:etal:arXiv2016</bcf:citekey>
+    <bcf:citekey order="21">DBLP:journals/corr/abs-1709-00849</bcf:citekey>
+    <bcf:citekey order="22">holdgeoffroy-cvpr-17</bcf:citekey>
+    <bcf:citekey order="23">Gardner:2017:LPI:3130800.3130891</bcf:citekey>
+    <bcf:citekey order="24">RematasCVPR2016</bcf:citekey>
+    <bcf:citekey order="25">https://www.disneyresearch.com/publication/face2light/</bcf:citekey>
+    <bcf:citekey order="26">https://github.com/affinelayer/pix2pix-tensorflow/blob/master/pix2pix.py</bcf:citekey>
+    <bcf:citekey order="27">lpt2013ikea</bcf:citekey>
+    <bcf:citekey order="28">principled_BSDF</bcf:citekey>
+    <bcf:citekey order="29">https://hdrihaven.com/</bcf:citekey>
+    <bcf:citekey order="30">RematasCVPR2016</bcf:citekey>
+    <bcf:citekey order="31">GoogleMaps</bcf:citekey>
+    <bcf:citekey order="32">2018arXiv180302266M</bcf:citekey>
+    <bcf:citekey order="33">7780983</bcf:citekey>
+    <bcf:citekey order="34">1284395</bcf:citekey>
+    <bcf:citekey order="35">zhang2017learning</bcf:citekey>
+    <bcf:citekey order="36">xia</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" name="none/global" type="entry" sortscheme="none" sortnamekeyscheme="global">
   <bcf:sorting>

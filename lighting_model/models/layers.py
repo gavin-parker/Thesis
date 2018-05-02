@@ -96,3 +96,10 @@ def siamese_encode_2(input, reuse=False):
         multiscale_a = downsampled_a
 
     return  filters_c, [downsampled_a, downsampled_b], [multiscale_a, multiscale_b, multiscale_c]
+
+def basic_encode(input):
+    filters_a = encode_layer_siamese(input, 3, 64, [3,3],False, "basic_1")
+    filters_b = encode_layer_siamese(filters_a, 3, 128, [3,3],False, "basic_2")
+    filters_c = encode_layer_siamese(filters_b, 3, 256, [3,3],False, "basic_3")
+
+    return  filters_c

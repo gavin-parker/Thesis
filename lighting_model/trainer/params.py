@@ -17,6 +17,8 @@ tf.app.flags.DEFINE_boolean('dotprod-pyramid', True, 'Use a dot product for each
 tf.app.flags.DEFINE_boolean('multiscale', True, 'Use multiscale features. (default: %(default)d)')
 tf.app.flags.DEFINE_boolean('stereo2', False, 'Stereo mode')
 tf.app.flags.DEFINE_boolean('adam', False, 'Use adam optimizer')
+tf.app.flags.DEFINE_boolean('use-bg', False, 'Use background image')
+tf.app.flags.DEFINE_boolean('sep-bg', False, 'Use seperate branch for background image')
 
 tf.app.flags.DEFINE_boolean('app', False, 'Dont load train data. (default: %(default)d)')
 tf.app.flags.DEFINE_string('log-dir', 'envmap_synthetic_results', 'Output Log directory')

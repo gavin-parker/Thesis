@@ -52,19 +52,19 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.2.2}Outdoor Lighting}{10}{subsection.2.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.3}Shadows}{10}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.3}Shadows}{11}{subsection.2.2.3}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.2.4}Experimental Methods}{11}{subsection.2.2.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.3}Deep Learning for scene understanding}{11}{section.2.3}
+\contentsline {section}{\numberline {2.3}Deep Learning for scene understanding}{12}{section.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3.1}Geometry Estimation}{11}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.1}Geometry Estimation}{12}{subsection.2.3.1}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3.2}Synthetic Datasets}{12}{subsection.2.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.4}Deep Learning for Illumination Estimation}{12}{section.2.4}
+\contentsline {section}{\numberline {2.4}Deep Learning for Illumination Estimation}{13}{section.2.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.5}Predicting Light Probes}{12}{section.2.5}
+\contentsline {section}{\numberline {2.5}Predicting Light Probes}{13}{section.2.5}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Implementing Prior Art}{15}{chapter.3}
 \defcounter {refsection}{0}\relax 
@@ -102,11 +102,13 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {5.1.4}Cosine Similarity Pyramid}{27}{subsection.5.1.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.2}Final Model Accuracy}{27}{section.5.2}
+\contentsline {subsection}{\numberline {5.1.5}Effect of Multi-Scale Features}{28}{subsection.5.1.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.3}Final Model Performance}{28}{section.5.3}
+\contentsline {section}{\numberline {5.2}Final Model Accuracy}{28}{section.5.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.4}Limitations}{30}{section.5.4}
+\contentsline {section}{\numberline {5.3}Final Model Performance}{30}{section.5.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.4}Limitations}{31}{section.5.4}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {6}Conclusion}{33}{chapter.6}
 \defcounter {refsection}{0}\relax 
@@ -119,7 +121,5 @@
 \contentsline {subsection}{\numberline {6.2.2}Texture Resilient Inference}{34}{subsection.6.2.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {6.2.3}Video Inference}{34}{subsection.6.2.3}
-\defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {6.2.4}Spatial Lighting}{34}{subsection.6.2.4}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {A}Demo Application}{37}{appendix.A}

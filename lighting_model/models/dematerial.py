@@ -32,14 +32,12 @@ class Model:
         with tf.device('/cpu:0'):
             iterator = tf.data.Iterator.from_string_handle(
                 self.handle, self.train_dataset.output_types, self.train_dataset.output_shapes)
-            (rgb_image, rgb_normals, envmap) = iterator.get_next()
+            (rgb_image, rgb_normals, envmap, bg) = iterator.get_next()
             self.sphere = preprocessing.get_norm_sphere(FLAGS.batch_size)
             self.sphere = preprocessing.unit_norm(self.sphere[:, :, :, :3], channels=3)
             self.zero_mask = preprocessing.zero_mask(rgb_normals)
             appearance = rgb_image * self.zero_mask
             rgb_normals = rgb_normals * self.zero_mask
-            bg = rgb_image * preprocessing.flip_mask(self.zero_mask)
-            bg = tf.cast(bg, tf.float32)
         with tf.device('/gpu:0'):
             normal_sphere_flat = tf.reshape(self.sphere, [FLAGS.batch_size, -1, 3])
             sparse_rm = tf.map_fn(reflectance_ops.online_reflectance,
