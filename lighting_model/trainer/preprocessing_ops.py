@@ -312,6 +312,11 @@ def rgb_to_lab(srgb):
 
 
 def lab_to_rgb(lab):
+    l, a, b = tf.split(lab, 3, axis=2)
+    l = tf.clip_by_value(l, 0,100)
+    a =  tf.clip_by_value(a, -86.185,98.254)
+    b =  tf.clip_by_value(b, -107.863,94.482)
+    lab = tf.concat([l,a,b], axis=2)
     with tf.name_scope("lab_to_rgb"):
         lab_pixels = tf.reshape(lab, [-1, 3])
 
@@ -330,8 +335,8 @@ def lab_to_rgb(lab):
             epsilon = 6.0 / 29.0
             linear_mask = tf.cast(fxfyfz_pixels <= epsilon, dtype=tf.float32)
             exponential_mask = tf.cast(fxfyfz_pixels > epsilon, dtype=tf.float32)
-            xyz_pixels = (3.0 * epsilon ** 2.0 * (fxfyfz_pixels - 4.0 / 29.0)) * linear_mask + (
-                    fxfyfz_pixels ** 3.0) * exponential_mask
+            xyz_pixels = (3.0 * epsilon ** 2 * (fxfyfz_pixels - 4.0 / 29.0)) * linear_mask + (
+                    fxfyfz_pixels ** 3) * exponential_mask
 
             # denormalize for D65 white point
             xyz_pixels = tf.multiply(xyz_pixels, [0.950456, 1.0, 1.088754])

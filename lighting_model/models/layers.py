@@ -34,7 +34,7 @@ def encode_layer(x, count, size, stride, convolutions=1, regularizer=None, activ
         x = conv2d_extraction(x, count, size, [1, 1], regularizer=regularizer, activation=activation)
         if norm:
             x = tf.layers.batch_normalization(x,
-                                              fused=True)
+                                              fused=False)
         if activation:
             x = tf.nn.relu(x)
     if maxpool:
@@ -49,7 +49,7 @@ def encode_layer_siamese(x, convolutions, filters, kernel_size, reuse, name):
                                  kernel_initializer=tf.contrib.layers.xavier_initializer_conv2d(),
                                  reuse=reuse)
             x = tf.layers.batch_normalization(x,
-                                              fused=True, reuse=reuse)
+                                              fused=False, reuse=reuse)
             x = tf.nn.relu(x)
     x = tf.layers.max_pooling2d(x, pool_size=[2, 2], strides=[2, 2], padding='SAME')
     return x
@@ -61,7 +61,7 @@ def decode_layer(x, count, size, stride, convolutions=0, regularizer=None, norm=
         deconv = conv2d_extraction(deconv, count, size, [1, 1], regularizer=regularizer)
         if norm:
             deconv = tf.layers.batch_normalization(deconv,
-                                                   fused=True)
+                                                   fused=False)
         if activation:
             deconv = tf.nn.relu(deconv)
     return deconv
@@ -84,11 +84,11 @@ def siamese_encode(input, reuse=False):
         filters_c = encode_layer_siamese(filters_b, 3, 256, [3,3], reuse, "siamese_3")
     return [filters_a, filters_b, filters_c]
 
-def siamese_encode_2(input, reuse=False):
+def siamese_encode_2(input, reuse=False, depth=3):
     with tf.name_scope("siamese_encode_v2"):
-        filters_a = encode_layer_siamese(input, 3, 64, [3,3], reuse, "siamese_1")
-        filters_b = encode_layer_siamese(filters_a, 3, 128, [3,3], reuse, "siamese_2")
-        filters_c = encode_layer_siamese(filters_b, 3, 256, [3,3], reuse, "siamese_3")
+        filters_a = encode_layer_siamese(input, depth, 64, [3,3], reuse, "siamese_1")
+        filters_b = encode_layer_siamese(filters_a, depth, 128, [3,3], reuse, "siamese_2")
+        filters_c = encode_layer_siamese(filters_b, depth, 256, [3,3], reuse, "siamese_3")
         downsampled_a = tf.layers.max_pooling2d(filters_a, pool_size=[4, 4], strides=[4, 4], padding='SAME')
         downsampled_b = tf.layers.max_pooling2d(filters_b, pool_size=[2, 2], strides=[2, 2], padding='SAME')
         multiscale_c = tf.layers.max_pooling2d(filters_c, pool_size=[4, 4], strides=[4, 4], padding='SAME')
@@ -97,9 +97,9 @@ def siamese_encode_2(input, reuse=False):
 
     return  filters_c, [downsampled_a, downsampled_b], [multiscale_a, multiscale_b, multiscale_c]
 
-def basic_encode(input):
-    filters_a = encode_layer_siamese(input, 3, 64, [3,3],False, "basic_1")
-    filters_b = encode_layer_siamese(filters_a, 3, 128, [3,3],False, "basic_2")
-    filters_c = encode_layer_siamese(filters_b, 3, 256, [3,3],False, "basic_3")
+def basic_encode(input, depth=3):
+    filters_a = encode_layer_siamese(input, depth, 64, [3,3],False, "basic_1")
+    filters_b = encode_layer_siamese(filters_a, depth, 128, [3,3],False, "basic_2")
+    filters_c = encode_layer_siamese(filters_b, depth , 256, [3,3],False, "basic_3")
 
     return  filters_c

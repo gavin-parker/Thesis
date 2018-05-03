@@ -56,24 +56,24 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
                     [model.loss, model.summaries], feed_dict={model.handle: handle_train}, options=options,
                     run_metadata=run_metadata)
                 t1 = time.time()
-                [train_writer.add_summary(s, epoch * epoch_size + i) for s in summaries]
-                saver.save(sess, "{}/{}/model".format(FLAGS.train_dir, name))
-                if FLAGS.debug:
-                    train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
-                                                  global_step=None)
-                train_writer.flush()
-                print("Loss:{}".format(err))
-                print("{} sec per sample".format((t1 - t0) / (100 * FLAGS.batch_size)))
-                if FLAGS.debug:
-                    return
+                #[train_writer.add_summary(s, epoch * epoch_size + i) for s in summaries]
+                #saver.save(sess, "{}/{}/model".format(FLAGS.train_dir, name))
+                #if FLAGS.debug:
+                #    train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
+                #                                  global_step=None)
+                #train_writer.flush()
+                #print("Loss:{}".format(err))
+                #print("{} sec per sample".format((t1 - t0) / (100 * FLAGS.batch_size)))
+                #if FLAGS.debug:
+                #    return
         print("Validating...")
         for i in range(0, validation_size):
             sess.run(model.val_update, feed_dict={model.handle: handle_val}, options=options,
                      run_metadata=run_metadata)
-        validation_summary = sess.run(model.validation_summary, options=options, run_metadata=run_metadata)
-        sess.run(model.reset_mean)
-        train_writer.add_summary(validation_summary, epoch)
-        train_writer.flush()
+        #validation_summary = sess.run(model.validation_summary, options=options, run_metadata=run_metadata)
+        #sess.run(model.reset_mean)
+        #train_writer.add_summary(validation_summary, epoch)
+        #train_writer.flush()
     print("finished")
     train_writer.close()
     sess.close()
