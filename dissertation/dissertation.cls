@@ -183,7 +183,6 @@
 % define macro to generate UoB declaration
 
 \newcommand{\makedecl}{
-  \newpage
   \thispagestyle{plain}
 
   \chapter*{Declaration}
