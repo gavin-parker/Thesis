@@ -60,9 +60,13 @@
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=8cm]{images/examples/example_25p}\\
+\includegraphics[height=5cm]{images/tests/25p_ssim_shallow/pred_composite}
 
-\caption{Ground Truth Lighting - Our Model's Prediction - Current Basic AR Lighting - }
+\vspace{0.5cm}
+\includegraphics[height=5cm]{images/tests/25p_ssim_shallow/gt_composite}
+%\includegraphics[height=8cm]{images/examples/example_25p}\\
+
+\caption{Ground Truth Lighting(below) - Our Model's Prediction(above) }
 \label{example_1}
 \end{figure}
 \noindent
@@ -82,9 +86,8 @@ To test my hypothesis I performed the following research:
 \begin{itemize}
 \item Replicated the work of Stamatios Georgoulis et al. in Tensorflow by building CNNs that can interpolate sparse reflectance maps and predict environment map lighting from single objects with provided geometry. Achieved equivalent results on known surface geometry and confirmed the limitations of estimated geometry.
 \item Implemented a dataset generator that could produce realistic lighting parameters and images for training networks. Augmented our large dataset of HDRI environment maps with Google Street View images, automatically tonemapped by HDR-ExpandNet. Produced a high-detail stereo image dataset of 55000 image-lighting pairs.
-\item Created a new siamese architecture to encode geometry from stereo images and estimate lighting conditions. Achieved SSIM to the ground truth illumination of 0.3, equivalent to previous methods but without known geometry.
-\item Improved upon the Siamese architecture with a Cosine Similarity pyramid to achieve SSIM differences as low as 0.2, beating previous attempts without increasing te depth of the network.
-\item Evaulated the quality and performance of different architectures and features against a validation set of 1000 unseen pairs.
+\item Created a new siamese architecture to encode geometry from stereo images and estimate lighting conditions. This achieved similar performance to previous work without the need for known surface geometry.
+\item Improved upon the Siamese architecture with a Cosine Similarity step to achieve an average SSIM difference of 0.27, outperforming previous similar work by Stamatios Georgoulis et al. which relied on known surface geometry.
 \end{itemize}
 
 Our network is able to achieve equivalent results to previous work that relied on known geometry, and outperforms those that use estimated surface normals in both accuraccy and inference speed.
@@ -515,6 +518,8 @@ A drawback of traditional block-disparity methods for stereo matching is that th
 \newline
 The original Dematerial network was trained with a \textit{Gradient Descent} optimizer, using a momentum on the learning rate such that it decreases over time. The idea is that the learning rate decreases as the model reaches the optimum, to fine-tune the weightings. We found that we could achieve faster training using the ADAM optimiser, which maintains a per-parameter learning rate using the second moments of the gradients after loss calculation to produce new weights. We were also able to use a higher learning rate of 1.7e-5. Often the performance of details such as these are very dependent on implementation details like the framework used or the hardware being trained on. As a result our choice to make these changes is not alone an indication that the previous work could be improved in the same way.
 \newline
+Our deep model uses 9 convolutional layers per input branch, 9 convolutional layers for branch fusion and 9 more to produce the environment map. In comparison the original Dematerial network used 13 convolutional layers per branch, and 15 to produce the environment map. To evaluate our new model features we experiment with different model depths.
+\newline
 For our prediction task we make the following assumptions:
 \begin{itemize}
 \item Provided objects consist of a single material with constant albedo. Materials can contain Diffuse, Specular and Subsurface properties.
@@ -536,7 +541,7 @@ To determine the best features for the task, we evaluated the performance of a s
 \item Cosine Similarity Pyramid model.
 \item Cosine Similarity Pyramid model with Multi-Scale features.
 \end{itemize}
-All models were trained for 100 epochs, with a learning rate of 1.7e-8, and evaluated on 1000 validation samples. A batch size of only 16 was used, due to memory requirements of the larger networks. We only quanititatively evaulate the quality of the lighting prediction, however surface normals are also produced as an output too all models aside from 'Dematerial'.
+All models were trained for 100 epochs, with a learning rate of 1.7e-8, and evaluated on 1000 validation samples. A batch size of only 24 was used, due to memory requirements of the larger networks. We only quanititatively evaulate the quality of the lighting prediction, however surface normals are also produced as an output too all models aside from 'Dematerial'.
 \chapter{Critical Evaluation}
 \label{chap:evaluation}
 \section{Experimental Results}
@@ -548,7 +553,7 @@ All models were trained for 100 epochs, with a learning rate of 1.7e-8, and eval
 \setlength\figurewidth{12cm}
 \centering
 \input{siam_comparison}
-\caption{L1 Norm between predictions and GT on validation set. Basic concatenation graph is used, with and without shared weights.}
+\caption{SSD between the predicted lighting and ground truth on the validation set, at each epoch during the training process. In both models, 3 Convolutions are used for each Encode/Decode block, and the outputs of the stereo branches are concatenated.}
 \end{figure}
 We found that using shared weights on our basic concatenation model had very little effect on the accuracy of results. In our training process we use the L1 norm loss to determine how to reweight our graph. For the siamese network, new weights are only calculated for the left branch, and then duplicated to the right branch. When the weights are trained seperately, they will eventually converge on, or even outperform the original weightings.
 \subsection{Concatenation VS Dot Product}
@@ -556,20 +561,40 @@ We found that using shared weights on our basic concatenation model had very lit
 \setlength\figureheight{6cm}
 \setlength\figurewidth{12cm}
 \centering
-\input{training}
-\caption{L1 Norm between predictions and GT on validation set. In the first version, the outputs from the siamese layers are concatenated, in the other they are normalised and the dot product is performed.}
+\input{dotprod_comparison_deep}
+\caption{SSD between the predicted lighting and ground truth on the validation set, at each epoch during the training process. In the first model, the outputs from the stereo branches are concatenated, in the other we use normalisation and dot product to determine Cosine Similarity. Both models use 3 layers per block.}
 \end{figure}
-The dot product step results in a small improvement in accuraccy and a significant improvement in training speed. The dot product step is effectively a manually calculated similarity measure between the two views, and so the model can converge on the depth features earlier in the training process. We believe that the performance difference is minimal as the model is already very deep, and training would likely converge on the depth features eventually. As a result we also show the effect with a much shallower model. \todo{Show this}
-
+The dot product step results in a small improvement in accuraccy and a significant improvement in training speed. The dot product step is effectively a manually calculated similarity measure between the two views, and so the model can converge on the depth features earlier in the training process. We believe that the performance difference is minimal as the model is already very deep, and training would likely converge on the depth features eventually.
+As a result we also show the effect with a much shallower model.
+\begin{figure}[H]
+\setlength\figureheight{6cm}
+\setlength\figurewidth{12cm}
+\centering
+\input{dotprod_comparison_shallow}
+\caption{In the first model, the outputs from the stereo branches are concatenated, in the other we use normalisation and dot product to determine Cosine Similarity. Both models use 1 convolutional layer per block.}
+\end{figure}
+The shallow model uses 1 Convolutional layer per Encode block, resulting in 3 convolutional layers per stereo branch, 3 more for branch fusion, and 3 to produce the lighting. The memory requirements for this graph much lower than the deep model, but the performance is very similar. Here we can see a consistent, although modest, improvement in performance from using the Cosine Similarity. We believe a limiting factor in this approach for lighting estimation is that many differences in stereo views are not due to the relative movement of geometry relied upon for depth calculation. For example, specularity depends heavily on view direction. By performing the dot product we are treating these features the same as geometric features.
+\newline
+Another issue with this is that we are also performing the dot product on features extracted from the background. In our case the background is modelled to be infinitely far away, and while it contains useful contextual and hue information, should not be used in the similarity measure.
 \subsection{Effect of Background}
 \begin{figure}[H]
 \setlength\figureheight{6cm}
 \setlength\figurewidth{12cm}
 \centering
 \input{bg_comparison}
-\caption{Comparison of L1 Norm accuracy with and without the background present. Lighting effects on the subject remain the same.}
+\caption{In the first model, the object is composited onto the background, while in the second model, the background is not present and replaced with 0 values.}
 \end{figure}
-The model is able to infer much of the lighting without the background, indicating that it is learning the lighting conditions from the subject. However, adding the background improves the performance significantly. The background not only gives an indication of the physical environment the subject inhabits, but also the colors and intensities to expect. This data, in theory, should make it easier to determine the difference between reflectance, albedo and shadows on the subject as well as indicate the hue of the resulting environment map. Ou results indicate that the background information is useful for estimating the lighting accurately.
+The model is able to infer some of the lighting without the background, indicating that it is learning the lighting conditions from the subject. However, adding the background improves the performance significantly. The background not only gives an indication of the physical environment the subject inhabits, but also the colors and intensities to expect. This data, in theory, should make it easier to determine the difference between reflectance, albedo and shadows on the subject as well as indicate the hue of the resulting environment map. Our results indicate that the background information is useful for estimating the lighting accurately. For a robust model we cannot exclude the background, however it cannot be included in our Cosine Similarity steps. To solve this we present a new network where the background is given it's own branch.
+\begin{figure}[H]
+\setlength\figureheight{6cm}
+\setlength\figurewidth{12cm}
+\centering
+\input{sep_bg_comparison}
+\caption{In the first model, the object is composited onto the background, while in the second model, the object is provided on a 0 value background, while the real background is provided to a different branch. The output of this branch is concatenated to the dot product output.}
+\end{figure}
+A separate background, as used by the Dematerial network, results in significant improvements over our original network. In fact, the shallow network now outperforms the deeper networks that didn't include our augmentations.
+
+
 \subsection{Cosine Similarity Pyramid}
 \begin{figure}[H]
 \setlength\figureheight{6cm}
@@ -578,31 +603,47 @@ The model is able to infer much of the lighting without the background, indicati
 \input{pyramid_comparison}
 \caption{Comparison of model with single Similarity layer, and model with a pyramid of similarity measurements.}
 \end{figure}
-
-\subsection{Effect of Multi-Scale Features}
-\begin{figure}[H]
-\setlength\figureheight{6cm}
-\setlength\figurewidth{12cm}
-\centering
-\input{ms_comparison}
-\caption{Comparison of model with single Similarity layer, and model with a pyramid of similarity measurements.}
-\end{figure}
-Multi-Scale features aim to improve performance by making use of convolutional features at a range of scales. Between each encode block, the output is both passed to the next encode layer, and the corresponding decode layer with the same feature size. This results in faster training as the model can make useful predictions early on before a deeper understanding, that makes use of all the layers is built.
+With the gain in performance from performing a Cosine Similarity on the stereo branch output, we expected that we could gain additional performance by finding similarities at a range of layer depths. In theory, we would find the feature similarity across receptive field sizes, giving more depth information to the fusion network. However we found this had little effect on accuracy. We believe that the features are uneccesary at the scale provided - that of a single floating nearby object. In more complex scenarios, such as depth inference across a full scene, finding similarity at a range of receptive field sizes may use useful. Furthermore if the features are useful, the fusion network would need to be deeper to extract the useful information.
 \section{Final Model Accuracy}
-To evaluate the accuracy of the models we use a suite of image comparison measures on the produced HDRI environment maps. It is essential that the metrics used suitably evaulate the image similarity, and so we consider which image properties are most influential of the resulting lighting. The most basic estimation should be able to capture the direction and intensity of direct lights within the scene. Often there are few direct lights, but their effect on lighting dominates the overall scene illumination. Better predictions will be able to capture some information on indirect lighting, such as sky or wall colour and brightness.
-\todo{Talk a bit more about this}
+\subsection{Metrics}
+From our experiments we determined to choose our shallow stereo model, with a seperated background and a cosine similarity block as our final model for evaluation. To evaluate the accuracy of the model we use a suite of image comparison measures on the produced HDRI environment maps. It is essential that the metrics used suitably evaulate the image similarity, and so we consider which image properties are most influential of the resulting lighting. The most basic estimation should be able to capture the direction and intensity of direct lights within the scene. Often there are few direct lights, but their effect on lighting dominates the overall scene illumination. Better predictions will be able to capture some information on indirect lighting, such as sky or wall colour and brightness.
 \newline 
-We start with two basic difference metrics, the L1 and L2 norm, which are both per-pixel Minkowski distances. These measures are fast to calculate and simple to implement and so are often used as the loss function in image regression tasks. L2 norm involves the squaring of pixel differences, and exagerrates the effect of large pixel differences on the overall similarity score. In the HDR domain this can mean that direct lights, such as the sun, which are predicted to be in a slightly different direction, will have a severe impact on the similarity, despite having a minor effect on the resulting illumination. When we inspect light sources in sRGB photographs, it appears as if the light source is large and emmitting light from a radius, as the higher brightness values fall outside of the cameras exposure bracket. \ref{rgb_example} demonstrates this effect, as parts of the woman's face, as well as the surrounding sky have the same colour values as the center of the sun, as the camera fails to capture the brightness rage. A minor misprediction in sun position here will have little effect on the L2 distance, but in HDR would have a significant impact.
+We start with two basic difference metrics, the L1 norm and L2 norm, which are both per-pixel Minkowski distances. These measures are fast to calculate and simple to implement and so are often used as the loss function in image regression tasks. L2 norm, also cannel \textit{Mean Squared Error}, involves the squaring of pixel differences, and exagerrates the effect of large pixel differences on the overall similarity score. In the HDR domain this can mean that direct lights, such as the sun, which are predicted to be in a slightly different direction, will have a severe impact on the similarity, despite having a minor effect on the resulting illumination. When we inspect light sources in sRGB photographs, it appears as if the light source is large and emmitting light from a radius, as the higher brightness values fall outside of the cameras exposure bracket. \ref{rgb_example} demonstrates this effect, as parts of the woman's face, as well as the surrounding sky have the same colour values as the center of the sun, as the camera fails to capture the brightness rage. A minor misprediction in sun position here will have little effect on the L2 distance, but in HDR would have a significant impact. 
 \newline
 Another commonly used image comparison metric is the SSIM \cite{1284395},
 \[SSIM(x,y) = \frac{(2u_xu_y + c_1)(2\sigma_{xy} + c_2)}{(u^2_x + u^2_y + c_1)(\sigma^2_x + \sigma^2_y + c_2)}\]
 which aims to predict the accuracy of an image with human perception. It is a measure of structure, which takes luminance and contrast into account, and so is better suited for HDR. Finally, we assess the models ability to identify the direction of the provailing light source, by taking the distance between the brightest pixel in the ground truth and predicted image. For assessment we use a validation set of 1000 images, under new environment maps and models with random materials and rotations.
+\subsection{Results}
+On our synthetic benchmark, our stereo model achieved a Mean Squared Error of 1134.83, with the 50th and 75th percentile being 2.17 and 7.62 respectively. This implies that while the model performs well in most tested scenarios, there are some cases where the predictions are vastly incorrect, as shown in \ref{mse_results}. It is also clear from the qualitative results that the MSE is not the ideal metric in our case. While it favours structure and sky location, it seems to fail to capture the primary light direction. As a result, renders produced with the best MSE results tend to have good environment lighting, but completely incorrect shadowing due to a failure to predict direct lighting.
 \newline
-On our synthetic benchmark, our deep stereo model achieved a Mean Squared Error of 150.03, with the 50th and 75th percentile being 2.67 and 8.3 respectively. This implies that while the model performs well in most tested scenarios, there are some cases where the predictions are vastly incorrect, as shown in \ref{ssim_results}. For the SSIM test, the stereo model achieves a respectable average of 0.322, with 50th and 75th percentiles of 0.30 and 0.41. These results are close to that of the previous work that relied on known surface geometry.
-\newline
-Our method does not achieve the accuracy of the original 'What is around the camera?' work. However an important factor to consider is that the original work made use of known surface geometry, making the input sparse reflectance map a better representation of the light on the object. If noisy, estimated surface normals are used, as suggested by the original authors, our work provides more complete estimates. Furthermore, the differences in training data between the original work and ours have a significant impact on the resulting accuracies. The original model was trained on classes from the Shapenet 'Car' class, mostly consisting of curved objects. This means that the image contains more surface normals to estimate light from, and can build a denser reflectance map. The original work also only contained materials from the MERL BRDF dataset, capturing 100 different common materials. Our material range is more complete, using materials generated from BSDF shader parameters.
-\todo{Put a table of results here followed by discussion}
 \begin{figure}[H]
+\centering
+\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}|  }
+ \hline
+ \multicolumn{5}{|c|}{MSE Evaluation} \\
+ \hline
+  & Input Data &Ground Truth Environment&Predicted Environment&MSE Score\\
+ \hline
+ 25th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_mse_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_mse_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_mse_pred_tm}}& 0.22\\
+ 50th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_mse_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_mse_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_mse_pred_tm}}& 0.30\\
+ 75th Percentile(Synth)&\parbox[c]{1em}{
+ \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_mse_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_mse_gt_tm}}&
+\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_mse_pred_tm}}& 0.41\\
+ \hline
+\end{tabular}
+
+\label{mse_results}
+\caption{Demonstration on test set.}
+
+\end{figure}
+For the SSIM test, the stereo model achieves a respectable average of 0.28, with 50th and 75th percentiles of 0.28 and 0.35. Here the spread of results is much tighter, and we can see from \ref{ssim_results} that the metric captures the structure of the environment very well. These results are better than many of the models of Georgoulis et al. \cite{Georgoulis_2017_ICCV}, which all rely on known geometry.
+  \todo{Little table here}
+ \newline
+ \begin{figure}[H]
 \centering
 \begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}|  }
  \hline
@@ -627,33 +668,8 @@ Our method does not achieve the accuracy of the original 'What is around the cam
 \caption{Demonstration on test set.}
 
 \end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}|  }
- \hline
- \multicolumn{5}{|c|}{MSE Evaluation} \\
- \hline
-  & Input Data &Ground Truth Environment&Predicted Environment&MSE Score\\
- \hline
- 25th Percentile(Synth)&\parbox[c]{1em}{
- \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_mse_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_mse_gt_tm}}&
-\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/25p_mse_pred_tm}}& 0.22\\
- 50th Percentile(Synth)&\parbox[c]{1em}{
- \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_mse_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_mse_gt_tm}}&
-\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/50p_mse_pred_tm}}& 0.30\\
- 75th Percentile(Synth)&\parbox[c]{1em}{
- \includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_mse_input}}&\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_mse_gt_tm}}&
-e\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo/75p_mse_pred_tm}}& 0.41\\
- \hline
-\end{tabular}
-
-\label{mse_results}
-\caption{Demonstration on test set.}
-
-\end{figure}
-
-\begin{figure}[H]
+ We assess the models ability to predict the main light source using pixel distance between the highest values in the predicted and ground truth environment. Our model produces an average pixel distance of 26, with the maximum being 45 for a 64x64 map. The 50th and 75th percentiles are 24 and 35 respectively. This demonstrates a limitation in our models ability to predict primary lighting, which is a significant issue especially if the environment map is used to produce shadows. We must note however that many of the environments used for validation do not contain a single primary light direction, with many being outdoor overcast scenarios or indoor scenes with soft lighting, which can be seen in \ref{sun_results}.
+ \begin{figure}[H]
 \centering
 \begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}|  }
  \hline
@@ -673,10 +689,16 @@ e\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo
  \hline
 \end{tabular}
 
-\label{mse_results}
+\label{sun_results}
 \caption{Demonstration on test set.}
 
 \end{figure}
+Our method outperforms the original 'What is around the camera?' work for single material objects. Furthermore our network uses fewer layers, and removes the need for known surface geometry in favour of stereo views of the object. We must note that the the differences in training data between the original work and ours have a significant impact on the resulting accuracies. The original model was trained on classes from the Shapenet 'Car' class, mostly consisting of curved objects. This means that the image contains more surface normals to estimate light from, and build a denser reflectance map. The original work also only contained materials from the MERL BRDF dataset, capturing 100 different common materials. Our material range is more complete, using materials generated from BSDF shader parameters.
+
+
+
+
+
 \todo{Oops looks like a training sample made it's way into the validation set}
 \begin{figure}[h]
 \centering
@@ -686,7 +708,17 @@ e\parbox[c]{1em}{\includegraphics[width=2cm,trim=-10 0 0 -10]{images/deep_stereo
 \end{figure}
 
 \section{Final Model Performance}
-It is not only important to assess the accuracy of the predicted lighting, but also the resource requirements. A model that produces rough approximations with a lower memory footprint and computation time is still valuable, especially in the field of AR. For this we assess the memory usage and average inference time for our validation set. Testing the model performance across different hardware configurations is beyond the scope of this project. Our model achieved an average per-image inference time of 32ms using an Nvidia GTX 1070 consumer GPU. For reference, this is just over 30 frames per second, the minimum framerate expected for smooth non-interactive video. The performance of the model is acceptable for use in video editing on home desktop computers and laptops. For use in mobile AR however, the inference time is far to slow to be used live on very frame. However as lighting conditions tend to remain constant for long periods of time, running inference every frame would be wasteful. A more practical approach would be to recalculate the lighting every time a major change in luminance values in the frame is detected, or when the user places an object - there is little to gain from calculating the lighting in physical areas where virtual objects will not be placed.
+It is not only important to assess the accuracy of the predicted lighting, but also the resource requirements. A model that produces rough approximations with a lower memory footprint and computation time is still valuable, especially in the field of AR. For this we assess the memory usage and average inference time for our validation set. Testing the model performance across different hardware configurations is beyond the scope of this project. Our model achieved an average per-image inference time of 20ms using an Nvidia GTX 1070 consumer GPU. For reference, this is just over 50 frames per second, above the minimum framerate expected for smooth non-interactive video, and approaching the 60fps target for interactivity. The performance of the model is acceptable for use in video editing on home desktop computers and laptops. For use in mobile AR however, the inference time is a little too slow to be used live on very frame. However as lighting conditions tend to remain constant for long periods of time, running inference every frame would be wasteful. A more practical approach would be to recalculate the lighting every time a major change in luminance values in the frame is detected, or when the user places an object - there is little to gain from calculating the lighting in physical areas where virtual objects will not be placed.
+\chapter{Conclusion}
+\label{chap:conclusion}
+\section{Achievements}
+We have presented a CNN approach for estimating the lighting at an object that exploits multiple views, eliminating the need for known surface geometry. To do so, we implemented prior research in the Tensorflow framework, confirmed the findings of Georgoulis et al. and identified the main limitation of their approach. To address the need for known surface information, we researched depth estimation techniques and proposed a new model to exploit a learned stereo matching. To train our models on enough data we collected a set of 175 HDR environment maps, the largest dataset used for this task outside of \cite{gardner-sigasia-17}. Furthermore, we experimented with methods to augment this dataset with Google Street View data, using cutting-edge work in LDR-HDR prediction. We presented a method to assist the model's ability to infer depth using a Cosine Similarity step, performing the dot product on the outputs from convolutions with shared weights. Finally, we train a model that outperforms the previous work, with a smaller memory and computation footprint.
+\section{Conclusions}
+
+ Firstly, reflectance mapping is restricted in it's usefullness to objects with sufficient reflectance and curvature. If surface angles are missing from the subject, the incident light at that angle will be difficult to recover, though can be estimated based on the light intensity in similar directions. Similarly, diffuse objects make it difficult to extract the full range of light intensity as the specular component is less prominent. The most obvious limitation of reflectance mapping however, is the need for very accurate surface geometry representations. If the normals provided are noisy or incorrect as in most surface estimation techniques, the approach breaks down.
+\newline
+We have also demonstrated that taking explicit steps from existing stereo matching techniques can accelerate the training of deep neural networks, as well as reducing inference time. In our case, the problem of disparity matching and depth estimation is well formalized and there are many existing solutions. We can take advantage of this by incorporating steps from these, and treating our CNN as a model for learning parameters and refining results. A downside of this however is that we can potentially miss better learned solutions. We have demonstrated that this is not the case, with our dot product model outperforming deep purely learned models.
+
 \section{Limitations}
 While an improvement in practicality over previous work, our system is still bound by several limitations to varying degrees of severity. By eliminating the explicit reflectance mapping step we reduce the amount of preprocessing that must be performed on the input data, and allow our model to learn more subtleties and lighting features in the images. However, our system is far less robust than using an explicit reflectance mapping, if surface normals can be provided. By using reflectance maps the model does not need to learn any geometric features, significantly constraining the problem to that of differentiating the material from reflected light on a spherical surface. In cases where reasonable preprocessing and human input can be applied it would be sensible to use the previous work for more consistent results. For example it is easy to envisage an application where users simply highlight an object in a video frame, and select from rough geometric shapes to use in place of surface normals.
 \newline
@@ -699,13 +731,6 @@ As with previous works our system uses some assumptions about the input data to 
 Our model is somewhat limited in the features it can extract, and is restricted to a single 3d object. For example we make no attempt to identify cast shadow directions which could make for more robust estimations. While shadows are not available in every scene, their presence on a flat surface is a strong indication of shadow direction.
 \newline
 A valid criticism of our model as well as the previous models is that the model may simply be fitting to the background image, rather than performing any reflectance mapping. We have attempted to avoid this by using a larger set of environment maps and blurring them to give a depth-of-field effect. To further demonstrate that we are not overfitting to the background, we have also trained a model without any background provided, and found that \todo{this}.
-\chapter{Conclusion}
-\label{chap:conclusion}
-\section{Achievements}
-We have presented a CNN approach for estimating the lighting at an object that exploits multiple views, eliminating the need for known surface geometry. In the process we have been able to draw some conlusions about the task of light estimation. Firstly, reflectance mapping is restricted in it's usefullness to objects with sufficient reflectance and curvature. If surface angles are missing from the subject, the incident light at that angle will be difficult to recover, though can be estimated based on the light intensity in similar directions. Similarly, diffuse objects make it difficult to extract the full range of light intensity as the specular component is less prominent. The most obvious limitation of reflectance mapping however, is the need for very accurate surface geometry representations. If the normals provided are noisy or incorrect as in most surface estimation techniques, the approach breaks down.
-\newline
-We have also demonstrated that taking explicit steps from existing stereo matching techniques can accelerate the training of deep neural networks, as well as reducing inference time. In our case, the problem of disparity matching and depth estimation is well formalized and there are many existing solutions. We can take advantage of this by incorporating steps from these, and treating our CNN as a model for learning parameters and refining results. A downside of this however is that we can potentially miss better learned solutions. We have demonstrated that this is not the case, with our dot product model outperforming deep purely learned models.
-\newline
 \section{Future Work}
 Our work demonstrates progress in lighting estimation, by inferring object geometry and exploiting changes in shading and reflectance between multiple views. However the model presented is limited in scope, and could be extended into more useful models of scene lighting.
 \subsection{Full Scene Inference}

@@ -5,11 +5,11 @@
 \definecolor{color0}{rgb}{0.886274509803922,0.290196078431373,0.2}
 
 \begin{axis}[
-title={Performace of Dot Product},
-xlabel={Steps},
-ylabel={L1 Norm},
-xmin=-0.15, xmax=3.15,
-ymin=196667.60703125, ymax=206416.06484375,
+title={Effect of Background Exclusion (Deep Network)},
+xlabel={Epochs},
+ylabel={Sum of Squared Differences (SSD)},
+xmin=-1.4, xmax=29.4,
+ymin=40089.8203125, ymax=83578.8359375,
 width=12cm,
 height=8cm,
 tick align=outside,
@@ -20,25 +20,75 @@ ymajorgrids,
 y grid style={white},
 axis line style={white},
 axis background/.style={fill=white!89.80392156862746!black},
-legend entries={{Dot Product Model With Background},{Dot Product Model Without Background}},
-legend style={at={(0.03,0.97)}, anchor=north west, draw=white!80.0!black, fill=white!89.80392156862746!black},
-legend cell align={left}
+legend style={at={(0.03,0.03)}, anchor=south west, draw=white!80.0!black, fill=white!89.80392156862746!black},
+legend cell align={left},
+legend entries={{Dot Product with BG},{Dot Product No BG}}
 ]
 \addlegendimage{no markers, color0}
 \addlegendimage{no markers, color1}
 \addplot [semithick, color0]
 table {%
-0 197218.3125
-1 199080.0625
-2 197110.71875
-3 198440.03125
+0 71815.9140625
+1 66918.078125
+2 65479.265625
+3 64121.98046875
+4 59256.625
+5 58217.87890625
+6 59104.46875
+7 55539.98828125
+8 53817.453125
+9 52427.26953125
+10 50782.52734375
+11 48130.453125
+12 47883.140625
+13 52014.94921875
+14 52066.69140625
+15 45566.328125
+16 44443.25390625
+17 46223.32421875
+18 44993.12890625
+19 42946.69140625
+20 45057.19140625
+21 44253.609375
+22 42463.171875
+23 46869.61328125
+24 42066.59375
+25 44432.17578125
+26 42364.625
+27 42895.50390625
+28 42513.109375
 };
 \addplot [semithick, color1]
 table {%
-0 201396.34375
-1 203622.453125
-2 200947.40625
-3 205972.953125
+0 77981.546875
+1 77914.5078125
+2 81602.0625
+3 77327.15625
+4 77749.1640625
+5 71455.625
+6 72268.7109375
+7 73119.2734375
+8 72902.3203125
+9 75683.4921875
+10 70319.9375
+11 71257.7265625
+12 68554.953125
+13 68669.1015625
+14 71960.2578125
+15 77478.421875
+16 75098.2890625
+17 71414.4453125
+18 74120.765625
+19 73100.7265625
+20 69340.5390625
+21 69158.5390625
+22 70889.375
+23 73134.9296875
+24 71164.2421875
+25 70725.546875
+26 76315.390625
+27 77407.84375
+28 74847.6796875
 };
 \end{axis}
 
