@@ -80,7 +80,7 @@ def get_dematerial_dataset(dir, batch_size):
         lambda x: preprocess_orientation(x, norm_files[1],output_size=128, double_precision=False),
         num_parallel_calls=4)
     bg = bg_files[0].map(
-        lambda x: preprocess_orientation(x, bg_files[1],output_size=128, double_precision=False),
+        lambda x: preprocess_orientation(x, bg_files[1],output_size=128, double_precision=True),
         num_parallel_calls=4)
     dataset = tf.data.Dataset.zip((right, norms, envmap, bg)).shuffle(128).repeat().batch(
         batch_size).prefetch(
@@ -272,7 +272,6 @@ def stereo_stream(dir):
 def rgb_to_lab(srgb):
     with tf.name_scope("rgb_to_lab"):
         srgb_pixels = tf.reshape(srgb, [-1, 3])
-
         with tf.name_scope("srgb_to_xyz"):
             linear_mask = tf.cast(srgb_pixels <= 0.04045, dtype=tf.float32)
             exponential_mask = tf.cast(srgb_pixels > 0.04045, dtype=tf.float32)
@@ -297,7 +296,7 @@ def rgb_to_lab(srgb):
             linear_mask = tf.cast(xyz_normalized_pixels <= (epsilon ** 3.0), dtype=tf.float32)
             exponential_mask = tf.cast(xyz_normalized_pixels > (epsilon ** 3.0), dtype=tf.float32)
             fxfyfz_pixels = (xyz_normalized_pixels / (3.0 * epsilon ** 2.0) + 4.0 / 29) * linear_mask + (
-                    xyz_normalized_pixels ** (1.0 / 3)) * exponential_mask
+                    xyz_normalized_pixels ** (1.0 / 3.0)) * exponential_mask
 
             # convert to lab
             fxfyfz_to_lab = tf.constant([

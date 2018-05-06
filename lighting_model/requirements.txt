@@ -1,3 +1,4 @@
+cv2
 adium-theme-ubuntu==0.3.4
 backports.functools-lru-cache==1.5
 backports.weakref==1.0.post1

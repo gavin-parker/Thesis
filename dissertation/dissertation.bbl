@@ -1009,6 +1009,260 @@
       \endverb
       \keyw{Computer Science - Computer Vision and Pattern Recognition,Computer Science - Graphics}
     \endentry
+    \entry{McCormac:etal:arXiv2016}{article}{}
+      \name{author}{4}{}{%
+        {{hash=42b6d052fcc82298381923403dd954e5}{%
+           family={McCormac},
+           family_i={M\bibinitperiod},
+           given={John},
+           given_i={J\bibinitperiod}}}%
+        {{hash=91f71111407c735a209311b2c093f258}{%
+           family={Handa},
+           family_i={H\bibinitperiod},
+           given={Ankur},
+           given_i={A\bibinitperiod}}}%
+        {{hash=25564f7f36f46be27f7326210cc5c2ad}{%
+           family={Leutenegger},
+           family_i={L\bibinitperiod},
+           given={Stefan},
+           given_i={S\bibinitperiod}}}%
+        {{hash=05f44f0b3b2677ed06242067158fc86d}{%
+           family={J.Davison},
+           family_i={J\bibinitperiod},
+           given={Andrew},
+           given_i={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{a74fa03a4774038041df0be41344560d}
+      \strng{fullhash}{da556c551c0247df40304cf6065bb477}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{arXiv}
+      \field{title}{SceneNet RGB-D: 5M Photorealistic Images of Synthetic Indoor Trajectories with Ground Truth}
+      \field{year}{2016}
+    \endentry
+    \entry{DBLP:journals/corr/IsolaZZE16}{article}{}
+      \name{author}{4}{}{%
+        {{hash=cae9f806bc99a5f19fadea538fc2db04}{%
+           family={Isola},
+           family_i={I\bibinitperiod},
+           given={Phillip},
+           given_i={P\bibinitperiod}}}%
+        {{hash=ae8f9210d87f9c5a03a60a6fdb0f973d}{%
+           family={Zhu},
+           family_i={Z\bibinitperiod},
+           given={Jun{-}Yan},
+           given_i={J\bibinitperiod}}}%
+        {{hash=fbb5fac74ecd20c0f90a3884d6a93cdf}{%
+           family={Zhou},
+           family_i={Z\bibinitperiod},
+           given={Tinghui},
+           given_i={T\bibinitperiod}}}%
+        {{hash=6a42d448523b8d7c72613345041880c5}{%
+           family={Efros},
+           family_i={E\bibinitperiod},
+           given={Alexei\bibnamedelima A.},
+           given_i={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{ec4fcc5d841d37fa5602a3b388ff8d61}
+      \strng{fullhash}{5876525ed1e8df5ed8fc449d7d550507}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{Image-to-Image Translation with Conditional Adversarial Networks}
+      \field{volume}{abs/1611.07004}
+      \field{year}{2016}
+      \verb{eprint}
+      \verb 1611.07004
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1611.07004
+      \endverb
+    \endentry
+    \entry{DBLP:journals/corr/ChangFGHHLSSSSX15}{article}{}
+      \name{author}{13}{}{%
+        {{hash=1017f228517556c84c16ae7d00fc9ded}{%
+           family={Chang},
+           family_i={C\bibinitperiod},
+           given={Angel\bibnamedelima X.},
+           given_i={A\bibinitperiod\bibinitdelim X\bibinitperiod}}}%
+        {{hash=fec25649dc095fdd899392cccab85807}{%
+           family={Funkhouser},
+           family_i={F\bibinitperiod},
+           given={Thomas\bibnamedelima A.},
+           given_i={T\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=5fd23aab2c255b0c106ecfbaf9d59f12}{%
+           family={Guibas},
+           family_i={G\bibinitperiod},
+           given={Leonidas\bibnamedelima J.},
+           given_i={L\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=40c20cccc8bd195351b031b9a1a0e961}{%
+           family={Hanrahan},
+           family_i={H\bibinitperiod},
+           given={Pat},
+           given_i={P\bibinitperiod}}}%
+        {{hash=f39f54ab514468d41119001a79d4e3e0}{%
+           family={Huang},
+           family_i={H\bibinitperiod},
+           given={Qi{-}Xing},
+           given_i={Q\bibinitperiod}}}%
+        {{hash=eb461a98a0ab0c6164b138bbc6980c91}{%
+           family={Li},
+           family_i={L\bibinitperiod},
+           given={Zimo},
+           given_i={Z\bibinitperiod}}}%
+        {{hash=e29c20003a517abaaac28852301c03c2}{%
+           family={Savarese},
+           family_i={S\bibinitperiod},
+           given={Silvio},
+           given_i={S\bibinitperiod}}}%
+        {{hash=bad0a30ec9610ab126c95e2785c806c4}{%
+           family={Savva},
+           family_i={S\bibinitperiod},
+           given={Manolis},
+           given_i={M\bibinitperiod}}}%
+        {{hash=5abaf8ffacdb02cbfe12fca8f3d327cb}{%
+           family={Song},
+           family_i={S\bibinitperiod},
+           given={Shuran},
+           given_i={S\bibinitperiod}}}%
+        {{hash=18c26ddba8b9dd77f278213fd4e93ce4}{%
+           family={Su},
+           family_i={S\bibinitperiod},
+           given={Hao},
+           given_i={H\bibinitperiod}}}%
+        {{hash=2bbe6a54045fb885f5d23a8bdd1ebb0d}{%
+           family={Xiao},
+           family_i={X\bibinitperiod},
+           given={Jianxiong},
+           given_i={J\bibinitperiod}}}%
+        {{hash=b182798c336bebfb4b9120e5cf6a1c2b}{%
+           family={Yi},
+           family_i={Y\bibinitperiod},
+           given={Li},
+           given_i={L\bibinitperiod}}}%
+        {{hash=7d644ffcde545cbf48ce06126689b74c}{%
+           family={Yu},
+           family_i={Y\bibinitperiod},
+           given={Fisher},
+           given_i={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{7553d0144a53ed633ef7dc4c39fb113a}
+      \strng{fullhash}{d42c5771ae9ccf749d2c46fd1d390c63}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{ShapeNet: An Information-Rich 3D Model Repository}
+      \field{volume}{abs/1512.03012}
+      \field{year}{2015}
+      \verb{eprint}
+      \verb 1512.03012
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1512.03012
+      \endverb
+    \endentry
+    \entry{Georgoulis_2017_ICCV}{inproceedings}{}
+      \name{author}{6}{}{%
+        {{hash=751223babdb71d2eb244a5c451521d5b}{%
+           family={Georgoulis},
+           family_i={G\bibinitperiod},
+           given={Stamatios},
+           given_i={S\bibinitperiod}}}%
+        {{hash=7132dc1d76ad08675ca883081589092e}{%
+           family={Rematas},
+           family_i={R\bibinitperiod},
+           given={Konstantinos},
+           given_i={K\bibinitperiod}}}%
+        {{hash=701b6baf2c5d489ec654662ff22a979d}{%
+           family={Ritschel},
+           family_i={R\bibinitperiod},
+           given={Tobias},
+           given_i={T\bibinitperiod}}}%
+        {{hash=8d23fb9f6527e1ed90b165e1eed0c4d1}{%
+           family={Fritz},
+           family_i={F\bibinitperiod},
+           given={Mario},
+           given_i={M\bibinitperiod}}}%
+        {{hash=1fffde1e018446dc52c3da9c6e26ec11}{%
+           family={Tuytelaars},
+           family_i={T\bibinitperiod},
+           given={Tinne},
+           given_i={T\bibinitperiod}}}%
+        {{hash=97097efa079bb7f45db94404bf6cbfa0}{%
+           family={Van\bibnamedelima Gool},
+           family_i={V\bibinitperiod\bibinitdelim G\bibinitperiod},
+           given={Luc},
+           given_i={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{c8e64b09a09e28f213995a9421eb105f}
+      \strng{fullhash}{49bdcf3acb24b8174f3a743b3c449cf8}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{The IEEE International Conference on Computer Vision (ICCV)}
+      \field{month}{10}
+      \field{title}{What Is Around the Camera?}
+      \field{year}{2017}
+    \endentry
+    \entry{gardner-sigasia-17}{article}{}
+      \name{author}{7}{}{%
+        {{hash=3ec3b044bed6d19168fae25d72ae8fd2}{%
+           family={Gardner},
+           family_i={G\bibinitperiod},
+           given={Marc-André},
+           given_i={M\bibinithyphendelim A\bibinitperiod}}}%
+        {{hash=f7290b005248bb35197192165ddb02fc}{%
+           family={Sunkavalli},
+           family_i={S\bibinitperiod},
+           given={Kalyan},
+           given_i={K\bibinitperiod}}}%
+        {{hash=751719e3a408c6e623f8d2812dbc9dd4}{%
+           family={Yumer},
+           family_i={Y\bibinitperiod},
+           given={Ersin},
+           given_i={E\bibinitperiod}}}%
+        {{hash=3e86c851adc8c73970dc5012aab3fb3a}{%
+           family={Shen},
+           family_i={S\bibinitperiod},
+           given={Xiaohui},
+           given_i={X\bibinitperiod}}}%
+        {{hash=dc70f39b2376e06c48e34e8585715da7}{%
+           family={Gambaretto},
+           family_i={G\bibinitperiod},
+           given={Emiliano},
+           given_i={E\bibinitperiod}}}%
+        {{hash=6cf428558c3d4908897307fde7e4f5f4}{%
+           family={Gagné},
+           family_i={G\bibinitperiod},
+           given={Christian},
+           given_i={C\bibinitperiod}}}%
+        {{hash=48e8790ffa6c3802f13cef1d0d0307fa}{%
+           family={Lalonde},
+           family_i={L\bibinitperiod},
+           given={Jean-François},
+           given_i={J\bibinithyphendelim F\bibinitperiod}}}%
+      }
+      \strng{namehash}{3ed33dda47ded5219f08fd17a94f2a9e}
+      \strng{fullhash}{1aed73ada8b3c76b8142adc16d52a488}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{ACM Transactions on Graphics (SIGGRAPH Asia)}
+      \field{number}{4}
+      \field{title}{Learning to Predict Indoor Illumination from a Single Image}
+      \field{volume}{9}
+      \field{year}{2017}
+    \endentry
   \endsortlist
 \endrefsection
 \endinput

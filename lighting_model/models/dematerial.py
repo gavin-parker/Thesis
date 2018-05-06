@@ -30,9 +30,21 @@ class Model:
     name = 'dematerial'
     def __init__(self):
         with tf.device('/cpu:0'):
-            iterator = tf.data.Iterator.from_string_handle(
-                self.handle, self.train_dataset.output_types, self.train_dataset.output_shapes)
-            (rgb_image, rgb_normals, envmap, bg) = iterator.get_next()
+            if FLAGS.app or FLAGS.test:
+                self.left_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
+                self.right_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
+                self.norm_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
+                self.bg_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
+                rgb_image = tf.cast(tf.image.resize_images(self.right_image, [128,128]), tf.float16)
+                rgb_normals = tf.cast(tf.image.resize_images(self.norm_image, [128,128]), tf.float16)
+                bg = tf.image.resize_images(self.bg_image, [128,128])
+                gt = tf.placeholder(tf.float32, shape=[1, 64, 64, 3])
+                envmap = gt
+                pass
+            else:
+                iterator = tf.data.Iterator.from_string_handle(
+                    self.handle, self.train_dataset.output_types, self.train_dataset.output_shapes)
+                (rgb_image, rgb_normals, envmap, bg) = iterator.get_next()
             self.sphere = preprocessing.get_norm_sphere(FLAGS.batch_size)
             self.sphere = preprocessing.unit_norm(self.sphere[:, :, :, :3], channels=3)
             self.zero_mask = preprocessing.zero_mask(rgb_normals)
@@ -90,7 +102,8 @@ class Model:
     """Use Gradient Descent Optimizer to minimize loss"""
 
     def optimize(self):
-        #return tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
+        if FLAGS.adam:
+            return tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(self.loss)
         return tf.train.MomentumOptimizer(self.learning_rate, 0.95).minimize(self.loss)
 
     @staticmethod

@@ -7,11 +7,11 @@ from matplotlib2tikz import save as tikz_save
 
 val_dir = sys.argv[-1]
 print(val_dir)
-#data = np.genfromtxt("{}/results/meta.csv".format(val_dir), delimiter=',')
-#names = data[:, 0].astype(np.int32)
-#mse = data[:, 1]
-#ssim = data[:, 2]
-#sun = data[:,3]
+data = np.genfromtxt("{}/results/meta.csv".format(val_dir), delimiter=',')
+names = data[:, 0].astype(np.int32)
+mse = data[:, 1]
+ssim = data[:, 2]
+sun = data[:,3]
 
 def mse_results():
     n, bins, patches = plt.hist(mse.astype(float), 100, normed=False, log=True)
@@ -29,10 +29,13 @@ def ssim_results():
     print("SSIM AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(ssim), percentiles[0], percentiles[1],
                                                 percentiles[2]))
     print(ssim.min())
+    print(ssim.mean())
+    example_img(ssim.argmin(), ssim, "min_ssim")
+
     plt.savefig('ssim.png')
-    example_img(percentiles[0], mse, "25p_ssim")
-    example_img(percentiles[1], mse, "50p_ssim")
-    example_img(percentiles[2], mse, "75p_ssim")
+    example_img(percentiles[0], ssim, "25p_ssim")
+    example_img(percentiles[1], ssim, "50p_ssim")
+    example_img(percentiles[2], ssim, "75p_ssim")
 
 def sun_results():
     n, bins, patches = plt.hist(sun.astype(float), 100, normed=False, log=True)
@@ -40,6 +43,7 @@ def sun_results():
     print("SUN AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(sun), percentiles[0], percentiles[1],
                                                 percentiles[2]))
     print(sun.min())
+    example_img(sun.argmin(), sun, "min_sun")
     plt.savefig('sun.png')
     example_img(percentiles[0], sun, "25p_sun")
     example_img(percentiles[1], sun, "50p_sun")
@@ -47,7 +51,7 @@ def sun_results():
 
 
 def example_img(score, metric, out_name):
-    out_dir = "{}/results/images".format(val_dir)
+    out_dir = "{}/results/demat_images".format(val_dir)
     idx = (np.abs(metric - score)).argmin()+1
     name = names[idx]
     input_image = cv2.imread("{}/left/{}.png".format(val_dir, name))
@@ -75,19 +79,23 @@ def load_tf_log(name):
     return times, steps, value
 
 def train_log_results():
-    a_val = load_tf_log("Final_results/validation/pyramid.csv")
-    b_val = load_tf_log("Final_results/validation/full.csv")
+    batch_size = 24
+
+    a_val = load_tf_log("Final_results/validation/dotprod_shallow.csv")
+    b_val = load_tf_log("Final_results/validation/pyramid.csv")
     plt.style.use('ggplot')
     trim = min(a_val[1].shape[0], b_val[1].shape[0])
     print(b_val[2])
+    a_dat = a_val[2]/ batch_size
 
-    train_loss_a, = plt.plot(a_val[1][:trim], a_val[2][:trim], label='Cosine Similarity Pyramid')
-    train_loss_b, =plt.plot(b_val[1][:trim], b_val[2][:trim], label='Cosine Similarity Pyramid with MS Features')
-    plt.xlabel('Steps')
-    plt.ylabel('L1 Norm')
+    b_dat = b_val[2]/batch_size
+    train_loss_a, = plt.plot(a_val[1][:trim], a_dat[:trim], label='Single Dot Product')
+    train_loss_b, = plt.plot(b_val[1][:trim], b_dat[:trim], label='Cosine Similarity Pyramid')
+    plt.xlabel('Epochs')
+    plt.ylabel('Sum of Squared Differences (SSD)')
     plt.legend(handles=[train_loss_a, train_loss_b])
-    plt.title('Performace of Multi-Scale Features')
-    tikz_save('../dissertation/ms_comparison.tex',figureheight='8cm', figurewidth='12cm')
+    plt.title('Effect of Cosine Similarity Pyramid (Shallow Network)')
+    tikz_save('../dissertation/pyramid_comparison.tex',figureheight='8cm', figurewidth='12cm')
     plt.clf()
     #norm_training = load_tf_log("deep_stereo_normal_val.csv")
     #dotprod_training = load_tf_log("deep_stereo_dotprod_val.csv")
@@ -102,9 +110,9 @@ def train_log_results():
     #tikz_save('../dissertation/val.tex',figureheight='8cm', figurewidth='12cm')
 
 if __name__ == "__main__":
-    #if not os.path.exists("{}/results/images".format(val_dir)):
-    #    os.makedirs("{}/results/images".format(val_dir))
-    train_log_results()
-    #mse_results()
-    #ssim_results()
-    #sun_results()
+    if not os.path.exists("{}/results/demat_images".format(val_dir)):
+        os.makedirs("{}/results/demat_images".format(val_dir))
+    #train_log_results()
+    mse_results()
+    ssim_results()
+    sun_results()

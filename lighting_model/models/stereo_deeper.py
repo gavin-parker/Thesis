@@ -5,8 +5,7 @@ from models import layers
 from trainer.params import FLAGS
 from trainer import reflectance_ops
 
-""" Convolutional-Deconvolutional model for extracting reflectance maps from input images with normals.
-    Extracts sparse reflectance maps, with the CNN performing data interpolation"""
+""" Convolutional-Deconvolutional model for extracting Environment maps from stereo images."""
 
 """Defines the graph and provides a template training function"""
 
@@ -54,7 +53,8 @@ class Model:
                 r_mask = tf.stack([r_mask, r_mask, r_mask], axis=3)
                 self.left_image = self.bg_image * l_mask + self.left_image
                 self.right_image = self.bg_image * r_mask + self.right_image
-
+            else:
+                self.bg_image = tf.map_fn(preprocessing.rgb_to_lab, self.bg_image)
             gt_norm = preprocessing.normalize_hdr(gt)
             left_lab = tf.map_fn(preprocessing.rgb_to_lab, self.left_image)
             right_lab = tf.map_fn(preprocessing.rgb_to_lab, self.right_image)

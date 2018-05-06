@@ -97,9 +97,9 @@ def siamese_encode_2(input, reuse=False, depth=3):
 
     return  filters_c, [downsampled_a, downsampled_b], [multiscale_a, multiscale_b, multiscale_c]
 
-def basic_encode(input, depth=3):
-    filters_a = encode_layer_siamese(input, depth, 64, [3,3],False, "basic_1")
-    filters_b = encode_layer_siamese(filters_a, depth, 128, [3,3],False, "basic_2")
-    filters_c = encode_layer_siamese(filters_b, depth , 256, [3,3],False, "basic_3")
+def basic_encode(input, depth=3, name=""):
+    filters_a = encode_layer_siamese(input, depth, 64, [3,3],False, "basic_1_{}".format(name))
+    filters_b = encode_layer_siamese(filters_a, depth, 128, [3,3],False, "basic_2_{}".format(name))
+    filters_c = encode_layer_siamese(filters_b, depth , 256, [3,3],False, "basic_3_{}".format(name))
 
     return  filters_c

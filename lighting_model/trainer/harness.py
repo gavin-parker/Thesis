@@ -98,17 +98,23 @@ def collect_results(model=None):
     left_samples = file_io.get_matching_files("{}/left/*.png".format(FLAGS.val_dir))
     right_samples = file_io.get_matching_files("{}/right/*.png".format(FLAGS.val_dir))
     gt_samples = file_io.get_matching_files("{}/envmaps/*.hdr".format(FLAGS.val_dir))
+    bg_samples = file_io.get_matching_files("{}/bg/*.png".format(FLAGS.val_dir))
+    norm_samples = file_io.get_matching_files("{}/norms/*.png".format(FLAGS.val_dir))
+
     total_time = 0.0
     total_mse = 0.0
     total_ssim = 0.0
     if not os.path.exists("{}/results".format(FLAGS.val_dir)):
         os.makedirs("{}/results".format(FLAGS.val_dir))
     with open('{}/results/meta.csv'.format(FLAGS.val_dir), 'w+') as f:
-        for (l, r, gt) in zip(left_samples, right_samples, gt_samples):
-            left, right, envmap = prep_images(l, r, gt)
+        for (l, r, gt, bg, norms) in zip(left_samples, right_samples, gt_samples, bg_samples, norm_samples):
+            left, right, envmap, background, norms = prep_images(l, r, gt, bg, norms)
             t0 = time.time()
             prediction = sess.run(model.converted_prediction,
-                                  feed_dict={model.left_image: left, model.right_image: right})[0]
+                                  feed_dict={model.left_image: left,
+                                             model.right_image: right,
+                                             model.bg_image: background,
+                                             model.norm_image: norms})[0]
             t1 = time.time()
             mse = mean_squared_error(envmap, prediction)
             ss = ssim(envmap, prediction, multichannel=True)
@@ -138,18 +144,19 @@ def mean_squared_error(a, b):
     squared_error = error * error
     return np.mean(squared_error, axis=(0, 1, 2))
 
+def prep_col_img(im):
+    im = cv2.imread(im)
+    im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+    im = cv2.resize(im, (256, 256)).astype(np.float32)
+    im = cv2.normalize(im.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
+    im = np.expand_dims(im, axis=0)
+    return im
 
-def prep_images(l, r, gt):
-    left = cv2.imread(l)
-    right = cv2.imread(r)
+def prep_images(l, r, gt, bg, norms):
+    left = prep_col_img(l)
+    right = prep_col_img(r)
+    bg = prep_col_img(bg)
+    norms = prep_col_img(norms)
     envmap = cv2.imread(gt, cv2.IMREAD_UNCHANGED)
-    left = cv2.cvtColor(left, cv2.COLOR_BGR2RGB)
-    right = cv2.cvtColor(right, cv2.COLOR_BGR2RGB)
-    left = cv2.resize(left, (256, 256)).astype(np.float32)
-    right = cv2.resize(right, (256, 256)).astype(np.float)
-    left = cv2.normalize(left.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
-    right = cv2.normalize(right.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
-    left = np.expand_dims(left, axis=0)
-    right = np.expand_dims(right, axis=0)
-    return left, right, envmap
+    return left, right, envmap, bg, norms
 
