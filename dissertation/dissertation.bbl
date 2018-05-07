@@ -1263,6 +1263,94 @@
       \field{volume}{9}
       \field{year}{2017}
     \endentry
+    \entry{DBLP:journals/corr/abs-1803-06340}{article}{}
+      \name{author}{4}{}{%
+        {{hash=19a718067b041567499f0b2824c1e525}{%
+           family={Yi},
+           family_i={Y\bibinitperiod},
+           given={Renjiao},
+           given_i={R\bibinitperiod}}}%
+        {{hash=7bea82c1cda00ec93049ef33e73778c0}{%
+           family={Zhu},
+           family_i={Z\bibinitperiod},
+           given={Chenyang},
+           given_i={C\bibinitperiod}}}%
+        {{hash=2b6a47983313aca5e9c798cbdd6b4df6}{%
+           family={Tan},
+           family_i={T\bibinitperiod},
+           given={Ping},
+           given_i={P\bibinitperiod}}}%
+        {{hash=eb40fa909f02eebf8c76aedeab111038}{%
+           family={Lin},
+           family_i={L\bibinitperiod},
+           given={Stephen},
+           given_i={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{03fbd1f5f9ce9c527d67e00f6fc5880c}
+      \strng{fullhash}{806d356bee340e83c11f32ede1d8308b}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{Faces as Lighting Probes via Unsupervised Deep Highlight Extraction}
+      \field{volume}{abs/1803.06340}
+      \field{year}{2018}
+      \verb{eprint}
+      \verb 1803.06340
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1803.06340
+      \endverb
+    \endentry
+    \entry{ng2005light}{article}{}
+      \name{author}{6}{}{%
+        {{hash=96e30bdc2cf905aa1109c46617b16252}{%
+           family={Ng},
+           family_i={N\bibinitperiod},
+           given={Ren},
+           given_i={R\bibinitperiod}}}%
+        {{hash=1315bf00f5fa82534be18df443fc255c}{%
+           family={Levoy},
+           family_i={L\bibinitperiod},
+           given={Marc},
+           given_i={M\bibinitperiod}}}%
+        {{hash=43ae9c5b2b1497c05cc6338f069a9fd4}{%
+           family={Brédif},
+           family_i={B\bibinitperiod},
+           given={Mathieu},
+           given_i={M\bibinitperiod}}}%
+        {{hash=93adf43ab2e9fa264475b28f41e30236}{%
+           family={Duval},
+           family_i={D\bibinitperiod},
+           given={Gene},
+           given_i={G\bibinitperiod}}}%
+        {{hash=2c9d1aa766759ce8abffd16d2a35689e}{%
+           family={Horowitz},
+           family_i={H\bibinitperiod},
+           given={Mark},
+           given_i={M\bibinitperiod}}}%
+        {{hash=40c20cccc8bd195351b031b9a1a0e961}{%
+           family={Hanrahan},
+           family_i={H\bibinitperiod},
+           given={Pat},
+           given_i={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{eb61fad862f3ea57621cba5ba45fae30}
+      \strng{fullhash}{ec90ae5acfb08f652af2cba20e7a15dc}
+      \field{sortinit}{0}
+      \field{sortinithash}{990108227b3316c02842d895999a0165}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computer Science Technical Report CSTR}
+      \field{number}{11}
+      \field{title}{Light field photography with a hand-held plenoptic camera}
+      \field{volume}{2}
+      \field{year}{2005}
+      \field{pages}{1\bibrangedash 11}
+      \range{pages}{11}
+    \endentry
   \endsortlist
 \endrefsection
 \endinput
