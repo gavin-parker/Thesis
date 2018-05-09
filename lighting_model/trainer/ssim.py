@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 
 """SSIM function from bsautermeister at https://stackoverflow.com/questions/39051451/ssim-ms-ssim-for-tensorflow"""
-
+"""We use the scikit-image version"""
 
 def _tf_fspecial_gauss(size, sigma):
     """Function to mimic the 'fspecial' gaussian MATLAB function

@@ -7,24 +7,24 @@ from matplotlib2tikz import save as tikz_save
 
 val_dir = sys.argv[-1]
 print(val_dir)
-data = np.genfromtxt("{}/results/meta.csv".format(val_dir), delimiter=',')
+data = np.genfromtxt("./train_logs/shallow_results.csv", delimiter=',')
 names = data[:, 0].astype(np.int32)
 mse = data[:, 1]
 ssim = data[:, 2]
 sun = data[:,3]
 
 def mse_results():
-    n, bins, patches = plt.hist(mse.astype(float), 100, normed=False, log=True)
+    #n, bins, patches = plt.hist(mse.astype(float), 100, normed=False, log=True)
     percentiles = [np.percentile(mse, 25), np.percentile(mse, 50), np.percentile(mse, 75)]
     print("MSE AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(mse), percentiles[0], percentiles[1], percentiles[2]))
     print(mse.min())
-    plt.savefig('mse.png')
+    #plt.savefig('mse.png')
     example_img(percentiles[0], mse, "25p_mse")
     example_img(percentiles[1], mse, "50p_mse")
     example_img(percentiles[2], mse, "75p_mse")
 
 def ssim_results():
-    n, bins, patches = plt.hist(ssim.astype(float), 100, normed=False, log=True)
+    #n, bins, patches = plt.hist(ssim.astype(float), 100, normed=False, log=True)
     percentiles = [np.percentile(ssim, 25), np.percentile(ssim, 50), np.percentile(ssim, 75)]
     print("SSIM AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(ssim), percentiles[0], percentiles[1],
                                                 percentiles[2]))
@@ -32,19 +32,19 @@ def ssim_results():
     print(ssim.mean())
     example_img(ssim.argmin(), ssim, "min_ssim")
 
-    plt.savefig('ssim.png')
+    #plt.savefig('ssim.png')
     example_img(percentiles[0], ssim, "25p_ssim")
     example_img(percentiles[1], ssim, "50p_ssim")
     example_img(percentiles[2], ssim, "75p_ssim")
 
 def sun_results():
-    n, bins, patches = plt.hist(sun.astype(float), 100, normed=False, log=True)
+    #n, bins, patches = plt.hist(sun.astype(float), 100, normed=False, log=True)
     percentiles = [np.percentile(ssim, 25), np.percentile(sun, 50), np.percentile(sun, 75)]
     print("SUN AVG: {}, 25:{}, 50:{}, 75:{}".format(np.mean(sun), percentiles[0], percentiles[1],
                                                 percentiles[2]))
     print(sun.min())
     example_img(sun.argmin(), sun, "min_sun")
-    plt.savefig('sun.png')
+    #plt.savefig('sun.png')
     example_img(percentiles[0], sun, "25p_sun")
     example_img(percentiles[1], sun, "50p_sun")
     example_img(percentiles[2], sun, "75p_sun")
@@ -65,7 +65,7 @@ def compare_ssim(logs):
         std_dev = np.std(ssim)
         std_err = std_dev / 31.6227766017
         xs = np.arange(np.shape(ssim)[0])
-        plt.style.use('ggplot')
+        #plt.style.use('ggplot')
         #marker = plt.scatter(xs, ssim, label=name)
         ys = np.zeros(np.shape(xs)[0])
         ys[:] = np.mean(ssim)
@@ -100,8 +100,8 @@ def example_img(score, metric, out_name):
     cv2.imwrite("{}/{}_gt.hdr".format(out_dir, out_name), gt)
     cv2.imwrite("{}/{}_pred.hdr".format(out_dir, out_name), pred)
 
-    conv_and_save_hdr(pred, "{}/{}_pred_tm.png".format(out_dir, out_name))
-    conv_and_save_hdr(gt, "{}/{}_gt_tm.png".format(out_dir, out_name))
+    #conv_and_save_hdr(pred, "{}/{}_pred_tm.png".format(out_dir, out_name))
+    #conv_and_save_hdr(gt, "{}/{}_gt_tm.png".format(out_dir, out_name))
 
 
 def conv_and_save_hdr(subject, newname):
@@ -152,10 +152,8 @@ if __name__ == "__main__":
     if not os.path.exists("{}/results/demat_images".format(val_dir)):
         os.makedirs("{}/results/demat_images".format(val_dir))
     #train_log_results()
-    compare_ssim([("Dematerial (perfect normals)", "demat_results.csv"),
-                  ("Shallow Stereo", "shallow_results.csv"),
-                  ("Deep Stereo", "deep_results.csv"),
-                  ("Deep Stereo SSIM loss", "ssim_results.csv")])
-    #mse_results()
-    #ssim_results()
-    #sun_results()
+    #compare_ssim([("Dematerial (Perfect Normals)", "demat_results.csv"),
+    #              ("Stereo (Shallow)", "shallow_results.csv")])
+    mse_results()
+    ssim_results()
+    sun_results()

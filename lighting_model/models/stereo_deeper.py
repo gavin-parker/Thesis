@@ -59,6 +59,7 @@ class Model:
             gt_norm = preprocessing.normalize_hdr(gt)
             left_lab = tf.map_fn(preprocessing.rgb_to_lab, self.left_image)
             right_lab = tf.map_fn(preprocessing.rgb_to_lab, self.right_image)
+            self.test = tf.reduce_mean(right_lab)
             gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
             predictions = self.inference((left_lab, right_lab, gt_lab))
             self.diff = tf.abs(tf.reduce_max(gt_lab) - tf.reduce_max(predictions[0]))
@@ -67,6 +68,7 @@ class Model:
             self.check = [tf.is_nan(predictions), tf.is_nan(self.loss)]
 
             pred_pretty = tf.map_fn(preprocessing.lab_to_rgb, predictions[0])
+            self.pred = pred_pretty
             self.converted_prediction = preprocessing.denormalize_hdr(pred_pretty)
             self.summaries = self.summary(self.left_image, self.right_image, gt_lab, predictions, gt, left_lab,
                                           right_lab)
@@ -135,7 +137,7 @@ class Model:
         if FLAGS.sep_bg:
             bg_encoding = layers.basic_encode(self.bg_image, depth=FLAGS.depth)
             joint = tf.concat([joint, bg_encoding], axis=-1)
-        joint = layers.encode_layer(joint, 1024, (3, 3), (2, 2), 1, maxpool=True)
+        joint = layers.encode_layer(joint, 1024, (3, 3), (2, 2), 2, maxpool=True)
 
         env_pred = self.decode(joint, r_multiscale)
         if FLAGS.norms:

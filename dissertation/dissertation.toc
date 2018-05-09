@@ -66,13 +66,13 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.1.1}Reflectance Mapping}{16}{subsection.3.1.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.2}Training}{16}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.2}Training}{17}{subsection.3.1.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3.2}Dematerial Network}{17}{section.3.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.2.1}HDR Formatting}{17}{subsection.3.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.2}Training}{17}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.2}Training}{18}{subsection.3.2.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {4}New Stereo Model}{19}{chapter.4}
 \defcounter {refsection}{0}\relax 

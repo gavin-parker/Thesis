@@ -46,7 +46,7 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
     print("Epoch size: {}".format(epoch_size))
     print("Batch size: {}".format(FLAGS.batch_size))
     handle_train, handle_val = sess.run([model.iter_train_handle, model.iter_val_handle])
-    val_best = 100.0
+    val_best = 9999999999
     stop_count=0
     # generate batches and run graph
     for epoch in range(0, FLAGS.max_epochs):
@@ -90,23 +90,20 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
 
 
 def collect_results(model=None):
+    assert model
 
     config = tf.ConfigProto(allow_soft_placement=True)
     config.gpu_options.per_process_gpu_memory_fraction = 0.8
 
     sess = tf.Session(config=config)
-
     sess.run(tf.local_variables_initializer())
     sess.run(tf.global_variables_initializer())
     if FLAGS.debug:
         sess = tf_debug.LocalCLIDebugWrapperSession(sess)
     tf.train.start_queue_runners(sess=sess)
 
-    #saver = tf.train.Saver()
-    saver = tf.train.import_meta_graph(FLAGS.test_model_dir + '.meta')
+    saver = tf.train.Saver()
     saver.restore(sess, FLAGS.test_model_dir)
-    weights = [v for v in tf.trainable_variables()]
-    print(weights)
     left_samples = file_io.get_matching_files("{}/left/*.png".format(FLAGS.val_dir))
     right_samples = file_io.get_matching_files("{}/right/*.png".format(FLAGS.val_dir))
     gt_samples = file_io.get_matching_files("{}/envmaps/*.hdr".format(FLAGS.val_dir))
@@ -122,33 +119,17 @@ def collect_results(model=None):
         for (l, r, gt, bg, norms) in zip(left_samples, right_samples, gt_samples, bg_samples, norm_samples):
             left, right, envmap, background, norms = prep_images(l, r, gt, bg, norms)
             t0 = time.time()
-            #if model.name == 'normals':
-            #    pred_norms = sess.run(model.pred_norms,feed_dict={model.left_image: left,
-            #                                 model.right_image: right,
-            #                                 model.bg_image: background,
-            #                                 model.gt: np.expand_dims(envmap, axis=0)})
-            #    name = os.path.splitext(os.path.basename(l))[0]
-            #    pred = cv2.cvtColor(pred_norms[0], cv2.COLOR_RGB2BGR)
-            #    cv2.imwrite('{}/pred_norms/{}.png'.format(FLAGS.val_dir, name), pred)
-            #    continue
-            graph = tf.get_default_graph()
-            l_tensor = graph.get_tensor_by_name("IteratorGetNext:0")
-            r_tensor = graph.get_tensor_by_name("IteratorGetNext:1")
-            bg_tensor = graph.get_tensor_by_name("IteratorGetNext:4")
-            norm_tensor = graph.get_tensor_by_name("IteratorGetNext:3")
-            dummy = np.ones((1, 256, 256, 3))
-            op = graph.get_tensor_by_name("sub_13:0")
-
-            prediction = sess.run(op,
-                                  feed_dict={l_tensor: left,
-                                             r_tensor: right,
-                                             bg_tensor: background})
+            prediction,test = sess.run([model.converted_prediction, model.test],
+                                  feed_dict={model.left_image: left,
+                                             model.right_image: right,
+                                             model.bg_image: background})
             prediction = prediction[0]
+            print(np.mean(prediction))
             t1 = time.time()
             mse = mean_squared_error(envmap, prediction)
 
             ss = (1 - ssim(envmap, prediction, multichannel=True)) / 2
-            print(ss)
+            #print(ss)
 
             total_ssim += ss
             total_mse += mse
@@ -161,7 +142,7 @@ def collect_results(model=None):
             y_diff = min(math.fabs(gt_sun[1] - pred_sun[1]), math.fabs(gt_sun[1]+64-pred_sun[1]))
             sun_dist = math.sqrt(x_diff*x_diff + y_diff*y_diff)
             f.write("{},{},{},{}\n".format(name,mse, ss, sun_dist))
-            print("inference time: {}".format(t1-t0))
+            #print("inference time: {}".format(t1-t0))
             total_time += (t1 - t0)
             cv2.imwrite('{}/results/{}.hdr'.format(FLAGS.val_dir, name), prediction)
     print("Avg inference time: {}".format(total_time / len(left_samples)))

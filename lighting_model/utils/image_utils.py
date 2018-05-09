@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 kernel = np.ones((5, 5), np.float32) / 2
-
+"""some experiments with disparity matching"""
 
 def offline_stereo_disparity(image_a, image_b):
     left_matcher = cv2.StereoSGBM_create(numDisparities=32, blockSize=5)
