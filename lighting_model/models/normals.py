@@ -22,14 +22,14 @@ class Model:
         iter_train_handle = train_dataset.make_one_shot_iterator().string_handle()
         iter_val_handle = val_dataset.make_one_shot_iterator().string_handle()
         handle = tf.placeholder(tf.string, shape=[])
-    name = 'stereo'
+    name = 'normals'
 
     def __init__(self):
         with tf.device('/gpu:0'):
             if FLAGS.app or FLAGS.test:
                 self.left_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
                 self.right_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
-                self.norm_image = tf.placeholder(tf.float32, shape=[1, 64, 64, 3])
+                self.norm_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
                 self.bg_image = tf.placeholder(tf.float32, shape=[1, 256, 256, 3])
                 self.gt = tf.placeholder(tf.float32, shape=[1, 64, 64, 3])
                 gt = self.gt
@@ -41,7 +41,7 @@ class Model:
                 self.left_image = train_batch[0]
                 self.right_image = train_batch[1]
                 self.norm_image = train_batch[3]
-                self.norm_image = tf.image.resize_images(self.norm_image, (64, 64))
+                #self.norm_image = tf.image.resize_images(self.norm_image, (64, 64))
                 self.bg_image = train_batch[4]
                 gt = train_batch[2]
 
@@ -61,6 +61,7 @@ class Model:
             right_lab = tf.map_fn(preprocessing.rgb_to_lab, self.right_image)
             gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
             predictions = self.inference((left_lab, right_lab, gt_lab))
+            self.pred_norms = tf.image.convert_image_dtype(predictions[0], tf.uint8)
             self.diff = tf.abs(tf.reduce_max(gt_lab) - tf.reduce_max(predictions[0]))
             self.loss_calculation(predictions, (gt_lab, self.norm_image))
             self.train_op = self.optimize()
@@ -82,20 +83,7 @@ class Model:
     """Calculate the l2 norm loss between the prediction and ground truth"""
 
     def loss_calculation(self, (env_pred, norm_pred), (env_gt, norm_gt)):
-        self.env_loss = tf.reduce_sum(tf.abs(env_pred - env_gt))
-        self.l2_norm_env = tf.reduce_sum(tf.square(env_pred - env_gt))
-        self.norm_loss = tf.reduce_sum(tf.abs(norm_pred - norm_gt))
-        self.ssim = 0
-        for i in range(0,3):
-            self.ssim += preprocessing.tf_ssim(tf.expand_dims(env_pred[:,:,:,i],-1), tf.expand_dims(env_gt[:,:,:,i],-1))
-        if FLAGS.norms:
-            self.loss = self.env_loss + self.norm_loss
-        elif FLAGS.ssim_loss:
-            self.loss = (1 - self.ssim) / 2
-        #elif FLAGS.l2_loss:
-        #    self.loss = self.l2_norm_env
-        else:
-            self.loss = self.env_loss
+        self.loss = tf.reduce_sum(tf.abs(norm_pred - norm_gt))
 
     def gabriel_loss(self, prediction_log, gt_log):
         n = 1.0 / (3.0 * 64 * 64)
@@ -111,52 +99,40 @@ class Model:
 
     def encode(self, left, right):
 
-        l_encoding, l_encodings_downsampled, _ = layers.siamese_encode_2(left, reuse=False, depth=FLAGS.depth)
-        r_encoding, r_encodings_downsampled, r_multiscale = layers.siamese_encode_2(right, reuse=True,
+        #l_encoding, l_encodings_downsampled, _ = layers.siamese_encode_2(left, reuse=False, depth=FLAGS.depth)
+        r_encoding, r_encodings_downsampled, r_multiscale = layers.siamese_encode_2(right, reuse=False,
                                                                                     depth=FLAGS.depth)
-        if FLAGS.dotprod:
-            l_end = tf.nn.l2_normalize(l_encoding, dim=3)
-            r_end = tf.nn.l2_normalize(r_encoding, dim=3)
-            joint = tf.matmul(l_end, r_end, transpose_b=True)
-            joint = tf.concat([l_encoding, r_encoding, joint], axis=-1)
-        elif FLAGS.dotprod_pyramid:
-            joint = tf.concat([l_encoding, r_encoding], axis=-1)
-            for l, r in zip(l_encodings_downsampled, r_encodings_downsampled):
-                l_norm = tf.nn.l2_normalize(l, dim=3)
-                r_norm = tf.nn.l2_normalize(r, dim=3)
-                similarity = tf.matmul(l_norm, r_norm, transpose_b=True)
-                joint = tf.concat([joint, similarity], axis=-1)
-        else:
-            joint = tf.concat([l_encoding, r_encoding], axis=-1)
-
+        #if FLAGS.dotprod:
+        #    l_end = tf.nn.l2_normalize(l_encoding, dim=3)
+        #    r_end = tf.nn.l2_normalize(r_encoding, dim=3)
+        #    joint = tf.matmul(l_end, r_end, transpose_b=True)
+        #    joint = tf.concat([l_encoding, r_encoding, joint], axis=-1)
+        #elif FLAGS.dotprod_pyramid:
+        #    joint = tf.concat([l_encoding, r_encoding], axis=-1)
+        #    for l, r in zip(l_encodings_downsampled, r_encodings_downsampled):
+        #        l_norm = tf.nn.l2_normalize(l, dim=3)
+        #        r_norm = tf.nn.l2_normalize(r, dim=3)
+        #        similarity = tf.matmul(l_norm, r_norm, transpose_b=True)
+        #        joint = tf.concat([joint, similarity], axis=-1)
+        #else:
+        #    joint = tf.concat([l_encoding, r_encoding], axis=-1)
+        #if FLAGS.sep_bg:
+        #    bg_encoding = layers.basic_encode(self.bg_image, depth=FLAGS.depth)
+        #    joint = tf.concat([joint, bg_encoding], axis=-1)
+        joint = r_encoding
         joint = layers.encode_layer(joint, 512, (3, 3), (2, 2), 2, maxpool=False)
-        joint = layers.encode_layer(joint, 512, (3, 3), (2, 2), 2, maxpool=True)
-        joint = layers.encode_layer(joint, 512, (3, 3), (2, 2), 2, maxpool=True)
-        if FLAGS.sep_bg:
-            bg_encoding = layers.basic_encode(self.bg_image, depth=FLAGS.depth)
-            joint = tf.concat([joint, bg_encoding], axis=-1)
-        joint = layers.encode_layer(joint, 1024, (3, 3), (2, 2), 1, maxpool=True)
+        joint_b = layers.encode_layer(joint, 512, (3, 3), (2, 2), 2, maxpool=True)
+        joint_c = layers.encode_layer(joint_b, 1024, (3, 3), (2, 2), 1, maxpool=True)
+        norm_pred = self.decode(joint_c)
+        return norm_pred, norm_pred
 
-        env_pred = self.decode(joint, r_multiscale)
-        if FLAGS.norms:
-            norm_pred = self.decode(joint, r_multiscale)
-            return env_pred, norm_pred
-        return env_pred, env_pred
-
-    def decode(self, encoded, multiscale):
-        if FLAGS.multiscale:
-            encoded = tf.concat([encoded, multiscale[-1]], axis=-1)
-            decode_1 = layers.decode_layer(encoded, 512, (3, 3), (2, 2), FLAGS.depth)
-            decode_1 = tf.concat([decode_1, multiscale[-2]], axis=-1)
-            decode_2 = layers.decode_layer(decode_1, 512, (3, 3), (2, 2), FLAGS.depth)
-            decode_2 = tf.concat([decode_2, multiscale[-3]], axis=-1)
-            decode_3 = layers.decode_layer(decode_2, 256, (3, 3), (2, 2), FLAGS.depth)
-        else:
-            decode_1 = layers.decode_layer(encoded, 512, (3, 3), (2, 2), FLAGS.depth)
-            decode_2 = layers.decode_layer(decode_1, 512, (3, 3), (2, 2), FLAGS.depth)
-            decode_3 = layers.decode_layer(decode_2, 256, (3, 3), (2, 2), FLAGS.depth)
-            decode_4 = layers.decode_layer(decode_3, 128, (3, 3), (2, 2), FLAGS.depth)
-        return layers.encode_layer(decode_4, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
+    def decode(self, encoded):
+        decode_1 = layers.decode_layer(encoded, 512, (3, 3), (2, 2), FLAGS.depth)
+        decode_2 = layers.decode_layer(decode_1, 512, (3, 3), (2, 2), FLAGS.depth)
+        decode_3 = layers.decode_layer(decode_2, 256, (3, 3), (2, 2), FLAGS.depth)
+        decode_4 = layers.decode_layer(decode_3, 128, (3, 3), (2, 2), FLAGS.depth)
+        decode_5 = layers.decode_layer(decode_4, 64, (3, 3), (2, 2), FLAGS.depth)
+        return layers.encode_layer(decode_5, 3, (1, 1), (1, 1), 1, activation=None, norm=False, maxpool=False)
 
     """Create tensorboard summaries of images and loss"""
 
@@ -176,15 +152,13 @@ class Model:
         if FLAGS.norms:
             summaries.append(tf.summary.image('Predicted_norms', preds[1], max_outputs=1))
         scalar_summary = tf.summary.merge([tf.summary.scalar("Loss", self.loss),
-                                           tf.summary.scalar("Lighting_Loss", self.env_loss),
-                                           tf.summary.scalar("Norm_Loss", self.norm_loss),
                                            tf.summary.scalar("Max_difference", self.diff),
                                            tf.summary.scalar("Learning_Rate", self.learning_rate)])
         img_summary = tf.summary.merge(summaries)
         return img_summary, scalar_summary
 
     def validate(self):
-        validation_loss = (1 - self.ssim) / 2
+        validation_loss = self.loss
         with tf.variable_scope("validation_mean") as scope:
             self.val_loss, self.val_update = tf.metrics.mean(validation_loss)
             self.validation_summary = tf.summary.merge([tf.summary.scalar("Validation_Loss", self.val_loss)])

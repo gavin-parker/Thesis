@@ -1,4 +1,4 @@
-from models import  stereo_deeper, dematerial, bob
+from models import normals, stereo_deeper,dematerial
 import trainer.params
 import harness
 import sys
@@ -7,15 +7,18 @@ def main():
     model = None
     #if '--reflectance' in sys.argv:
     #    model = reflectance.Model()
-    if '--dematerial' in sys.argv:
-        model = dematerial.Model()
-    if '--bob' in sys.argv:
-        model = bob.Model()
+    #if '--dematerial' in sys.argv:
+    #    model = dematerial.Model()
+    #if '--bob' in sys.argv:
+    #    model = bob.Model()
+    #if '--normals' in sys.argv:
+    #    model = normals.Model()
     #if '--stereo' in sys.argv:
     #    model = stereo.Model()
-    if '--stereo2' in sys.argv:
-        model = stereo_deeper.Model()
-    name = get_name(model)
+    #if '--stereo2' in sys.argv:
+    #    model = stereo_deeper.Model()
+    #name = get_name(model)
+    name = ""
     print("Model Name: {}".format(name))
     if '--test' in sys.argv:
         harness.collect_results(model)

@@ -54,6 +54,7 @@ class Model:
             gt_lab = tf.map_fn(preprocessing.rgb_to_lab, gt_norm)
             self.bg_lab = tf.map_fn(preprocessing.rgb_to_lab, self.bg_image)
             predictions = self.inference((left_lab, right_lab, gt_lab))
+            self.pred_norms = tf.image.convert_image_dtype(predictions[1], tf.uint8)
             self.diff = tf.abs(tf.reduce_max(gt_lab) - tf.reduce_max(predictions[0]))
             self.loss_calculation(predictions, (gt_lab, self.norm_image))
             self.train_op = self.optimize()

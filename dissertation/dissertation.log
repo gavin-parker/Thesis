@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.3.23)  5 MAY 2018 22:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.3.23)  9 MAY 2018 12:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1466,7 +1466,11 @@ File: english.lbx 2016/03/03 v3.3 biblatex localization (PK/JW/AB)
 \@quotelevel=\count376
 \@quotereset=\count377
 
-(./dissertation.aux)
+(./dissertation.aux
+
+LaTeX Warning: Label `fig:dotprod_comp' multiply defined.
+
+)
 \openout1 = `dissertation.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
@@ -1483,8 +1487,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
 LaTeX Font Info:    ... okay on input line 39.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 39.
 LaTeX Font Info:    ... okay on input line 39.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+ (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count378
 \scratchdimen=\dimen266
@@ -1600,7 +1603,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 46--46
 
  []
 
-<logo/logo_uob_color.pdf, id=115, 546.04pt x 158.5925pt>
+<logo/logo_uob_color.pdf, id=119, 546.04pt x 158.5925pt>
 File: logo/logo_uob_color.pdf Graphic file (type pdf)
 
 <use logo/logo_uob_color.pdf>
@@ -1626,37 +1629,43 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 [3] [4
 
 ]
-<images/tests/25p_ssim_shallow/pred_composite.png, id=149, 963.6pt x 542.025pt>
+<images/tests/25p_ssim_shallow/gt_composite.png, id=153, 561.09625pt x 542.025p
+t>
+File: images/tests/25p_ssim_shallow/gt_composite.png Graphic file (type png)
+ <use images/tests/25p_ssim_shallow/gt_composite.png>
+Package pdftex.def Info: images/tests/25p_ssim_shallow/gt_composite.png used on
+ input line 63.
+(pdftex.def)             Requested size: 218.51521pt x 211.08289pt.
+
+<images/tests/25p_ssim_shallow/pred_composite.png, id=155, 562.1pt x 542.025pt>
 File: images/tests/25p_ssim_shallow/pred_composite.png Graphic file (type png)
 <use images/tests/25p_ssim_shallow/pred_composite.png>
 Package pdftex.def Info: images/tests/25p_ssim_shallow/pred_composite.png used 
-on input line 63.
-(pdftex.def)             Requested size: 252.91203pt x 142.26378pt.
-
-<images/tests/25p_ssim_shallow/gt_composite.png, id=151, 963.6pt x 542.025pt>
-File: images/tests/25p_ssim_shallow/gt_composite.png Graphic file (type png)
-
-<use images/tests/25p_ssim_shallow/gt_composite.png>
-Package pdftex.def Info: images/tests/25p_ssim_shallow/gt_composite.png used on
- input line 66.
-(pdftex.def)             Requested size: 252.91203pt x 142.26378pt.
- [5pdfTeX warning (ext4): destination with the same identifier (name{figure.0.1
-}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.78 
-      <./images/tests/25p_ssim_shallow/pred_composite.png> <./images/tests/25p_
-ssim_shallow/gt_composite.png>]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 87.
+on input line 67.
+(pdftex.def)             Requested size: 218.51521pt x 210.7107pt.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 82.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 87.
- [6]
-(./dissertation.toc)
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 82.
+ [5pdfTeX warning (ext4): destination with the same identifier (name{figure.0.1
+}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.84 \item A
+            ugmented our large dataset of HDRI environment maps with Google ...
+pdfTeX warning (ext4): destination with the same identifier (name{figure.0.2}) 
+has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.84 \item A
+            ugmented our large dataset of HDRI environment maps with Google ...
+ <./images/tests/25p_ssim_shallow/gt_composite.png> <./images/tests/25p_ssim_sh
+allow/pred_composite.png>] [6] (./dissertation.toc)
 \tf@toc=\write7
 \openout7 = `dissertation.toc'.
 
@@ -1664,23 +1673,57 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 
 ] [8
 
-] [9] [10
+]
+
+LaTeX Warning: Citation 'blender.org' on page 9 undefined on input line 113.
+
+
+LaTeX Warning: Citation 'cycles-renderer.org' on page 9 undefined on input line
+ 115.
+
+
+LaTeX Warning: Citation 'cloud.google.com/maps-platform/' on page 9 undefined o
+n input line 117.
+
+
+LaTeX Warning: Citation 'hdrihaven.com' on page 9 undefined on input line 119.
+
+
+LaTeX Warning: Citation 'opencv.org' on page 9 undefined on input line 121.
+
+
+LaTeX Warning: Citation 'scikit-image.org/' on page 9 undefined on input line 1
+22.
+
+
+LaTeX Warning: Citation 'graphics.stanford.edu/data/3Dscanrep/' on page 9 undef
+ined on input line 123.
+
+
+LaTeX Warning: Citation 'tensorflow.org' on page 9 undefined on input line 124.
+
+
+[9] [10
 
 ] [11] [12
 
 ]
 Chapter 1.
+
+LaTeX Warning: Reference `raytracing' on page 1 undefined on input line 191.
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.194 \newpage
+l.192 \newpage
                [1
 
 ]
-
-LaTeX Warning: Citation 'Impel:1986:RM:15886.15901' on page 2 undefined on inpu
-t line 214.
+Overfull \hbox (9.71379pt too wide) detected at line 215
+\OML/cmm/m/it/10 Reflectance \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 EmmitedRadiance
+ \OT1/cmr/m/n/10 + [][] []
+ []
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
 been already used, duplicate ignored
@@ -1694,74 +1737,79 @@ ored
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
 l.219 \subsection
-                 {Indirect Illumination}] [3]
-<images/Stereo_Matching.png, id=247, 522.95375pt x 323.2075pt>
+                 {Indirect Illumination}] [3pdfTeX warning (ext4): destination 
+with the same identifier (name{figure.1.2}) has been already used, duplicate ig
+nored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.241 \subsection
+                 {Digital Compositing}] [4]
+<images/Stereo_Matching.png, id=285, 522.95375pt x 323.2075pt>
 File: images/Stereo_Matching.png Graphic file (type png)
 
 <use images/Stereo_Matching.png>
-Package pdftex.def Info: images/Stereo_Matching.png used on input line 236.
+Package pdftex.def Info: images/Stereo_Matching.png used on input line 256.
 (pdftex.def)             Requested size: 227.62204pt x 140.68289pt.
- [4pdfTeX warning (ext4): destination with the same identifier (name{figure.1.2
+ [5pdfTeX warning (ext4): destination with the same identifier (name{figure.1.3
 }) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.248 \subsection
+l.269 \subsection
                  {SLAM} <./images/Stereo_Matching.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 251--253
+Underfull \hbox (badness 10000) in paragraph at lines 272--274
 
  []
 
-[5] <images/example_synthetic.png, id=268, 256.96pt x 256.96pt>
+[6] <images/example_synthetic.png, id=307, 256.96pt x 256.96pt>
 File: images/example_synthetic.png Graphic file (type png)
 
 <use images/example_synthetic.png>
-Package pdftex.def Info: images/example_synthetic.png used on input line 271.
+Package pdftex.def Info: images/example_synthetic.png used on input line 292.
 (pdftex.def)             Requested size: 142.26378pt x 142.26552pt.
 
-Overfull \hbox (5.68916pt too wide) in paragraph at lines 271--273
+Overfull \hbox (5.68916pt too wide) in paragraph at lines 292--294
  [][] 
  []
 
-[6pdfTeX warning (ext4): destination with the same identifier (name{figure.1.3}
+[7pdfTeX warning (ext4): destination with the same identifier (name{figure.1.4}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.281 \chapter
+l.302 \chapter
               {Technical Background} <./images/example_synthetic.png (PNG copy)
->] [7] [8
-
-]
+>] [8]
 Chapter 2.
-<images/envmap.jpg, id=285, 4657.4pt x 2619.7875pt>
+<images/envmap.jpg, id=321, 4657.4pt x 2619.7875pt>
 File: images/envmap.jpg Graphic file (type jpg)
  <use images/envmap.jpg>
-Package pdftex.def Info: images/envmap.jpg used on input line 286.
+Package pdftex.def Info: images/envmap.jpg used on input line 307.
 (pdftex.def)             Requested size: 199.16928pt x 112.00906pt.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+<images/lytro.jpg, id=327, 1291.224pt x 857.604pt>
+File: images/lytro.jpg Graphic file (type jpg)
+ <use images/lytro.jpg>
+Package pdftex.def Info: images/lytro.jpg used on input line 318.
+(pdftex.def)             Requested size: 142.26378pt x 94.48067pt.
 
- [9pdfTeX warning (ext4): destination with the same identifier (name{figure.2.1
-}) has been already used, duplicate ignored
+[9
+
+pdfTeX warning (ext4): destination with the same identifier (name{figure.2.1}) 
+has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.307 \end{center}
-                   <./images/envmap.jpg>]
-<images/lytro.jpg, id=296, 1291.224pt x 857.604pt>
-File: images/lytro.jpg Graphic file (type jpg)
- <use images/lytro.jpg>
-Package pdftex.def Info: images/lytro.jpg used on input line 312.
-(pdftex.def)             Requested size: 142.26378pt x 94.48067pt.
-
-<images/Contour.png, id=298, 706.64pt x 648.4225pt>
+l.322 \end{wrapfigure}
+                       <./images/envmap.jpg>]
+<images/Contour.png, id=338, 706.64pt x 648.4225pt>
 File: images/Contour.png Graphic file (type png)
  <use images/Contour.png>
-Package pdftex.def Info: images/Contour.png used on input line 322.
+Package pdftex.def Info: images/Contour.png used on input line 329.
 (pdftex.def)             Requested size: 142.26378pt x 130.54298pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 320--325
+Underfull \hbox (badness 10000) in paragraph at lines 327--333
 \OT1/cmr/m/n/10 di-rec-tion, pro-vided the in-put im-age con-tained an ap-pro-p
 ri-ate lam-ber-tian sur-face.
  []
@@ -1771,69 +1819,60 @@ ri-ate lam-ber-tian sur-face.
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.325 \end{wrapfigure}
-                      pdfTeX warning (ext4): destination with the same identifi
-er (name{figure.2.3}) has been already used, duplicate ignored
+l.337 \subsection
+                 {Outdoor Lighting}pdfTeX warning (ext4): destination with the 
+same identifier (name{figure.2.3}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.325 \end{wrapfigure}
-                       <./images/lytro.jpg>]
-<images/antinous_rgb.png, id=317, 513.92pt x 513.92pt>
+l.337 \subsection
+                 {Outdoor Lighting} <./images/lytro.jpg> <./images/Contour.png>
+] <images/antinous_rgb.png, id=363, 513.92pt x 513.92pt>
 File: images/antinous_rgb.png Graphic file (type png)
 
 <use images/antinous_rgb.png>
-Package pdftex.def Info: images/antinous_rgb.png used on input line 339.
+Package pdftex.def Info: images/antinous_rgb.png used on input line 347.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
 
-<images/antinous_lf.png, id=318, 513.92pt x 513.92pt>
+<images/antinous_lf.png, id=364, 513.92pt x 513.92pt>
 File: images/antinous_lf.png Graphic file (type png)
 
 <use images/antinous_lf.png>
-Package pdftex.def Info: images/antinous_lf.png used on input line 340.
+Package pdftex.def Info: images/antinous_lf.png used on input line 348.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- [11pdfTeX warning (ext4): destination with the same identifier (name{figure.2.
+ [11]
+<images/scenenet.png, id=385, 1017.8025pt x 159.59625pt>
+File: images/scenenet.png Graphic file (type png)
+
+<use images/scenenet.png>
+Package pdftex.def Info: images/scenenet.png used on input line 360.
+(pdftex.def)             Requested size: 455.24408pt x 71.38416pt.
+ [12pdfTeX warning (ext4): destination with the same identifier (name{figure.2.
 4}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.343 \end{figure}
-                   <./images/Contour.png>]
-<images/scenenet.png, id=339, 1017.8025pt x 159.59625pt>
-File: images/scenenet.png Graphic file (type png)
+l.364 \subsection
+                 {Deep Learning for Illumination Estimation} <./images/antinous
+_rgb.png (PNG copy)> <./images/antinous_lf.png>]
+<images/reflectance.png, id=403, 190.311pt x 113.223pt>
+File: images/reflectance.png Graphic file (type png)
 
-<use images/scenenet.png>
-Package pdftex.def Info: images/scenenet.png used on input line 351.
-(pdftex.def)             Requested size: 455.24408pt x 71.38416pt.
- [12pdfTeX warning (ext4): destination with the same identifier (name{figure.2.
+<use images/reflectance.png>
+Package pdftex.def Info: images/reflectance.png used on input line 371.
+(pdftex.def)             Requested size: 227.62204pt x 135.42981pt.
+
+Underfull \vbox (badness 1867) has occurred while \output is active []
+
+ [13pdfTeX warning (ext4): destination with the same identifier (name{figure.2.
 5}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.353 \end{figure}
-                   <./images/antinous_rgb.png (PNG copy)> <./images/antinous_lf
-.png>] <images/reflectance.png, id=354, 190.311pt x 113.223pt>
-File: images/reflectance.png Graphic file (type png)
-
-<use images/reflectance.png>
-Package pdftex.def Info: images/reflectance.png used on input line 361.
-(pdftex.def)             Requested size: 227.62204pt x 135.42981pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [13pdfTeX warning (ext4): destination with the same identifier (name{figure.2.
-6}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.364 \end{figure}
-                   <./images/scenenet.png>]
-
-LaTeX Warning: Citation 'https://www.disneyresearch.com/publication/face2light/
-' on page 14 undefined on input line 369.
-
-
-Overfull \hbox (23.32607pt too wide) in paragraph at lines 372--383
+l.376 T
+       his work was then extended for illumination estimation in `What is Ar...
+ <./images/scenenet.png>]
+Overfull \hbox (55.2151pt too wide) in paragraph at lines 381--394
 [][]
  []
 
@@ -1842,721 +1881,719 @@ Overfull \hbox (23.32607pt too wide) in paragraph at lines 372--383
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.388 \chapter
-              {Implementing Prior Art} <./images/reflectance.png>] [15pdfTeX wa
-rning (ext4): destination with the same identifier (name{figure.2.8}) has been 
-already used, duplicate ignored
+l.400 \chapter
+              {Implementing Prior Art}pdfTeX warning (ext4): destination with t
+he same identifier (name{figure.2.6}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.388 \chapter
-              {Implementing Prior Art}] [16
-
-]
+l.400 \chapter
+              {Implementing Prior Art} <./images/reflectance.png>]
 Chapter 3.
-[17pdfTeX warning (ext4): destination with the same identifier (name{figure.3.1
-}) has been already used, duplicate ignored
+[15
+
+pdfTeX warning (ext4): destination with the same identifier (name{figure.3.1}) 
+has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.418 \[
-         R_i = max(n\cdot n_i \cdot L)\],]
-<images/Dematerial.png, id=397, 1080.035pt x 580.1675pt>
+l.430 \[
+         R_i = max(n\cdot n_i \cdot L)\]]
+<images/Dematerial.png, id=428, 1080.035pt x 580.1675pt>
 File: images/Dematerial.png Graphic file (type png)
 
 <use images/Dematerial.png>
-Package pdftex.def Info: images/Dematerial.png used on input line 434.
+Package pdftex.def Info: images/Dematerial.png used on input line 446.
 (pdftex.def)             Requested size: 423.7334pt x 227.62204pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [18]
+ [16]
 
 LaTeX Warning: Citation 'https://github.com/affinelayer/pix2pix-tensorflow/blob
-/master/pix2pix.py' on page 19 undefined on input line 441.
+/master/pix2pix.py' on page 17 undefined on input line 453.
 
-<images/original/gt_render.png, id=407, 963.6pt x 542.025pt>
+<images/original/gt_render.png, id=438, 963.6pt x 542.025pt>
 File: images/original/gt_render.png Graphic file (type png)
 
 <use images/original/gt_render.png>
-Package pdftex.def Info: images/original/gt_render.png used on input line 450.
+Package pdftex.def Info: images/original/gt_render.png used on input line 462.
 (pdftex.def)             Requested size: 227.62204pt x 128.03754pt.
 
-<images/original/pred_render.png, id=408, 963.6pt x 542.025pt>
+<images/original/pred_render.png, id=439, 963.6pt x 542.025pt>
 File: images/original/pred_render.png Graphic file (type png)
 
 <use images/original/pred_render.png>
-Package pdftex.def Info: images/original/pred_render.png used on input line 454
+Package pdftex.def Info: images/original/pred_render.png used on input line 466
 .
 (pdftex.def)             Requested size: 227.62204pt x 128.03754pt.
- [19pdfTeX warning (ext4): destination with the same identifier (name{figure.3.
+ [17pdfTeX warning (ext4): destination with the same identifier (name{figure.3.
 2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.457 \end{figure}
-                   <./images/Dematerial.png>] [20pdfTeX warning (ext4): destina
+l.469 \end{figure}
+                   <./images/Dematerial.png>] [18pdfTeX warning (ext4): destina
 tion with the same identifier (name{figure.3.3}) has been already used, duplica
 te ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.459 \chapter
+l.471 \chapter
               {New Stereo Model} <./images/original/gt_render.png (PNG copy)> <
 ./images/original/pred_render.png (PNG copy)>]
 Chapter 4.
-<images/left/0.png, id=423, 256.96pt x 256.96pt>
+<images/left/0.png, id=456, 256.96pt x 256.96pt>
 File: images/left/0.png Graphic file (type png)
  <use images/left/0.png>
-Package pdftex.def Info: images/left/0.png used on input line 468.
+Package pdftex.def Info: images/left/0.png used on input line 479.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
 
-<images/right/0.png, id=424, 256.96pt x 256.96pt>
+<images/right/0.png, id=457, 256.96pt x 256.96pt>
 File: images/right/0.png Graphic file (type png)
  <use images/right/0.png>
-Package pdftex.def Info: images/right/0.png used on input line 469.
+Package pdftex.def Info: images/right/0.png used on input line 480.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
 
-<images/normals/0.png, id=425, 256.96pt x 256.96pt>
+<images/normals/0.png, id=458, 256.96pt x 256.96pt>
 File: images/normals/0.png Graphic file (type png)
  <use images/normals/0.png>
-Package pdftex.def Info: images/normals/0.png used on input line 470.
+Package pdftex.def Info: images/normals/0.png used on input line 481.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
 
-<images/hdri/0.png, id=426, 256.96pt x 256.96pt>
+<images/hdri/0.png, id=459, 256.96pt x 256.96pt>
 File: images/hdri/0.png Graphic file (type png)
  <use images/hdri/0.png>
-Package pdftex.def Info: images/hdri/0.png used on input line 471.
+Package pdftex.def Info: images/hdri/0.png used on input line 482.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
 
-<images/left/11.png, id=427, 513.92pt x 513.92pt>
+<images/left/11.png, id=460, 513.92pt x 513.92pt>
 File: images/left/11.png Graphic file (type png)
  <use images/left/11.png>
-Package pdftex.def Info: images/left/11.png used on input line 472.
+Package pdftex.def Info: images/left/11.png used on input line 483.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
 
-<images/right/11.png, id=428, 513.92pt x 513.92pt>
+<images/right/11.png, id=461, 513.92pt x 513.92pt>
 File: images/right/11.png Graphic file (type png)
  <use images/right/11.png>
-Package pdftex.def Info: images/right/11.png used on input line 473.
+Package pdftex.def Info: images/right/11.png used on input line 484.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
 
-<images/normals/11.png, id=429, 513.92pt x 513.92pt>
+<images/normals/11.png, id=462, 513.92pt x 513.92pt>
 File: images/normals/11.png Graphic file (type png)
 
 <use images/normals/11.png>
-Package pdftex.def Info: images/normals/11.png used on input line 474.
+Package pdftex.def Info: images/normals/11.png used on input line 485.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/hdri/11.png, id=430, 401.5pt x 401.5pt>
+ <images/hdri/11.png, id=463, 401.5pt x 401.5pt>
 File: images/hdri/11.png Graphic file (type png)
 
 <use images/hdri/11.png>
-Package pdftex.def Info: images/hdri/11.png used on input line 475.
+Package pdftex.def Info: images/hdri/11.png used on input line 486.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
- <images/left/22.png, id=431, 513.92pt x 513.92pt>
+ <images/left/22.png, id=464, 513.92pt x 513.92pt>
 File: images/left/22.png Graphic file (type png)
 
 <use images/left/22.png>
-Package pdftex.def Info: images/left/22.png used on input line 476.
+Package pdftex.def Info: images/left/22.png used on input line 487.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/right/22.png, id=432, 513.92pt x 513.92pt>
+ <images/right/22.png, id=465, 513.92pt x 513.92pt>
 File: images/right/22.png Graphic file (type png)
 
 <use images/right/22.png>
-Package pdftex.def Info: images/right/22.png used on input line 477.
+Package pdftex.def Info: images/right/22.png used on input line 488.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/normals/22.png, id=433, 513.92pt x 513.92pt>
+ <images/normals/22.png, id=466, 513.92pt x 513.92pt>
 File: images/normals/22.png Graphic file (type png)
 
 <use images/normals/22.png>
-Package pdftex.def Info: images/normals/22.png used on input line 478.
+Package pdftex.def Info: images/normals/22.png used on input line 489.
 (pdftex.def)             Requested size: 85.35826pt x 85.35774pt.
- <images/hdri/22.png, id=434, 401.5pt x 401.5pt>
+ <images/hdri/22.png, id=467, 401.5pt x 401.5pt>
 File: images/hdri/22.png Graphic file (type png)
 
 <use images/hdri/22.png>
-Package pdftex.def Info: images/hdri/22.png used on input line 479.
+Package pdftex.def Info: images/hdri/22.png used on input line 490.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [21
+ [19
 
 ]
 
-LaTeX Warning: Citation 'https://hdrihaven.com/' on page 22 undefined on input 
-line 489.
+LaTeX Warning: Citation 'https://hdrihaven.com/' on page 20 undefined on input 
+line 500.
 
-<images/google_example/original.jpg, id=444, 1117.17375pt x 534.99875pt>
+<images/google_example/original.jpg, id=477, 1117.17375pt x 534.99875pt>
 File: images/google_example/original.jpg Graphic file (type jpg)
 
 <use images/google_example/original.jpg>
 Package pdftex.def Info: images/google_example/original.jpg used on input line 
-492.
+503.
 (pdftex.def)             Requested size: 142.26378pt x 68.12367pt.
 
-<images/google_example/dark.jpg, id=445, 401.5pt x 191.71625pt>
+<images/google_example/dark.jpg, id=478, 401.5pt x 191.71625pt>
 File: images/google_example/dark.jpg Graphic file (type jpg)
 
 <use images/google_example/dark.jpg>
-Package pdftex.def Info: images/google_example/dark.jpg used on input line 493.
+Package pdftex.def Info: images/google_example/dark.jpg used on input line 504.
 
 (pdftex.def)             Requested size: 142.26378pt x 67.93248pt.
 
-<images/google_example/bright.jpg, id=446, 401.5pt x 191.71625pt>
+<images/google_example/bright.jpg, id=479, 401.5pt x 191.71625pt>
 File: images/google_example/bright.jpg Graphic file (type jpg)
 
 <use images/google_example/bright.jpg>
-Package pdftex.def Info: images/google_example/bright.jpg used on input line 49
-4.
+Package pdftex.def Info: images/google_example/bright.jpg used on input line 50
+5.
 (pdftex.def)             Requested size: 142.26378pt x 67.93248pt.
- [22pdfTeX warning (ext4): destination with the same identifier (name{figure.4.
+ [20pdfTeX warning (ext4): destination with the same identifier (name{figure.4.
 1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.498 \subsection
+l.509 \subsection
                  {Bootstrapping Extra Light Probes} <./images/left/0.png> <./im
 ages/right/0.png> <./images/normals/0.png> <./images/hdri/0.png> <./images/left
 /11.png (PNG copy)> <./images/right/11.png (PNG copy)> <./images/normals/11.png
  (PNG copy)> <./images/hdri/11.png> <./images/left/22.png (PNG copy)> <./images
 /right/22.png (PNG copy)> <./images/normals/22.png (PNG copy)> <./images/hdri/2
-2.png>] <images/Stereo.png, id=459, 693.59125pt x 618.31pt>
+2.png>] <images/Stereo.png, id=491, 693.59125pt x 618.31pt>
 File: images/Stereo.png Graphic file (type png)
 
 <use images/Stereo.png>
-Package pdftex.def Info: images/Stereo.png used on input line 504.
+Package pdftex.def Info: images/Stereo.png used on input line 515.
 (pdftex.def)             Requested size: 319.18285pt x 284.52756pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [23pdfTeX warning (ext4): destination with the same identifier (name{figure.4.
+ [21pdfTeX warning (ext4): destination with the same identifier (name{figure.4.
 2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.510 \section
+l.521 \section
               {Model Architecture} <./images/google_example/original.jpg> <./im
 ages/google_example/dark.jpg> <./images/google_example/bright.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 512--514
+Underfull \hbox (badness 10000) in paragraph at lines 523--525
 
  []
 
-<images/Pyramid.png, id=471, 796.9775pt x 468.75125pt>
+<images/Pyramid.png, id=500, 796.9775pt x 468.75125pt>
 File: images/Pyramid.png Graphic file (type png)
 
 <use images/Pyramid.png>
-Package pdftex.def Info: images/Pyramid.png used on input line 518.
+Package pdftex.def Info: images/Pyramid.png used on input line 529.
 (pdftex.def)             Requested size: 398.33858pt x 234.2892pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [24pdfTeX warning (ext4): destination with the same identifier (name{figure.4.
+ [22pdfTeX warning (ext4): destination with the same identifier (name{figure.4.
 3}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.521 W
+l.532 W
        e can further encourage the network to perform stereo matching by usi...
- <./images/Stereo.png>] [25pdfTeX warning (ext4): destination with the same ide
+ <./images/Stereo.png>] [23pdfTeX warning (ext4): destination with the same ide
 ntifier (name{figure.4.4}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.534 \begin{itemize}
-                      <./images/Pyramid.png>] [26]
+l.545 \begin{itemize}
+                      <./images/Pyramid.png>] [24]
 Chapter 5.
 \figureheight=\skip91
 \figurewidth=\skip92
 (./siam_comparison.tex) (./dotprod_comparison_deep.tex)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [27
+ [25
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5.1}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.577 T
-       he dot product step results in a small improvement in accuracy and a ...
-] (./dotprod_comparison_shallow.tex) [28pdfTeX warning (ext4): destination with
+l.591 T
+       he dot product step results in a small improvement in accuracy (shown...
+] (./dotprod_comparison_shallow.tex) [26pdfTeX warning (ext4): destination with
  the same identifier (name{figure.5.2}) has been already used, duplicate ignore
 d
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.589 \subsection
+l.604 \subsection
                  {Effect of Background}pdfTeX warning (ext4): destination with 
 the same identifier (name{figure.5.3}) has been already used, duplicate ignored
 
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.589 \subsection
+l.604 \subsection
                  {Effect of Background}] (./bg_comparison.tex)
 (./sep_bg_comparison.tex)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [29pdfTeX warning (ext4): destination with the same identifier (name{figure.5.
+ [27pdfTeX warning (ext4): destination with the same identifier (name{figure.5.
 4}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.605 A
+l.622 A
         separate background, as used by the Dematerial network, results in s...
-] (./pyramid_comparison.tex) [30pdfTeX warning (ext4): destination with the sam
+] (./pyramid_comparison.tex) [28pdfTeX warning (ext4): destination with the sam
 e identifier (name{figure.5.5}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.617 \section
-              {Final Model Evaluation}pdfTeX warning (ext4): destination with t
-he same identifier (name{figure.5.6}) has been already used, duplicate ignored
+l.635 \section
+              {Final Model Accuracy}pdfTeX warning (ext4): destination with the
+ same identifier (name{figure.5.6}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.617 \section
-              {Final Model Evaluation}]
-<exposure_example.jpg, id=523, 2959.055pt x 2573.615pt>
-File: exposure_example.jpg Graphic file (type jpg)
-
-<use exposure_example.jpg>
-Package pdftex.def Info: exposure_example.jpg used on input line 624.
-(pdftex.def)             Requested size: 113.81102pt x 98.96078pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 619--627
-\OT1/cmr/m/n/10 tion.
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 644--644
-[]\OT1/cmr/m/n/10 25th Per-
- []
-
-<images/deep_stereo/25p_mse_input.png, id=527, 256.96pt x 256.96pt>
-File: images/deep_stereo/25p_mse_input.png Graphic file (type png)
-
-<use images/deep_stereo/25p_mse_input.png>
-Package pdftex.def Info: images/deep_stereo/25p_mse_input.png used on input lin
-e 645.
-(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 645--645
-[][] 
- []
-
-<images/deep_stereo/25p_mse_gt_tm.png, id=528, 64.24pt x 64.24pt>
-File: images/deep_stereo/25p_mse_gt_tm.png Graphic file (type png)
-
-<use images/deep_stereo/25p_mse_gt_tm.png>
-Package pdftex.def Info: images/deep_stereo/25p_mse_gt_tm.png used on input lin
-e 645.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 645--645
-[][] 
- []
-
-<images/deep_stereo/25p_mse_pred_tm.png, id=529, 64.24pt x 64.24pt>
-File: images/deep_stereo/25p_mse_pred_tm.png Graphic file (type png)
-
-<use images/deep_stereo/25p_mse_pred_tm.png>
-Package pdftex.def Info: images/deep_stereo/25p_mse_pred_tm.png used on input l
-ine 646.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 646--646
-[][] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 647--647
-[]\OT1/cmr/m/n/10 50th Per-
- []
-
-<images/deep_stereo/50p_mse_input.png, id=530, 256.96pt x 256.96pt>
-File: images/deep_stereo/50p_mse_input.png Graphic file (type png)
-
-<use images/deep_stereo/50p_mse_input.png>
-Package pdftex.def Info: images/deep_stereo/50p_mse_input.png used on input lin
-e 648.
-(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 648--648
-[][] 
- []
-
-<images/deep_stereo/50p_mse_gt_tm.png, id=531, 64.24pt x 64.24pt>
-File: images/deep_stereo/50p_mse_gt_tm.png Graphic file (type png)
-
-<use images/deep_stereo/50p_mse_gt_tm.png>
-Package pdftex.def Info: images/deep_stereo/50p_mse_gt_tm.png used on input lin
-e 648.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 648--648
-[][] 
- []
-
-<images/deep_stereo/50p_mse_pred_tm.png, id=532, 64.24pt x 64.24pt>
-File: images/deep_stereo/50p_mse_pred_tm.png Graphic file (type png)
-
-<use images/deep_stereo/50p_mse_pred_tm.png>
-Package pdftex.def Info: images/deep_stereo/50p_mse_pred_tm.png used on input l
-ine 649.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 649--649
-[][] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 650--650
-[]\OT1/cmr/m/n/10 75th Per-
- []
-
-<images/deep_stereo/75p_mse_input.png, id=533, 256.96pt x 256.96pt>
-File: images/deep_stereo/75p_mse_input.png Graphic file (type png)
-
-<use images/deep_stereo/75p_mse_input.png>
-Package pdftex.def Info: images/deep_stereo/75p_mse_input.png used on input lin
-e 651.
-(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 651--651
-[][] 
- []
-
-<images/deep_stereo/75p_mse_gt_tm.png, id=534, 64.24pt x 64.24pt>
-File: images/deep_stereo/75p_mse_gt_tm.png Graphic file (type png)
-
-<use images/deep_stereo/75p_mse_gt_tm.png>
-Package pdftex.def Info: images/deep_stereo/75p_mse_gt_tm.png used on input lin
-e 651.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 651--651
-[][] 
- []
-
-<images/deep_stereo/75p_mse_pred_tm.png, id=535, 64.24pt x 64.24pt>
-File: images/deep_stereo/75p_mse_pred_tm.png Graphic file (type png)
-
-<use images/deep_stereo/75p_mse_pred_tm.png>
-Package pdftex.def Info: images/deep_stereo/75p_mse_pred_tm.png used on input l
-ine 652.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 652--652
-[][] 
- []
-
-
-Overfull \hbox (33.5472pt too wide) in paragraph at lines 638--655
- [][] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 634--659
-
- []
-
-[31pdfTeX warning (ext4): destination with the same identifier (name{figure.5.7
-}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.660 F
-       or the SSIM test, the stereo model achieves a respectable average of ...
- <./exposure_example.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 670--670
-[]\OT1/cmr/m/n/10 25th Per-
- []
-
-<images/deep_stereo/25p_ssim_input.png, id=546, 256.96pt x 256.96pt>
-File: images/deep_stereo/25p_ssim_input.png Graphic file (type png)
-
-<use images/deep_stereo/25p_ssim_input.png>
-Package pdftex.def Info: images/deep_stereo/25p_ssim_input.png used on input li
-ne 671.
-(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 671--671
-[][] 
- []
-
-<images/deep_stereo/25p_ssim_gt_tm.png, id=547, 64.24pt x 64.24pt>
-File: images/deep_stereo/25p_ssim_gt_tm.png Graphic file (type png)
-
-<use images/deep_stereo/25p_ssim_gt_tm.png>
-Package pdftex.def Info: images/deep_stereo/25p_ssim_gt_tm.png used on input li
-ne 671.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 671--671
-[][] 
- []
-
-<images/deep_stereo/25p_ssim_pred_tm.png, id=548, 64.24pt x 64.24pt>
-File: images/deep_stereo/25p_ssim_pred_tm.png Graphic file (type png)
-
-<use images/deep_stereo/25p_ssim_pred_tm.png>
-Package pdftex.def Info: images/deep_stereo/25p_ssim_pred_tm.png used on input 
-line 672.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 672--672
-[][] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 673--673
-[]\OT1/cmr/m/n/10 50th Per-
- []
-
-<images/deep_stereo/50p_ssim_input.png, id=549, 256.96pt x 256.96pt>
-File: images/deep_stereo/50p_ssim_input.png Graphic file (type png)
-
-<use images/deep_stereo/50p_ssim_input.png>
-Package pdftex.def Info: images/deep_stereo/50p_ssim_input.png used on input li
-ne 674.
-(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 674--674
-[][] 
- []
-
-<images/deep_stereo/50p_ssim_gt_tm.png, id=550, 64.24pt x 64.24pt>
-File: images/deep_stereo/50p_ssim_gt_tm.png Graphic file (type png)
-
-<use images/deep_stereo/50p_ssim_gt_tm.png>
-Package pdftex.def Info: images/deep_stereo/50p_ssim_gt_tm.png used on input li
-ne 674.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 674--674
-[][] 
- []
-
-<images/deep_stereo/50p_ssim_pred_tm.png, id=551, 64.24pt x 64.24pt>
-File: images/deep_stereo/50p_ssim_pred_tm.png Graphic file (type png)
-
-<use images/deep_stereo/50p_ssim_pred_tm.png>
-Package pdftex.def Info: images/deep_stereo/50p_ssim_pred_tm.png used on input 
-line 675.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 675--675
-[][] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 676--676
-[]\OT1/cmr/m/n/10 75th Per-
- []
-
-<images/deep_stereo/75p_ssim_input.png, id=552, 256.96pt x 256.96pt>
-File: images/deep_stereo/75p_ssim_input.png Graphic file (type png)
-
-<use images/deep_stereo/75p_ssim_input.png>
-Package pdftex.def Info: images/deep_stereo/75p_ssim_input.png used on input li
-ne 677.
-(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 677--677
-[][] 
- []
-
-<images/deep_stereo/75p_ssim_gt_tm.png, id=553, 64.24pt x 64.24pt>
-File: images/deep_stereo/75p_ssim_gt_tm.png Graphic file (type png)
-
-<use images/deep_stereo/75p_ssim_gt_tm.png>
-Package pdftex.def Info: images/deep_stereo/75p_ssim_gt_tm.png used on input li
-ne 677.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 677--677
-[][] 
- []
-
-<images/deep_stereo/75p_ssim_pred_tm.png, id=554, 64.24pt x 64.24pt>
-File: images/deep_stereo/75p_ssim_pred_tm.png Graphic file (type png)
-
-<use images/deep_stereo/75p_ssim_pred_tm.png>
-Package pdftex.def Info: images/deep_stereo/75p_ssim_pred_tm.png used on input 
-line 678.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 678--678
-[][] 
- []
-
-
-Overfull \hbox (33.5472pt too wide) in paragraph at lines 664--682
- [][] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 660--686
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 694--695
-[]\OT1/cmr/m/n/10 Average Dis-tance
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 694--695
-\OT1/cmr/m/n/10 be-tween bright-est
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 696--696
-[]\OT1/cmr/m/n/10 25th Per-
- []
-
-<images/deep_stereo/25p_sun_input.png, id=556, 256.96pt x 256.96pt>
-File: images/deep_stereo/25p_sun_input.png Graphic file (type png)
-
-<use images/deep_stereo/25p_sun_input.png>
-Package pdftex.def Info: images/deep_stereo/25p_sun_input.png used on input lin
-e 697.
-(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 697--697
-[][] 
- []
-
-<images/deep_stereo/25p_sun_gt_tm.png, id=557, 64.24pt x 64.24pt>
-File: images/deep_stereo/25p_sun_gt_tm.png Graphic file (type png)
-
-<use images/deep_stereo/25p_sun_gt_tm.png>
-Package pdftex.def Info: images/deep_stereo/25p_sun_gt_tm.png used on input lin
-e 697.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 697--697
-[][] 
- []
-
-<images/deep_stereo/25p_sun_pred_tm.png, id=558, 64.24pt x 64.24pt>
-File: images/deep_stereo/25p_sun_pred_tm.png Graphic file (type png)
-
-<use images/deep_stereo/25p_sun_pred_tm.png>
-Package pdftex.def Info: images/deep_stereo/25p_sun_pred_tm.png used on input l
-ine 698.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 698--698
-[][] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 699--699
-[]\OT1/cmr/m/n/10 50th Per-
- []
-
-<images/deep_stereo/50p_sun_input.png, id=559, 256.96pt x 256.96pt>
-File: images/deep_stereo/50p_sun_input.png Graphic file (type png)
-
-<use images/deep_stereo/50p_sun_input.png>
-Package pdftex.def Info: images/deep_stereo/50p_sun_input.png used on input lin
-e 700.
-(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 700--700
-[][] 
- []
-
-<images/deep_stereo/50p_sun_gt_tm.png, id=560, 64.24pt x 64.24pt>
-File: images/deep_stereo/50p_sun_gt_tm.png Graphic file (type png)
-
-<use images/deep_stereo/50p_sun_gt_tm.png>
-Package pdftex.def Info: images/deep_stereo/50p_sun_gt_tm.png used on input lin
-e 700.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 700--700
-[][] 
- []
-
-<images/deep_stereo/50p_sun_pred_tm.png, id=561, 64.24pt x 64.24pt>
-File: images/deep_stereo/50p_sun_pred_tm.png Graphic file (type png)
-
-<use images/deep_stereo/50p_sun_pred_tm.png>
-Package pdftex.def Info: images/deep_stereo/50p_sun_pred_tm.png used on input l
-ine 701.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 701--701
-[][] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 702--702
-[]\OT1/cmr/m/n/10 75th Per-
- []
-
-<images/deep_stereo/75p_sun_input.png, id=562, 256.96pt x 256.96pt>
-File: images/deep_stereo/75p_sun_input.png Graphic file (type png)
-
-<use images/deep_stereo/75p_sun_input.png>
-Package pdftex.def Info: images/deep_stereo/75p_sun_input.png used on input lin
-e 703.
-(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 703--703
-[][] 
- []
-
-<images/deep_stereo/75p_sun_gt_tm.png, id=563, 64.24pt x 64.24pt>
-File: images/deep_stereo/75p_sun_gt_tm.png Graphic file (type png)
-
-<use images/deep_stereo/75p_sun_gt_tm.png>
-Package pdftex.def Info: images/deep_stereo/75p_sun_gt_tm.png used on input lin
-e 703.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 703--703
-[][] 
- []
-
-<images/deep_stereo/75p_sun_pred_tm.png, id=564, 64.24pt x 64.24pt>
-File: images/deep_stereo/75p_sun_pred_tm.png Graphic file (type png)
-
-<use images/deep_stereo/75p_sun_pred_tm.png>
-Package pdftex.def Info: images/deep_stereo/75p_sun_pred_tm.png used on input l
-ine 704.
-(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
-
-Overfull \hbox (46.90549pt too wide) in paragraph at lines 704--704
-[][] 
- []
-
-
-Overfull \hbox (33.5472pt too wide) in paragraph at lines 690--707
+l.635 \section
+              {Final Model Accuracy}] (./val_comp.tex)
+Overfull \hbox (4.2397pt too wide) in paragraph at lines 889--650
  [][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [32pdfTeX warning (ext4): destination with the same identifier (name{figure.5.
+ [29]
+Underfull \hbox (badness 10000) in paragraph at lines 663--663
+[]\OT1/cmr/m/n/10 25th Per-
+ []
+
+<images/deep_stereo/25p_mse_input.png, id=565, 256.96pt x 256.96pt>
+File: images/deep_stereo/25p_mse_input.png Graphic file (type png)
+
+<use images/deep_stereo/25p_mse_input.png>
+Package pdftex.def Info: images/deep_stereo/25p_mse_input.png used on input lin
+e 664.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 664--664
+[][] 
+ []
+
+<images/deep_stereo/25p_mse_gt_tm.png, id=566, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_mse_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/25p_mse_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_mse_gt_tm.png used on input lin
+e 664.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 664--664
+[][] 
+ []
+
+<images/deep_stereo/25p_mse_pred_tm.png, id=567, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_mse_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/25p_mse_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_mse_pred_tm.png used on input l
+ine 665.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 665--665
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 666--666
+[]\OT1/cmr/m/n/10 50th Per-
+ []
+
+<images/deep_stereo/50p_mse_input.png, id=568, 256.96pt x 256.96pt>
+File: images/deep_stereo/50p_mse_input.png Graphic file (type png)
+
+<use images/deep_stereo/50p_mse_input.png>
+Package pdftex.def Info: images/deep_stereo/50p_mse_input.png used on input lin
+e 667.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 667--667
+[][] 
+ []
+
+<images/deep_stereo/50p_mse_gt_tm.png, id=569, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_mse_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_mse_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_mse_gt_tm.png used on input lin
+e 667.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 667--667
+[][] 
+ []
+
+<images/deep_stereo/50p_mse_pred_tm.png, id=570, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_mse_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_mse_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_mse_pred_tm.png used on input l
+ine 668.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 668--668
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 669--669
+[]\OT1/cmr/m/n/10 75th Per-
+ []
+
+<images/deep_stereo/75p_mse_input.png, id=571, 256.96pt x 256.96pt>
+File: images/deep_stereo/75p_mse_input.png Graphic file (type png)
+
+<use images/deep_stereo/75p_mse_input.png>
+Package pdftex.def Info: images/deep_stereo/75p_mse_input.png used on input lin
+e 670.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 670--670
+[][] 
+ []
+
+<images/deep_stereo/75p_mse_gt_tm.png, id=572, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_mse_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_mse_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_mse_gt_tm.png used on input lin
+e 670.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 670--670
+[][] 
+ []
+
+<images/deep_stereo/75p_mse_pred_tm.png, id=573, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_mse_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_mse_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_mse_pred_tm.png used on input l
+ine 671.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 671--671
+[][] 
+ []
+
+
+Overfull \hbox (33.5472pt too wide) in paragraph at lines 657--674
+ [][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 653--678
+
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [30pdfTeX warning (ext4): destination with the same identifier (name{figure.5.
+7}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.679 F
+       or the SSIM test, the stereo model achieves a respectable average of ...
+]
+Underfull \hbox (badness 10000) in paragraph at lines 689--689
+[]\OT1/cmr/m/n/10 25th Per-
+ []
+
+<images/deep_stereo/25p_ssim_input.png, id=584, 256.96pt x 256.96pt>
+File: images/deep_stereo/25p_ssim_input.png Graphic file (type png)
+
+<use images/deep_stereo/25p_ssim_input.png>
+Package pdftex.def Info: images/deep_stereo/25p_ssim_input.png used on input li
+ne 690.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 690--690
+[][] 
+ []
+
+<images/deep_stereo/25p_ssim_gt_tm.png, id=585, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_ssim_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/25p_ssim_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_ssim_gt_tm.png used on input li
+ne 690.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 690--690
+[][] 
+ []
+
+<images/deep_stereo/25p_ssim_pred_tm.png, id=586, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_ssim_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/25p_ssim_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_ssim_pred_tm.png used on input 
+line 691.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 691--691
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 692--692
+[]\OT1/cmr/m/n/10 50th Per-
+ []
+
+<images/deep_stereo/50p_ssim_input.png, id=587, 256.96pt x 256.96pt>
+File: images/deep_stereo/50p_ssim_input.png Graphic file (type png)
+
+<use images/deep_stereo/50p_ssim_input.png>
+Package pdftex.def Info: images/deep_stereo/50p_ssim_input.png used on input li
+ne 693.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 693--693
+[][] 
+ []
+
+<images/deep_stereo/50p_ssim_gt_tm.png, id=588, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_ssim_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_ssim_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_ssim_gt_tm.png used on input li
+ne 693.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 693--693
+[][] 
+ []
+
+<images/deep_stereo/50p_ssim_pred_tm.png, id=589, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_ssim_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_ssim_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_ssim_pred_tm.png used on input 
+line 694.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 694--694
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 695--695
+[]\OT1/cmr/m/n/10 75th Per-
+ []
+
+<images/deep_stereo/75p_ssim_input.png, id=590, 256.96pt x 256.96pt>
+File: images/deep_stereo/75p_ssim_input.png Graphic file (type png)
+
+<use images/deep_stereo/75p_ssim_input.png>
+Package pdftex.def Info: images/deep_stereo/75p_ssim_input.png used on input li
+ne 696.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 696--696
+[][] 
+ []
+
+<images/deep_stereo/75p_ssim_gt_tm.png, id=591, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_ssim_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_ssim_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_ssim_gt_tm.png used on input li
+ne 696.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 696--696
+[][] 
+ []
+
+<images/deep_stereo/75p_ssim_pred_tm.png, id=592, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_ssim_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_ssim_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_ssim_pred_tm.png used on input 
+line 697.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 697--697
+[][] 
+ []
+
+
+Overfull \hbox (33.5472pt too wide) in paragraph at lines 683--701
+ [][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 679--705
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 713--714
+[]\OT1/cmr/m/n/10 Average Dis-tance
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 713--714
+\OT1/cmr/m/n/10 be-tween bright-est
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 715--715
+[]\OT1/cmr/m/n/10 25th Per-
+ []
+
+<images/deep_stereo/25p_sun_input.png, id=594, 256.96pt x 256.96pt>
+File: images/deep_stereo/25p_sun_input.png Graphic file (type png)
+
+<use images/deep_stereo/25p_sun_input.png>
+Package pdftex.def Info: images/deep_stereo/25p_sun_input.png used on input lin
+e 716.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 716--716
+[][] 
+ []
+
+<images/deep_stereo/25p_sun_gt_tm.png, id=595, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_sun_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/25p_sun_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_sun_gt_tm.png used on input lin
+e 716.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 716--716
+[][] 
+ []
+
+<images/deep_stereo/25p_sun_pred_tm.png, id=596, 64.24pt x 64.24pt>
+File: images/deep_stereo/25p_sun_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/25p_sun_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/25p_sun_pred_tm.png used on input l
+ine 717.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 717--717
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 718--718
+[]\OT1/cmr/m/n/10 50th Per-
+ []
+
+<images/deep_stereo/50p_sun_input.png, id=597, 256.96pt x 256.96pt>
+File: images/deep_stereo/50p_sun_input.png Graphic file (type png)
+
+<use images/deep_stereo/50p_sun_input.png>
+Package pdftex.def Info: images/deep_stereo/50p_sun_input.png used on input lin
+e 719.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 719--719
+[][] 
+ []
+
+<images/deep_stereo/50p_sun_gt_tm.png, id=598, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_sun_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_sun_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_sun_gt_tm.png used on input lin
+e 719.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 719--719
+[][] 
+ []
+
+<images/deep_stereo/50p_sun_pred_tm.png, id=599, 64.24pt x 64.24pt>
+File: images/deep_stereo/50p_sun_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/50p_sun_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/50p_sun_pred_tm.png used on input l
+ine 720.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 720--720
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 721--721
+[]\OT1/cmr/m/n/10 75th Per-
+ []
+
+<images/deep_stereo/75p_sun_input.png, id=600, 256.96pt x 256.96pt>
+File: images/deep_stereo/75p_sun_input.png Graphic file (type png)
+
+<use images/deep_stereo/75p_sun_input.png>
+Package pdftex.def Info: images/deep_stereo/75p_sun_input.png used on input lin
+e 722.
+(pdftex.def)             Requested size: 56.9055pt x 56.90224pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 722--722
+[][] 
+ []
+
+<images/deep_stereo/75p_sun_gt_tm.png, id=601, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_sun_gt_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_sun_gt_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_sun_gt_tm.png used on input lin
+e 722.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 722--722
+[][] 
+ []
+
+<images/deep_stereo/75p_sun_pred_tm.png, id=602, 64.24pt x 64.24pt>
+File: images/deep_stereo/75p_sun_pred_tm.png Graphic file (type png)
+
+<use images/deep_stereo/75p_sun_pred_tm.png>
+Package pdftex.def Info: images/deep_stereo/75p_sun_pred_tm.png used on input l
+ine 723.
+(pdftex.def)             Requested size: 56.9055pt x 56.90825pt.
+
+Overfull \hbox (46.90549pt too wide) in paragraph at lines 723--723
+[][] 
+ []
+
+
+Overfull \hbox (33.5472pt too wide) in paragraph at lines 709--726
+ [][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [31pdfTeX warning (ext4): destination with the same identifier (name{figure.5.
 8}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.712 O
-       ur method outperforms the original 'What is around the camera?' work ...
+l.731 O
+       ur method outperforms the original `What is around the camera?' work ...
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5.9}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.712 O
-       ur method outperforms the original 'What is around the camera?' work ...
+l.731 O
+       ur method outperforms the original `What is around the camera?' work ...
  <./images/deep_stereo/25p_mse_input.png (PNG copy)> <./images/deep_stereo/25p_
 mse_gt_tm.png (PNG copy)> <./images/deep_stereo/25p_mse_pred_tm.png (PNG copy)>
  <./images/deep_stereo/50p_mse_input.png (PNG copy)> <./images/deep_stereo/50p_
@@ -2569,58 +2606,55 @@ y)> <./images/deep_stereo/50p_ssim_input.png (PNG copy)> <./images/deep_stereo/
 50p_ssim_gt_tm.png (PNG copy)> <./images/deep_stereo/50p_ssim_pred_tm.png (PNG 
 copy)> <./images/deep_stereo/75p_ssim_input.png (PNG copy)> <./images/deep_ster
 eo/75p_ssim_gt_tm.png (PNG copy)> <./images/deep_stereo/75p_ssim_pred_tm.png (P
-NG copy)>] [33pdfTeX warning (ext4): destination with the same identifier (name
+NG copy)>] [32pdfTeX warning (ext4): destination with the same identifier (name
 {figure.5.10}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.718 \chapter
+l.734 \chapter
               {Conclusion} <./images/deep_stereo/25p_sun_input.png (PNG copy)> 
 <./images/deep_stereo/25p_sun_gt_tm.png (PNG copy)> <./images/deep_stereo/25p_s
 un_pred_tm.png (PNG copy)> <./images/deep_stereo/50p_sun_input.png (PNG copy)> 
 <./images/deep_stereo/50p_sun_gt_tm.png (PNG copy)> <./images/deep_stereo/50p_s
 un_pred_tm.png (PNG copy)> <./images/deep_stereo/75p_sun_input.png (PNG copy)> 
 <./images/deep_stereo/75p_sun_gt_tm.png (PNG copy)> <./images/deep_stereo/75p_s
-un_pred_tm.png (PNG copy)>] [34
+un_pred_tm.png (PNG copy)>]
+Chapter 6.
+[33
 
 ]
-Chapter 6.
-[35]
-Underfull \hbox (badness 10000) in paragraph at lines 738--740
+Underfull \hbox (badness 10000) in paragraph at lines 753--755
 
  []
 
-[36] [37] [38]
-Overfull \hbox (20.18108pt too wide) in paragraph at lines 797--797
+[34] [35] [36]
+Overfull \hbox (20.18108pt too wide) in paragraph at lines 819--819
 []\OT1/cmr/m/n/10 C. Hazir-bas, L. Leal-Taix, and D. Cre-mers, ``Deep depth fro
 m fo-cus,'' in \OT1/cmr/m/it/10 Arxiv preprint arXiv:1704.01085\OT1/cmr/m/n/10 
 ,
  []
 
-[39
+[37
 
 
-] [40] [41] [42
+] [38] [39] [40
 
 ]
 Appendix A.
-[43]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 823.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 823.
+[41]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 845.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 845.
  (./dissertation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 823.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 823.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 845.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 845.
+Package rerunfilecheck Info: File `dissertation.out' has not changed.
+(rerunfilecheck)             Checksum: 88EDCBF86A07B5C84688DC199402CB11;1744.
 
-
-Package rerunfilecheck Warning: File `dissertation.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `dissertation.out':
-(rerunfilecheck)             Before: 386FE18B0F089E1767F33FCE8F900B9E;1671
-(rerunfilecheck)             After:  14637AFC2F73FFD25A1FB82BB3BD32CE;1673.
 
 LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
 
 
 Package biblatex Warning: Please (re)run Biber on the file:
@@ -2632,13 +2666,13 @@ Package logreq Info: Writing requests to 'dissertation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37427 strings out of 494910
- 827523 string characters out of 6179836
- 1411506 words of memory out of 5000000
- 39808 multiletter control sequences out of 15000+600000
+ 37463 strings out of 494910
+ 828267 string characters out of 6179836
+ 1423872 words of memory out of 5000000
+ 39834 multiletter control sequences out of 15000+600000
  16934 words of font info for 62 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 68i,20n,100p,2462b,2201s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 68i,20n,100p,2625b,2201s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texli
@@ -2658,10 +2692,10 @@ dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmtt10.pfb>
-Output written on dissertation.pdf (57 pages, 16096686 bytes).
+Output written on dissertation.pdf (55 pages, 15166980 bytes).
 PDF statistics:
- 801 PDF objects out of 1000 (max. 8388607)
- 646 compressed objects within 7 object streams
- 205 named destinations out of 1000 (max. 500000)
- 529 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 837 PDF objects out of 1000 (max. 8388607)
+ 685 compressed objects within 7 object streams
+ 213 named destinations out of 1000 (max. 500000)
+ 532 words of extra memory for PDF output out of 10000 (max. 10000000)
 

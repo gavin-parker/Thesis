@@ -82,6 +82,7 @@ class SceneGenerator:
         bpy.ops.transform.resize(value=(0.1, 0.1, 0.1), constraint_axis=(False, False, False),
                                  constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED',
                                  proportional_edit_falloff='SMOOTH', proportional_size=1)
+        random_rotation(objects[0], self.camera_limits)
         #text_file = open("{}/meta/{}.txt".format(scene_dir, name), "w+")
         #text_file.write("Model: {}".format(path))
         #text_file.close()
@@ -185,7 +186,7 @@ def random_rotation(object, limits):
 
 def find_scene_data():
     categories = dict()
-    models = glob.glob('{}/models/*/*/*.obj'.format(model_dir))
+    models = glob.glob('{}/*/*.obj'.format(model_dir))
     return models
 
 

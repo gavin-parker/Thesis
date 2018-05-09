@@ -38,8 +38,8 @@ class Model:
                 rgb_image = tf.cast(tf.image.resize_images(self.right_image, [128,128]), tf.float16)
                 rgb_normals = tf.cast(tf.image.resize_images(self.norm_image, [128,128]), tf.float16)
                 bg = tf.image.resize_images(self.bg_image, [128,128])
-                gt = tf.placeholder(tf.float32, shape=[1, 64, 64, 3])
-                envmap = gt
+                self.gt = tf.placeholder(tf.float32, shape=[1, 64, 64, 3])
+                envmap = self.gt
                 pass
             else:
                 iterator = tf.data.Iterator.from_string_handle(
@@ -94,6 +94,9 @@ class Model:
     def loss_calculation(self, prediction, gt_lab):
         prediction = tf.image.resize_images(prediction, [64,64])
         self.loss = tf.reduce_sum(tf.abs(prediction - gt_lab))
+        self.ssim = 0
+        for i in range(0,3):
+            self.ssim += preprocessing.tf_ssim(tf.expand_dims(prediction[:,:,:,i],-1), tf.expand_dims(gt_lab[:,:,:,i],-1))
 
     def gabriel_loss(self, prediction_log, gt_log):
         n = 1.0 / (3.0 * 64 * 64)

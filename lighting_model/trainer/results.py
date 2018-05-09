@@ -49,6 +49,45 @@ def sun_results():
     example_img(percentiles[1], sun, "50p_sun")
     example_img(percentiles[2], sun, "75p_sun")
 
+def compare_ssim(logs):
+    markers = []
+    runs = []
+    names = []
+    means = []
+    std_err = 0.0
+
+    for (name, log) in logs:
+        data = load_tf_log(log)
+        ssim = data[2]
+        runs.append(ssim)
+        names.append(name)
+        means.append(np.mean(ssim))
+        std_dev = np.std(ssim)
+        std_err = std_dev / 31.6227766017
+        xs = np.arange(np.shape(ssim)[0])
+        plt.style.use('ggplot')
+        #marker = plt.scatter(xs, ssim, label=name)
+        ys = np.zeros(np.shape(xs)[0])
+        ys[:] = np.mean(ssim)
+        #plt.plot(xs, ys, label=name)
+        #markers.append(marker)
+    plt.violinplot(runs)
+    #locs, labels = plt.xticks()
+    xticks = np.arange(1, 1+len(logs))
+    plt.scatter(xticks, means, color='black')
+    print(means)
+    fig = plt.gcf()
+    fig.set_size_inches(18.5, 10.5)
+    #plt.errorbar(xticks, means, yerr=0.01, linestyle="None", color='black', ls=None)
+
+    plt.xticks(xticks,names)
+    plt.xlabel('Validation Sample')
+    plt.ylabel('DSSIM')
+    plt.legend(handles=markers)
+    plt.title('Validation Accuracy')
+    tikz_save('../dissertation/val_comp.tex', figureheight='12cm', figurewidth='16cm')
+    plt.clf()
+
 
 def example_img(score, metric, out_name):
     out_dir = "{}/results/demat_images".format(val_dir)
@@ -95,7 +134,7 @@ def train_log_results():
     plt.ylabel('Sum of Squared Differences (SSD)')
     plt.legend(handles=[train_loss_a, train_loss_b])
     plt.title('Effect of Cosine Similarity Pyramid (Shallow Network)')
-    tikz_save('../dissertation/pyramid_comparison.tex',figureheight='8cm', figurewidth='12cm')
+    tikz_save('../dissertation/pyramid_comparison.tex',figureheight='10cm', figurewidth='14cm')
     plt.clf()
     #norm_training = load_tf_log("deep_stereo_normal_val.csv")
     #dotprod_training = load_tf_log("deep_stereo_dotprod_val.csv")
@@ -113,6 +152,10 @@ if __name__ == "__main__":
     if not os.path.exists("{}/results/demat_images".format(val_dir)):
         os.makedirs("{}/results/demat_images".format(val_dir))
     #train_log_results()
-    mse_results()
-    ssim_results()
-    sun_results()
+    compare_ssim([("Dematerial (perfect normals)", "demat_results.csv"),
+                  ("Shallow Stereo", "shallow_results.csv"),
+                  ("Deep Stereo", "deep_results.csv"),
+                  ("Deep Stereo SSIM loss", "ssim_results.csv")])
+    #mse_results()
+    #ssim_results()
+    #sun_results()

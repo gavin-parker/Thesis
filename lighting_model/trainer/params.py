@@ -21,13 +21,15 @@ tf.app.flags.DEFINE_boolean('adam', True, 'Use adam optimizer')
 tf.app.flags.DEFINE_boolean('use-bg', False, 'Use background image')
 tf.app.flags.DEFINE_boolean('sep-bg', True, 'Use seperate branch for background image')
 tf.app.flags.DEFINE_boolean('norms', False, 'Use normals in training')
+tf.app.flags.DEFINE_boolean('l2-loss', False, 'Use l2 loss in training')
+tf.app.flags.DEFINE_boolean('ssim-loss', False, 'Use ssim loss in training')
 
 tf.app.flags.DEFINE_boolean('app', False, 'Dont load train data. (default: %(default)d)')
 tf.app.flags.DEFINE_string('log-dir', 'envmap_synthetic_results', 'Output Log directory')
 tf.app.flags.DEFINE_string('log-prefix', '', 'Output log prefix')
 tf.app.flags.DEFINE_string('test-model-dir', 'best_dematerial', 'Directory of model for testing')
-tf.app.flags.DEFINE_string('train-dir', "/mnt/black/MultiNatIllum/data/single_material_multiple_objects/singlets/",
+tf.app.flags.DEFINE_string('train-dir', "/home/gavin/scene_data/renders",
                            'Path to training set')
-tf.app.flags.DEFINE_string('val-dir', "/mnt/black/MultiNatIllum/data/single_material_multiple_objects/singlets/",
+tf.app.flags.DEFINE_string('val-dir', "/home/gavin/scene_data/val",
                            'Path to validation set')
 FLAGS = tf.app.flags.FLAGS

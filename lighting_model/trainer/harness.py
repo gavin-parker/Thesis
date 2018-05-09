@@ -1,5 +1,6 @@
 from trainer.params import FLAGS
 import tensorflow as tf
+
 from tensorflow.python import debug as tf_debug
 import time
 import glob
@@ -45,8 +46,12 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
     print("Epoch size: {}".format(epoch_size))
     print("Batch size: {}".format(FLAGS.batch_size))
     handle_train, handle_val = sess.run([model.iter_train_handle, model.iter_val_handle])
+    val_best = 100.0
+    stop_count=0
     # generate batches and run graph
     for epoch in range(0, FLAGS.max_epochs):
+        if stop_count > 5:
+            break
         t0 = time.time()
         for i in range(0, epoch_size):
             sess.run([model.loss, model.train_op], feed_dict={model.handle: handle_train}, options=options,
@@ -56,42 +61,49 @@ def train(model=None, sess=None, name=time.strftime("%H:%M:%S")):
                     [model.loss, model.summaries], feed_dict={model.handle: handle_train}, options=options,
                     run_metadata=run_metadata)
                 t1 = time.time()
-                #[train_writer.add_summary(s, epoch * epoch_size + i) for s in summaries]
-                #saver.save(sess, "{}/{}/model".format(FLAGS.train_dir, name))
-                #if FLAGS.debug:
-                #    train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
-                #                                  global_step=None)
-                #train_writer.flush()
-                #print("Loss:{}".format(err))
-                #print("{} sec per sample".format((t1 - t0) / (100 * FLAGS.batch_size)))
-                #if FLAGS.debug:
-                #    return
+                [train_writer.add_summary(s, epoch * epoch_size + i) for s in summaries]
+
+                if FLAGS.debug:
+                    train_writer.add_run_metadata(run_metadata, "step{}".format(epoch * epoch_size + i),
+                                                  global_step=None)
+                train_writer.flush()
+                print("Loss:{}".format(err))
+                print("{} sec per sample".format((t1 - t0) / (100 * FLAGS.batch_size)))
+                if FLAGS.debug:
+                    return
         print("Validating...")
         for i in range(0, validation_size):
             sess.run(model.val_update, feed_dict={model.handle: handle_val}, options=options,
                      run_metadata=run_metadata)
-        #validation_summary = sess.run(model.validation_summary, options=options, run_metadata=run_metadata)
-        #sess.run(model.reset_mean)
-        #train_writer.add_summary(validation_summary, epoch)
-        #train_writer.flush()
+        validation_summary, val_ssim = sess.run([model.validation_summary, model.val_loss], options=options, run_metadata=run_metadata)
+        if val_ssim < val_best:
+            saver.save(sess, "{}/{}/model".format(FLAGS.train_dir, name))
+            val_best = val_ssim
+        else:
+            stop_count += 1
+        sess.run(model.reset_mean)
+        train_writer.add_summary(validation_summary, epoch)
+        train_writer.flush()
     print("finished")
     train_writer.close()
     sess.close()
 
 
 def collect_results(model=None):
-    assert model
 
     config = tf.ConfigProto(allow_soft_placement=True)
     config.gpu_options.per_process_gpu_memory_fraction = 0.8
 
     sess = tf.Session(config=config)
+
     sess.run(tf.local_variables_initializer())
     sess.run(tf.global_variables_initializer())
     if FLAGS.debug:
         sess = tf_debug.LocalCLIDebugWrapperSession(sess)
     tf.train.start_queue_runners(sess=sess)
-    saver = tf.train.Saver()
+
+    #saver = tf.train.Saver()
+    saver = tf.train.import_meta_graph(FLAGS.test_model_dir + '.meta')
     saver.restore(sess, FLAGS.test_model_dir)
     weights = [v for v in tf.trainable_variables()]
     print(weights)
@@ -110,14 +122,34 @@ def collect_results(model=None):
         for (l, r, gt, bg, norms) in zip(left_samples, right_samples, gt_samples, bg_samples, norm_samples):
             left, right, envmap, background, norms = prep_images(l, r, gt, bg, norms)
             t0 = time.time()
-            prediction = sess.run(model.converted_prediction,
-                                  feed_dict={model.left_image: left,
-                                             model.right_image: right,
-                                             model.bg_image: background,
-                                             model.norm_image: norms})[0]
+            #if model.name == 'normals':
+            #    pred_norms = sess.run(model.pred_norms,feed_dict={model.left_image: left,
+            #                                 model.right_image: right,
+            #                                 model.bg_image: background,
+            #                                 model.gt: np.expand_dims(envmap, axis=0)})
+            #    name = os.path.splitext(os.path.basename(l))[0]
+            #    pred = cv2.cvtColor(pred_norms[0], cv2.COLOR_RGB2BGR)
+            #    cv2.imwrite('{}/pred_norms/{}.png'.format(FLAGS.val_dir, name), pred)
+            #    continue
+            graph = tf.get_default_graph()
+            l_tensor = graph.get_tensor_by_name("IteratorGetNext:0")
+            r_tensor = graph.get_tensor_by_name("IteratorGetNext:1")
+            bg_tensor = graph.get_tensor_by_name("IteratorGetNext:4")
+            norm_tensor = graph.get_tensor_by_name("IteratorGetNext:3")
+            dummy = np.ones((1, 256, 256, 3))
+            op = graph.get_tensor_by_name("sub_13:0")
+
+            prediction = sess.run(op,
+                                  feed_dict={l_tensor: left,
+                                             r_tensor: right,
+                                             bg_tensor: background})
+            prediction = prediction[0]
             t1 = time.time()
             mse = mean_squared_error(envmap, prediction)
-            ss = ssim(envmap, prediction, multichannel=True)
+
+            ss = (1 - ssim(envmap, prediction, multichannel=True)) / 2
+            print(ss)
+
             total_ssim += ss
             total_mse += mse
             name = os.path.splitext(os.path.basename(l))[0]
@@ -134,7 +166,7 @@ def collect_results(model=None):
             cv2.imwrite('{}/results/{}.hdr'.format(FLAGS.val_dir, name), prediction)
     print("Avg inference time: {}".format(total_time / len(left_samples)))
     print("Total MSE: {}".format(total_mse / len(left_samples)))
-    print("Total SSIM: {}".format(total_ssim / len(left_samples)))
+    print("Total DSSIM: {}".format(total_ssim / len(left_samples)))
 
     sess.close()
 

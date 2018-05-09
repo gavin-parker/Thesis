@@ -101,5 +101,6 @@ def basic_encode(input, depth=3, name=""):
     filters_a = encode_layer_siamese(input, depth, 64, [3,3],False, "basic_1_{}".format(name))
     filters_b = encode_layer_siamese(filters_a, depth, 128, [3,3],False, "basic_2_{}".format(name))
     filters_c = encode_layer_siamese(filters_b, depth , 256, [3,3],False, "basic_3_{}".format(name))
-
-    return  filters_c
+    filters_d = encode_layer_siamese(filters_c, depth , 512, [3,3],False, "basic_4_{}".format(name))
+    filters_e = encode_layer_siamese(filters_d, depth , 512, [3,3],False, "basic_5_{}".format(name))
+    return filters_e
