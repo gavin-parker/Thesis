@@ -11,4 +11,10 @@ The appearance of an object is a combination of material, geometry and lighting.
 
 Our network is able to achieve equivalent results to previous work that relies on known geometry, and outperforms those that use estimated surface normals in both accuracy and inference speed.
 
+Ground Truth Environment (64x64)    | Predicted Environment
+:----------------------------------:|:-------------------------:
+![](https://github.com/gavin-parker/Thesis/blob/master/dissertation/images/validation/332_gt.jpg) | ![](https://github.com/gavin-parker/Thesis/blob/master/dissertation/images/validation/332_pred.jpg)
+![](https://github.com/gavin-parker/Thesis/blob/master/dissertation/images/validation/386_gt.jpg) | ![](https://github.com/gavin-parker/Thesis/blob/master/dissertation/images/validation/386_pred.jpg)
+![](https://github.com/gavin-parker/Thesis/blob/master/dissertation/images/validation/516_gt.jpg) | ![](https://github.com/gavin-parker/Thesis/blob/master/dissertation/images/validation/516_pred.jpg)
+
 Read the full thesis with results [here](https://github.com/gavin-parker/Thesis/blob/master/dissertation.pdf "Thesis")
