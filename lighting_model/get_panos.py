@@ -5,7 +5,8 @@ import os
 import urllib2
 import json
 from multiprocessing import Pool
-url = "https://maps.googleapis.com/maps/api/streetview?size=600x300&location={}&scale=2&fov=120&&heading={}&pitch={}&key=AIzaSyAU80lrcX2Tso-JS_k5PXx-GuPGSDJKkA8"
+key = "your key"
+url = "https://maps.googleapis.com/maps/api/streetview?size=600x300&location={}&scale=2&fov=120&&heading={}&pitch={}&key={}"
 cities = ['52.372278,4.892636', '41.015137,28.979530', '51.454514,-2.587910', '45.5017,73.5673', '-33.856159,151.21256', '50.850346,4.351721',
           '52.520007,13.404954', '31.230390,121.473702', '37.983810,23.727539', '31.629472,-7.981084', '41.385064,2.173403', '43.212161,2.353663'
           '43.710173,7.261953','45.464204,9.189982', '48.208174,16.373819']
@@ -17,7 +18,7 @@ def main():
 
 
 def download_image(loc, heading, pitch,name):
-    img_data = requests.get(url.format(loc, heading, pitch)).content
+    img_data = requests.get(url.format(loc, heading, pitch, key)).content
     with open('{}.jpg'.format(name), 'wb+') as handler:
         handler.write(img_data)
     return cv2.imread('{}.jpg'.format(name))
