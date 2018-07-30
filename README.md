@@ -11,4 +11,4 @@ The appearance of an object is a combination of material, geometry and lighting.
 
 Our network is able to achieve equivalent results to previous work that relies on known geometry, and outperforms those that use estimated surface normals in both accuracy and inference speed.
 
-Read the full thesis with results [here] (https://github.com/gavin-parker/Thesis/blob/master/dissertation.pdf "Thesis")
+Read the full thesis with results [here](https://github.com/gavin-parker/Thesis/blob/master/dissertation.pdf "Thesis")
