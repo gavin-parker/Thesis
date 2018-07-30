@@ -57,7 +57,7 @@ def get_city((city,id)):
 
 if __name__ == "__main__":
     u_a = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.82 Safari/537.36"
-    places_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={}&radius=20000&key=AIzaSyAU80lrcX2Tso-JS_k5PXx-GuPGSDJKkA8"
+    places_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={}&radius=20000&key={}"
     places = []
     args = []
     for i,city in enumerate(cities):
